@@ -38,6 +38,9 @@ export default {
 	},
 	computed: {
 		isShowTabbar () {
+			// TODO 暂时不显示taber 底部栏
+			// 显示条件变成其他的
+			return false;
 			let routeLength = this.$route.path.split('/').length
 			return routeLength > 2 ? false : true
 		}

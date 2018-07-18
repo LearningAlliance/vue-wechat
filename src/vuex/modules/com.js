@@ -8,7 +8,7 @@ const state = {
     showToast: false,
     leftNavStatus: false,
     showSuccess: true,
-	showFail: false,
+    showFail: false,
     toastMsg: '操作成功',
     showTimePicker: false,
     alertMsg: '退出登录',
@@ -16,31 +16,49 @@ const state = {
 }
 
 const actions = {
-    setLoadingState({ commit }, status) {
+    setLoadingState({
+        commit
+    }, status) {
         commit(types.COM_LOADING_STATUS, status)
     },
-    setNavState({ commit }, status) {
+    setNavState({
+        commit
+    }, status) {
         commit(types.COM_NAV_STATUS, status)
     },
-    showToast({ commit }, status) {
+    showToast({
+        commit
+    }, status) {
         commit(types.COM_SHOW_TOAST, status)
     },
-    showSuccess({ commit }, status) {
+    showSuccess({
+        commit
+    }, status) {
         commit(types.COM_SHOW_SUCCESS, status)
     },
-    showFail({ commit }, status) {
+    showFail({
+        commit
+    }, status) {
         commit(types.COM_SHOW_FAIL, status)
     },
-    toastMsg({ commit }, str) {
+    toastMsg({
+        commit
+    }, str) {
         commit(types.COM_TOAST_MSG, str)
     },
-    showAlert({ commit }, status) {
+    showAlert({
+        commit
+    }, status) {
         commit(types.COM_SHOW_ALERT, status)
     },
-    alertMsg({ commit }, str) {
+    alertMsg({
+        commit
+    }, str) {
         commit(types.COM_ALERT_MSG, str)
     },
-    showTimePicker({ commit }, status) {
+    showTimePicker({
+        commit
+    }, status) {
         commit(types.COM_SHOW_TIME_PICKER, status)
     }
 

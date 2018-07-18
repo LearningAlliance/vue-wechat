@@ -31,3 +31,9 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 
 # vue修改微信中的title
 https://www.npmjs.com/package/vue-wechat-title
+
+# 页面路径
+> * /collection   收藏
+> * /discovery    发现
+> * /earning	  赚赚
+> * /mine         我的

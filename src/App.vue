@@ -1,11 +1,10 @@
 <template>
-    <div id="app" class="abc">
+    <div id="app">
         <v-toast v-show="showToast"></v-toast>
         <v-alert v-show="showAlert"></v-alert>
         <v-loading v-show="loading"></v-loading>
-
-        <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay"></v-header>
-        <div class="content" :class="{tabar: tabar}">
+        <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay" :header-display="headerDisplay"></v-header>
+        <div class="content" :class="{tabar: tabar, topbar: headerDisplay}">
             <transition name="slide-left">
                 <router-view v-wechat-title="$route.meta.title"></router-view>
             </transition>  
@@ -58,32 +57,45 @@ export default {
           'showAlert'
       ]),
       title () {
-        switch (this.$route.path.split('/')[1]) {
-            case '':
-              return "Qu约"
-            case 'home':
-              return "Qu约"
-            case 'sport':
-              return "约跑"
-            case 'travel':
-              return "约行"
-            case 'user':
-              return "我的"
+        let {
+          subTitle
+        } = this.$route.meta;
+        if(!!subTitle){
+          return subTitle
         }
       },
       tabar () {
+        // todo 暂时不显示底部栏，后续显示条件变更
+        return false;
         return this.$route.path.split('/').length > 2 ? false : true
+      },
+      headerDisplay(){
+        let {
+          subTitle
+        } = this.$route.meta;
+        return !!subTitle;
       },
       menuDisplay () {
-        if (this.$route.path.split('/')[1] == 'home') {
-          return false
-        }
-        return this.$route.path.split('/').length > 2 ? false : true
+        return false;
+        let {
+          subTitle
+        } = this.$route.meta;
+        return !!subTitle;
+        // if (this.$route.path.split('/')[1] == 'home') {
+        //   return false
+        // }
+        // return this.$route.path.split('/').length > 2 ? false : true
       },
       backDisplay () {
-        return this.$route.path.split('/').length > 2 ? true : false
+        let {
+          subTitle
+        } = this.$route.meta;
+        return !!subTitle;
+        // return this.$route.path.split('/').length > 2 ? true : false
       },
       mapDisplay () {
+        // TODO 默认不显示右边定位按钮
+        return false;
         if (this.$route.path.split('/')[1] == 'home') {
           return true
         }
@@ -94,12 +106,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import './assets/css/function';
-
-.abc{
-  font-size: 26px;
-}
-
 @font-face {
   font-family: 'icon';  /* project id 172436 */
   src: url('//at.alicdn.com/t/font_w71lovnj7adobt9.eot');
@@ -128,13 +134,15 @@ a.active {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
-  background: #F5F5F5;
+  background: #F8F8FC;
   .content{
-    padding-top: px2rem(100px);
-    background: #F5F5F5;
+    background: #F8F8FC ;
+  }
+  .topbar {
+    padding-top: 100px;
   }
   .tabar {
-    margin-bottom: px2rem(120px);
+    padding-bottom: 120px;
   }
   //渐变动效
   .slide-left-enter-active,

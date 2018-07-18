@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" v-show="headerDisplay">
     <div class="header-icon" v-show="backDisplay" @click="goBack"><i class="icon">&#xe622;</i></div>
     <div class="header-cont"><p>{{title}}</p></div>
     <div class="header-icon" v-show="menuDisplay" @click="showBar"><i class="icon">&#xe634;</i></div>
@@ -13,7 +13,8 @@
       title: String,
       menuDisplay: Boolean,
       backDisplay: Boolean,
-      mapDisplay: Boolean
+      mapDisplay: Boolean,
+      headerDisplay: Boolean,
     },
     data() {
       return {
