@@ -15,6 +15,7 @@ import UserMsg from '../pages/UserMsg'
 import Navbar from '../pages/Navbar'
 import NotFound from '../pages/NotFound'
 
+Vue.use(require('vue-wechat-title'))
 Vue.use(Router)
 
 export default new Router({
@@ -23,10 +24,16 @@ export default new Router({
   routes: [{
     path: '/',
     name: 'home',
+    meta: {
+      title: '主页'
+    },
     component: Home
   }, {
     path: '/home',
     name: 'home',
+    meta: {
+      title: '主页2'
+    },
     component: Home
   }, {
     path: '/sport',
@@ -68,6 +75,9 @@ export default new Router({
     component: UserMsg
   }, {
     path: '/user/navbar',
+    meta: {
+      title: '个人信息'
+    },
     component: Navbar
   }, {
     path: '*',

@@ -7,7 +7,7 @@
         <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay"></v-header>
         <div class="content" :class="{tabar: tabar}">
             <transition name="slide-left">
-                <router-view></router-view>
+                <router-view v-wechat-title="$route.meta.title"></router-view>
             </transition>  
         </div>
         <v-tabar></v-tabar>
