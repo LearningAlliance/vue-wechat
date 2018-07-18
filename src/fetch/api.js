@@ -5,23 +5,30 @@ import * as _ from '../util/tool'
 
 // axios 配置
 axios.defaults.timeout = 5000;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
-axios.defaults.baseURL = 'http://localhost:4000/';
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+
+if (process.env.NODE_ENV == "development") {
+    // 测试地址
+    axios.defaults.baseURL = 'http://localhost:4020/';
+} else {
+    // 正式地址
+    axios.defaults.baseURL = 'http://localhost:5000/';
+}
 
 //POST传参序列化
 axios.interceptors.request.use((config) => {
-    if(config.method  === 'post'){
+    if (config.method === 'post') {
         config.data = qs.stringify(config.data);
     }
     return config;
-},(error) =>{
-     _.toast("错误的传参", 'fail');
+}, (error) => {
+    _.toast("错误的传参", 'fail');
     return Promise.reject(error);
 });
 
 //返回状态判断
-axios.interceptors.response.use((res) =>{
-    if(!res.data.success){
+axios.interceptors.response.use((res) => {
+    if (!res.data.success) {
         // _.toast(res.data.msg);
         return Promise.reject(res);
     }
@@ -40,7 +47,7 @@ export function fetch(url, params) {
                 reject(err);
             })
             .catch((error) => {
-               reject(error)
+                reject(error)
             })
     })
 }
@@ -52,7 +59,7 @@ export default {
     Login(params) {
         return fetch('/users/api/userLogin', params)
     },
-    
+
     /**
      * 用户注册
      */
@@ -63,9 +70,11 @@ export default {
     /**
      * 发送注册验证码
      */
-     RegistVerifiCode(tellphone) {
-         return fetch('/users/api/registVerifiCode', {tellphone: tellphone})
-     },
+    RegistVerifiCode(tellphone) {
+        return fetch('/users/api/registVerifiCode', {
+            tellphone: tellphone
+        })
+    },
 
     /**
      * 获取约跑步列表
@@ -85,43 +94,55 @@ export default {
      * 获取约跑步详情
      */
     SportsDetail(id) {
-        return fetch('/api/sportDetail', {sportId: id})
+        return fetch('/api/sportDetail', {
+            sportId: id
+        })
     },
 
     /**
      * 获取约出行详情
      */
     TravelsDetail(id) {
-        return fetch('/api/travelDetail', {travelId: id})
+        return fetch('/api/travelDetail', {
+            travelId: id
+        })
     },
 
     /**
      * 获取出行活动点击次数
      */
     travelClicks(id) {
-        return fetch('/api/travelClickNum', {travelId: id})
+        return fetch('/api/travelClickNum', {
+            travelId: id
+        })
     },
 
     /**
      * 获取用户信息
      */
     UserInfo(id) {
-        return fetch('/users/api/userInfo', {userId: id})
+        return fetch('/users/api/userInfo', {
+            userId: id
+        })
     },
 
     /**
      * 获取用户发布约行个数
      */
-     getPubTotravelNum(id) {
-         return fetch('/users/api/getPubTotravelNum', {userId: id})
-     },
+    getPubTotravelNum(id) {
+        return fetch('/users/api/getPubTotravelNum', {
+            userId: id
+        })
+    },
 
-     /**
-      * 获取用户自己发布的约行
-      */
-      getMyTravel(id) {
-          return fetch('/users/api/myTravel', {userId: id})
-      },
+    /**
+     * 获取用户自己发布的约行
+     */
+    getMyTravel(id) {
+        return fetch('/users/api/myTravel', {
+            userId: id
+        })
+    },
 
     /**
      * 发布约行活动
@@ -133,7 +154,7 @@ export default {
     /**
      * 获取全国JSON数据
      */
-     getAddressJson() {
-         return fetch('/api/address')
-     }
+    getAddressJson() {
+        return fetch('/api/address')
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" class="abc">
         <v-toast v-show="showToast"></v-toast>
         <v-alert v-show="showAlert"></v-alert>
         <v-loading v-show="loading"></v-loading>
@@ -95,6 +95,10 @@ export default {
 
 <style lang="scss">
 @import './assets/css/function';
+
+.abc{
+  font-size: 26px;
+}
 
 @font-face {
   font-family: 'icon';  /* project id 172436 */

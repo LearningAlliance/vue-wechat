@@ -15,8 +15,8 @@ import UserMsg from '../pages/UserMsg'
 import Navbar from '../pages/Navbar'
 import NotFound from '../pages/NotFound'
 
-Vue.use(require('vue-wechat-title'))
 Vue.use(Router)
+Vue.use(require('vue-wechat-title'))
 
 export default new Router({
   linkActiveClass: 'active',

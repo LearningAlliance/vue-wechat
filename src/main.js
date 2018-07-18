@@ -11,8 +11,8 @@ Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  ...App
+	el: '#app',
+	router,
+	store,
+	...App
 })
