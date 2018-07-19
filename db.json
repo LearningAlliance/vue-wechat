@@ -1,0 +1,15 @@
+{
+	"userInfo": {
+		"resultMsg": "Successful",
+		"data": {
+			"avatar": "http://ac-aFkydcqQ.clouddn.com/a96b23926358c9999112.jpg",
+			"sex": "male",
+			"userName": "海娃",
+			"signIn": true,
+			"level": "青铜会员",
+			"integral": 32310,
+			"guaranteeAmount": 2147.38
+		},
+		"resultCode": "0"
+	}
+}
