@@ -32,36 +32,35 @@ export default new Router({
     path: '/',
     name: 'index',
     meta: {
-      title: '主页'
+      title: '主页',
     },
     component: Mine
   }, {
     path: '/collection',
     name: 'collection',
     meta: {
-      title: '收藏'
+      title: '收藏',
     },
     component: Collection
   }, {
     path: '/discovery',
     name: 'discovery',
     meta: {
-      title: '发现'
+      title: '发现',
     },
     component: Discovery
   }, {
     path: '/earning',
     name: 'earning',
     meta: {
-      title: '赚赚'
+      title: '赚赚',
     },
     component: Earning
   }, {
     path: '/mine',
     name: 'mine',
     meta: {
-      title: '我的',
-      subTitle: '个人信息'
+      title: '个人中心',
     },
     component: Mine
   }, {

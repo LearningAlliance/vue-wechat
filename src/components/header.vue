@@ -1,72 +1,85 @@
 <template>
-  <div class="header" v-show="headerDisplay">
-    <div class="header-icon" v-show="backDisplay" @click="goBack"><i class="icon">&#xe622;</i></div>
-    <div class="header-cont"><p>{{title}}</p></div>
+  <!--   <div class="header" v-show="headerDisplay">
+    <div class="header-icon" v-show="backDisplay" @click="goBack"><i class="icon left"></i></div>
+    <div class="header-cont">
+      <p>{{title}}</p>
+    </div>
     <div class="header-icon" v-show="menuDisplay" @click="showBar"><i class="icon">&#xe634;</i></div>
     <div class="header-icon" v-show="mapDisplay" @click="getMap"><i class="icon map-icon">&#xe600;</i></div>
+  </div> -->
+  <div class="header" v-show="headerDisplay">
+    <div class="header-icon" v-show="backDisplay" @click="goBack"><i class="icon goBack"></i></div>
+    <div class="header-cont">
+      <p>{{title}}</p>
+    </div>
   </div>
 </template>
-
 <script>
-  export default {
-    props: {
-      title: String,
-      menuDisplay: Boolean,
-      backDisplay: Boolean,
-      mapDisplay: Boolean,
-      headerDisplay: Boolean,
+export default {
+  props: {
+    title: String,
+    menuDisplay: Boolean,
+    backDisplay: Boolean,
+    mapDisplay: Boolean,
+    headerDisplay: Boolean,
+  },
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    goBack() {
+      window.history.back()
     },
-    data() {
-      return {
-        
-      }
+    getMap() {
+      alert('开发中')
     },
-    methods: {
-      goBack () {
-        window.history.back()
-      },
-      getMap () {
-        alert('开发中')
-      },
-      showBar () {
-        this.$store.dispatch('setNavState', true)
-      }
+    showBar() {
+      this.$store.dispatch('setNavState', true)
     }
   }
+}
+
 </script>
-
 <style lang="scss" scoped>
-@import '../assets/css/function';
-
-.header{
+.header {
+  display: block;
   position: fixed;
   transform: translateZ(0);
   top: 0;
-  z-index: 4;
-  height: px2rem(100px);
+  left: 0;
   width: 100%;
-  background: #76D49B;
-  display: flex;
-  flex-direction: row;
-  .header-icon{
-    flex:1;
-    text-align: center;
-    >i{
-      line-height: px2rem(100px);
-    }
-    .map-icon{
-      font-size: 22px;
+  height: 100px;
+  background: #fff;
+  overflow: hidden;
+  .header-icon {
+    position: absolute;
+    left: 20px;
+    top: 25px;
+    display: block;
+    width: 50px;
+    height: 50px;
+    .icon{
+        display: block;
+        width: 50px;
+        height: 50px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url(../assets/images/ic_back@2x.png);
     }
   }
-  
   .header-cont {
-    flex: 6;
-    padding-left: px2rem(40px);
-      >p{
-        line-height: px2rem(100px);
-        color: #ffffff;
-        font-size:17px;
-      }
-    }
+    display: block;
+    font-family: PingFangSC-Semibold;
+    width: 100%;
+    height: 100px;
+    font-size: 36px;
+    color: #2E3141;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 100px;
   }
+}
+
 </style>
