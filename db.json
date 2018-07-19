@@ -1,15 +1,20 @@
 {
 	"userInfo": {
 		"resultMsg": "Successful",
-		"data": {
-			"avatar": "http://ac-aFkydcqQ.clouddn.com/a96b23926358c9999112.jpg",
-			"sex": "male",
-			"userName": "海娃",
-			"signIn": true,
-			"level": "青铜会员",
-			"integral": 32310,
-			"guaranteeAmount": 2147.38
-		},
+		"data": [{
+			"userWecharId": "1111",
+			"stateDate": "2018-07-16 20:10:27",
+			"userId": 1,
+			"userNick": "驱蚊器翁群无",
+			"state": 1,
+			"userSex": 1,
+			"userAliId": 1,
+			"userPhone": "15858208598",
+			"createDate": "2018-07-16 20:10:20",
+			"idcardNo": "1234543234565432",
+			"userHead": 1,
+			"userBirthday": "1994-06-14 00:00:00"
+		}],
 		"resultCode": "0"
 	}
 }
