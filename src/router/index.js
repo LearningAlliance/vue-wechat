@@ -14,6 +14,9 @@ import Router from 'vue-router'
 // import UserMsg from '../pages/UserMsg'
 // import Navbar from '../pages/Navbar'
 
+//  测试页面
+import getToken from '../pages/getToken'
+
 import Collection from '../pages/Collection'
 import Discovery from '../pages/Discovery'
 import Earning from '../pages/Earning'
@@ -34,7 +37,7 @@ export default new Router({
     meta: {
       title: '主页',
     },
-    component: Mine
+    component: getToken
   }, {
     path: '/collection',
     name: 'collection',

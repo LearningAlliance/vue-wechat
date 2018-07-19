@@ -1,4 +1,8 @@
 {
+	"login": {
+		"resultMsg": "Successful",
+		"resultCode": "0"
+	},
 	"userInfo": {
 		"resultMsg": "Successful",
 		"data": [{
