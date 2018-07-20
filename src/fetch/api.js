@@ -13,7 +13,7 @@ if (process.env.NODE_ENV == "development") {
     axios.defaults.baseURL = 'http://localhost:4020/';
 } else {
     // 正式地址
-    axios.defaults.baseURL = 'http://localhost:5000/';
+    axios.defaults.baseURL = 'http://localhost:4020/';
 }
 
 //POST传参序列化
@@ -24,7 +24,7 @@ axios.interceptors.request.use((config) => {
     }
     return config;
 }, (error) => {
-    _.toast("错误的传参", 'fail');
+    _.toast("网络异常", 'fail');
     return Promise.reject(error);
 });
 

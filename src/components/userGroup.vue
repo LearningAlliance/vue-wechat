@@ -1,6 +1,6 @@
 <template>
   <div class="group">
-    <cell v-for="(item,index) in cellLists" :link="item.link" :icon-url="item.iconUrl" :text="item.text" :desc="item.desc" :badg="item.badg" :more="item.more" :avatar="item.avatar" :key="index">
+    <cell v-for="(item,index) in cellLists" :link="item.link" :icon-url="item.iconUrl" :text="item.text" :desc="item.desc" :badg="item.badg" :more="item.more" :avatar="item.avatar" :key="index" :hide-border="index == cellLists.length - 1">
     </cell>
   </div>
 </template>
@@ -26,10 +26,8 @@ export default {
 
 </script>
 <style lang="scss" scoped>
-@import '../assets/css/function';
-
 .group {
-  margin-bottom: px2rem(20px);
+  margin-bottom: 15px;
 }
 
 </style>

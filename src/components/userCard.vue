@@ -64,7 +64,7 @@ export default {
 <style lang="scss" scoped>
 .section {
   width: 100%;
-  height: 536px;
+  height: 526px;
   background: #fff;
   .card {
     margin: 5px auto;

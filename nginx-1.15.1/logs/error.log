@@ -1,0 +1,80 @@
+2018/07/17 11:29:21 [error] 18420#10068: *1 CreateFile() "C:\Users\K\Downloads\nginx-1.15.1\nginx-1.15.1/html/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost", referrer: "http://localhost/"
+2018/07/17 11:43:23 [emerg] 18200#10232: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:43:39 [emerg] 8396#18136: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:44:37 [emerg] 5152#18084: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:46:32 [emerg] 7992#18128: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:46:53 [emerg] 5312#7684: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:47:01 [emerg] 10124#8892: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:47:12 [emerg] 18760#4660: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/17 11:47:41 [notice] 16960#8764: signal process started
+2018/07/17 11:47:52 [error] 17592#13348: *1 CreateFile() "D:\D\xyy-vue\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7070", referrer: "http://localhost:7070/"
+2018/07/17 14:34:04 [notice] 4948#4496: signal process started
+2018/07/17 14:34:33 [notice] 752#11924: signal process started
+2018/07/17 14:35:24 [error] 17592#13348: *14 CreateFile() "D:\D\xyy-vue\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7070", referrer: "http://localhost:7070/"
+2018/07/17 14:36:37 [notice] 13460#12704: signal process started
+2018/07/17 15:43:55 [notice] 2776#6576: signal process started
+2018/07/18 10:34:19 [notice] 10696#14372: signal process started
+2018/07/18 12:08:15 [notice] 18736#17660: signal process started
+2018/07/18 12:08:15 [error] 18736#17660: CreateFile() "D:\D\nginx-1.15.1/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2018/07/18 12:10:03 [notice] 18608#11924: signal process started
+2018/07/18 12:10:49 [notice] 12524#12712: signal process started
+2018/07/18 12:11:58 [notice] 20612#21564: signal process started
+2018/07/18 12:12:20 [notice] 9124#13240: signal process started
+2018/07/18 12:13:42 [error] 10160#11212: *1 "D:\D\vue-wechat\dist/index.html" is not found (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost:7080"
+2018/07/18 12:13:42 [error] 10160#11212: *1 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 12:17:18 [notice] 19884#9472: signal process started
+2018/07/18 12:17:53 [notice] 12972#13324: signal process started
+2018/07/18 12:17:53 [error] 12972#13324: CreateFile() "D:\D\nginx-1.15.1/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2018/07/18 12:18:55 [emerg] 476#19620: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/18 12:18:58 [emerg] 18840#5388: invalid number of arguments in "root" directive in D:\D\nginx-1.15.1/conf/nginx.conf:45
+2018/07/18 12:19:17 [error] 15716#8756: *1 "D:\D\vue-wechat\dist/index.html" is not found (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost:7080"
+2018/07/18 12:19:28 [notice] 20144#21092: signal process started
+2018/07/18 12:19:31 [error] 15716#8756: *1 "D:\D\vue-wechat\dist/index.html" is not found (3: The system cannot find the path specified), client: 127.0.0.1, server: localhost, request: "GET / HTTP/1.1", host: "localhost:7080"
+2018/07/18 12:19:56 [notice] 10776#12460: signal process started
+2018/07/18 12:19:59 [error] 15716#8756: *1 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 12:20:21 [error] 15716#8756: *8 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 14:19:10 [error] 15716#8756: *18 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 14:19:15 [error] 15716#8756: *17 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 14:19:19 [error] 15716#8756: *14 CreateFile() "D:\D\vue-wechat\dist/home" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /home HTTP/1.1", host: "localhost:7080"
+2018/07/18 14:19:25 [error] 15716#8756: *18 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 14:19:29 [error] 15716#8756: *19 CreateFile() "D:\D\vue-wechat\dist/home" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /home HTTP/1.1", host: "localhost:7080"
+2018/07/18 14:19:50 [notice] 18604#16620: signal process started
+2018/07/18 14:20:04 [notice] 18016#14208: signal process started
+2018/07/18 14:20:08 [error] 15716#8756: *19 CreateFile() "D:\D\vue-wechat\dist/home" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /home HTTP/1.1", host: "localhost:7080"
+2018/07/18 14:20:14 [error] 15716#8756: *14 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/"
+2018/07/18 14:20:20 [error] 22468#15556: *1 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7090", referrer: "http://localhost:7090/"
+2018/07/18 14:20:21 [error] 22468#15556: *1 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7090", referrer: "http://localhost:7090/"
+2018/07/18 14:20:30 [error] 22468#15556: *1 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:20:35 [error] 22468#15556: *3 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7090", referrer: "http://localhost:7090/"
+2018/07/18 14:22:41 [error] 22468#15556: *7 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:23:30 [notice] 18044#16620: signal process started
+2018/07/18 14:23:36 [error] 20420#4236: *13 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:23:41 [error] 20420#4236: *16 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7090", referrer: "http://localhost:7090/"
+2018/07/18 14:23:58 [error] 17592#13348: *93 CreateFile() "D:\D\xyy-vue\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7070"
+2018/07/18 14:24:03 [notice] 22444#8620: signal process started
+2018/07/18 14:24:12 [notice] 6020#6832: signal process started
+2018/07/18 14:24:12 [error] 6020#6832: CreateFile() "D:\D\nginx-1.15.1/logs/nginx.pid" failed (2: The system cannot find the file specified)
+2018/07/18 14:24:19 [error] 10288#21348: *1 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:24:20 [error] 10288#21348: *1 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:24:22 [error] 10288#21348: *1 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:24:25 [error] 10288#21348: *4 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7090", referrer: "http://localhost:7090/"
+2018/07/18 14:26:07 [notice] 7456#9972: signal process started
+2018/07/18 14:26:24 [error] 13984#8576: *2 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:26:25 [error] 13984#8576: *2 CreateFile() "D:\D\vue-wechat\dist/index" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:27:33 [notice] 19948#22464: signal process started
+2018/07/18 14:27:41 [error] 19640#18576: *1 could not find named location "@rewrites", client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:27:46 [error] 19640#18576: *2 could not find named location "@rewrites", client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:28:00 [error] 19640#18576: *5 could not find named location "@rewrites", client: 127.0.0.1, server: localhost, request: "GET /index/index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:28:04 [error] 19640#18576: *6 could not find named location "@rewrites", client: 127.0.0.1, server: localhost, request: "GET /index HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:28:08 [error] 19640#18576: *7 could not find named location "@rewrites", client: 127.0.0.1, server: localhost, request: "GET /home HTTP/1.1", host: "localhost:7090"
+2018/07/18 14:29:40 [notice] 11216#7112: signal process started
+2018/07/18 14:36:22 [notice] 18604#1836: signal process started
+2018/07/18 17:06:20 [notice] 12012#13660: signal process started
+2018/07/20 11:43:26 [notice] 19796#22668: signal process started
+2018/07/20 11:43:27 [notice] 26488#4376: signal process started
+2018/07/20 11:43:30 [notice] 20952#16824: signal process started
+2018/07/20 11:43:50 [error] 15716#8756: *21 CreateFile() "D:\D\vue-wechat\dist/favicon.ico" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:7080", referrer: "http://localhost:7080/mine"
+2018/07/20 11:48:28 [error] 15716#8756: *26 CreateFile() "D:\D\vue-wechat\dist/mine" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /mine HTTP/1.1", host: "localhost:7080"
+2018/07/20 11:48:51 [notice] 23372#3196: signal process started
+2018/07/20 11:48:52 [notice] 25284#12192: signal process started
+2018/07/20 11:48:57 [error] 15716#8756: *26 CreateFile() "D:\D\vue-wechat\dist/mine" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /mine HTTP/1.1", host: "localhost:7080"

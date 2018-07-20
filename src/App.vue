@@ -174,6 +174,13 @@ a.active {
   // }
 }
 
+.clearfix:after {
+  display: block;
+  content: '';
+  clear: both;
+  visibility: hidden;
+}
+
 @keyframes slideLeft {
   from {
     transform: translate3d(100%, 0, 0);

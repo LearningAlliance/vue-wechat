@@ -14,9 +14,13 @@ export default {
   data() {
     return {
       cellLists1: [
-        { link: '', iconUrl: 'http://hzzly.net/xyy-vue/images/user-cert.png', text: '学生认证', desc: '', badg: '', more: true },
-        { link: 'user/info', iconUrl: 'http://hzzly.net/xyy-vue/images/user-detail.png', text: '我的详情', desc: '', badg: '', more: true },
-        { link: 'user/msg', iconUrl: 'http://hzzly.net/xyy-vue/images/user-message.png', text: '消息通知', desc: '', badg: '4', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_info.png'), text: '个人信息', desc: '', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_account.png'), text: '养老金账户', desc: '', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_huiyuan.png'), text: '会员中心', desc: '签到奖励', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_odering.png'), text: '我的订单', desc: '', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_egg.png'), text: '我的彩蛋', desc: '', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_ticket.png'), text: '我的优惠券', desc: '', badg: '', more: true },
+        { link: '', iconUrl: require('@/assets/images/ic_my_setting.png'), text: '设置', desc: '', badg: '', more: true },
       ]
     }
   },
@@ -31,7 +35,7 @@ export default {
     });
   },
   mounted() {
-    console.log(this.$route);
+
   },
   computed: {
     ...mapGetters([
