@@ -31,7 +31,7 @@ export default {
     login() {
       console.log('login');
       // TODO 登录判断
-      api.login({ username: 123, password: 123 }).then((res) => {
+      api.user.login({ username: 123, password: 123 }).then((res) => {
         console.log(res);
         // 假设获取了用户数据
         res = {userName: '海娃'};

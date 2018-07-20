@@ -45,18 +45,6 @@ const actions = {
 		commit(types.SET_LOGIN_STATUS, false)
 		commit(types.SET_USER_INFO, {})
 	},
-
-	/**
-	 * 请求用户信息
-	 */
-	getUserData({
-		commit
-	}, id) {
-		api.UserInfo(id)
-			.then(res => {
-				commit(types.GET_USER_DATA, res.data)
-			})
-	}
 }
 
 const getters = {
@@ -75,9 +63,6 @@ const mutations = {
 		state.loginStatus = status
 	},
 
-	[types.GET_USER_DATA](state, res) {
-		state.userData = res
-	}
 }
 
 export default {

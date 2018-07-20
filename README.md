@@ -47,6 +47,13 @@ json-server --watch db.json --port 4020
 > * http://localhost:4020/posts?id=1
 ```
 
+# 接口请求地址配置路径
+``` bash
+# src/config/index.js
+baseUrlDev: 'http://localhost:4020/', // 测试路径
+baseUrlPro: 'http://localhost:4020/', // 正式路径
+```
+
 # 发布在ngnix
 ``` bash
 # 待发布文件会生成在 dist文件夹下
@@ -65,6 +72,9 @@ nginx.exe -s reload
 # 配置文件参考
 ``` bash
 # nginx-1.15.1/conf/nginx.conf
+# http节点下
+sendfile        off; // 默认为on  改为 off, 可清除缓存
+# server节点下
 listen       7090;					// 监听端口
 server_name  localhost				// ip
 location / {

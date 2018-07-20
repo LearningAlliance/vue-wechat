@@ -29,7 +29,8 @@ export default {
     'user-group': userGroup,
   },
   created() {
-    api.getUserInfo({ userId: 33 }).then((res) => {
+    console.log(api); 
+    api.user.getUserInfo({ userId: 33 }).then((res) => {
       let userInfo = res.data[0];
       this.$store.dispatch('setUserInfo', userInfo);
     });
