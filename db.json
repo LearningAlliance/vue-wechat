@@ -6,6 +6,7 @@
 	"userInfo": {
 		"resultMsg": "Successful",
 		"data": [{
+			"userName": "用户姓名未返回",
 			"userWecharId": "1111",
 			"stateDate": "2018-07-16 20:10:27",
 			"userId": 1,
@@ -15,8 +16,8 @@
 			"userAliId": 1,
 			"userPhone": "15858208598",
 			"createDate": "2018-07-16 20:10:20",
-			"idcardNo": "1234543234565432",
-			"userHead": 1,
+			"idcardNo": "123454323456543212",
+			"userHead": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532006746195&di=47e74eb4ed8a7b8e3befe47b19575533&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fblog%2F201504%2F03%2F20150403225532_Jtxak.thumb.700_0.png",
 			"userBirthday": "1994-06-14 00:00:00"
 		}],
 		"resultCode": "0"

@@ -38,22 +38,28 @@ export default {
 
     }
   },
+  created(){
+      let routeName = this.$route.path.split('/')[1];
+      this.setRouteName(routeName || '');
+  },
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'hideMenuSlide'
   },
   methods: {
-    ...mapActions({ setNavState: 'setNavState' }),
+    ...mapActions({ setNavState: 'setNavState' , setRouteName: 'setRouteName'}),
     // 隐藏MenuSlide
     hideMenuSlide() {
-      this.setNavState(false)
+      this.setNavState(false);
+      let routeName = this.$route.path.split('/')[1];
+      this.setRouteName(routeName || '');
     }
   },
   computed: {
     ...mapGetters([
       'loading',
       'showToast',
-      'showAlert'
+      'showAlert',
     ]),
     title() {
       let {
@@ -65,8 +71,8 @@ export default {
     },
     tabar() {
       // todo 暂时不显示底部栏，后续显示条件变更
-      return false;
-      return this.$route.path.split('/').length > 2 ? false : true
+      let { showTabar } = this.$route.meta;
+      return !!showTabar ? showTabar : false;
     },
     headerDisplay() {
       let {
@@ -119,16 +125,13 @@ export default {
 //   font-family: PingFang-SC-Semibold;
 //   src: url("../../fonts/PingFang-SC-Semibold.ttf");
 // }
-
 // @font-face {
 //   font-family: PingFangSC-Regular;
 //   src: url("../../fonts/PingFang_Regular.otf");
 // }
-
 // * {
 //   font-family: PingFangSC-Medium, sans-serif;
 // }
-
 .icon {
   font-family: "icon" !important;
   font-size: 18px;
@@ -139,6 +142,7 @@ export default {
 html,
 body {
   height: 100%;
+  background: #F8F8FC;
 }
 
 a.active {

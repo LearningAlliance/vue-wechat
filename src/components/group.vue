@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-import cell from '@/components/userCell'
+import cell from '@/components/cell'
 
 export default {
   props: {

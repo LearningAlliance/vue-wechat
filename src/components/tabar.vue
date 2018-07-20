@@ -1,102 +1,118 @@
 <template>
-	<div class="tabar" v-show="isShowTabbar">
-		<div class="tab">
-			<div class="tab-item">
-				<router-link to="/home">
-					<div class="tab-icon"><img src="../assets/images/tab_home.png" alt=""></div>
-					<div class="tab-text">首页</div>
-				</router-link>
-			</div>
-			<div class="tab-item">
-				<router-link to="/sport">
-					<div class="tab-icon"><img src="../assets/images/tab_running.png" alt=""></div>
-					<div class="tab-text">约跑</div>
-				</router-link>
-			</div>
-			<div class="tab-item">
-				<router-link to="/travel">
-					<div class="tab-icon"><img src="../assets/images/tab_travel.png" alt=""></div>
-					<div class="tab-text">约行</div>
-				</router-link>
-			</div>
-			<div class="tab-item">
-				<router-link to="/user">
-					<div class="tab-icon"><img src="../assets/images/tab_user.png" alt=""></div>
-					<div class="tab-text">我的</div>
-				</router-link>
-			</div>
-		</div>
-	</div>
+  <div class="tabar" v-show="isShowTabbar">
+    <div class="tab clearfix">
+      <div class="tab-item">
+        <router-link to="/collection">
+         <div class="tab-icon"><img :src="routeName == 'collection' ? require('@/assets/images/ic_navfavorite.png') : require('@/assets/images/ic_navfavorite_grey.png')" alt=""></div>
+          <div class="tab-text">收藏</div>
+        </router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/discovery">
+         <div class="tab-icon"><img :src="routeName == 'discovery' ? require('@/assets/images/ic_navdiscovery.png') : require('@/assets/images/ic_navdiscovery_grey.png')" alt=""></div>
+          <div class="tab-text">发现</div>
+        </router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/earning">
+          <div class="tab-icon"><img :src="routeName == 'earning' ? require('@/assets/images/ic_navincome.png') : require('@/assets/images/ic_navincome_grey.png')" alt=""></div>
+          <div class="tab-text">赚赚</div>
+        </router-link>
+      </div>
+      <div class="tab-item">
+        <router-link to="/mine">
+          <div class="tab-icon"><img :src="routeName == 'mine' ? require('@/assets/images/ic_navmy.png') : require('@/assets/images/ic_navmy_grey.png')" alt=""></div>
+          <div class="tab-text">我的</div>
+        </router-link>
+      </div>
+    </div>
+  </div>
 </template>
-
 <script>
+import { mapGetters } from 'vuex'
 export default {
-	data() {
-		return {
+  data() {
+    return {
 
-		}
-	},
-	computed: {
-		isShowTabbar () {
-			// TODO 暂时不显示taber 底部栏
-			// 显示条件变成其他的
-			return false;
-			let routeLength = this.$route.path.split('/').length
-			return routeLength > 2 ? false : true
-		}
-	}
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'routeName',
+    ]),
+    isShowTabbar() {
+      let { showTabar } = this.$route.meta;
+      return !!showTabar ? showTabar : false;
+    }
+  }
 }
+
 </script>
-
 <style scoped lang="scss">
-@import '../assets/css/function';
-
-.tabar{
-	.tab{
-		position: fixed;
-		bottom: 0;
-		left: 0;
-	    display: flex;
-	    width: 100%;
-	    height: px2rem(120px);
-	    line-height: px2rem(120px);
-	    background: #fff;
-		box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
-	    &:after{
-			display: block;
-			position: absolute;
-			left: 0;
-			top: 0;
-			width: 100%;
-			border-top: 1px solid rgba(7, 17, 27, 0.1);
-			content: '';
-		}
-	    .tab-item{
-	    	flex: 1;
-	    	text-align: center;
-			a{
-				display: block;
-				font-size: 14px;
-					color: rgb(77, 85, 93);
-					&.active{
-						color: #76D49B;
-						text-decoration: none;
-					}
-				.tab-icon{
-					width: px2rem(50px);
-					height: px2rem(50px);
-					margin: 0 auto;
-					img{
-						width: 100%;
-					}
-				}
-				.tab-text{
-					height: px2rem(80px);
-					line-height: px2rem(80px);
-				}
-			}
-			
-	    }
-	}
+.tabar {
+  .tab {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100px;
+    line-height: 100px;
+    background: #fff;
+    &:after {
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      border-top: 1px solid rgba(7, 17, 27, 0.1);
+      content: '';
+    }
+    .tab-item {
+      display: inline-block;
+      width: 25%;
+      height: 100px;
+      float: left;
+      text-align: center;
+      a {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 14px;
+        color: rgb(77, 85, 93);
+        &:hover{
+        	text-decoration: none;
+        }
+        &:active{
+        	text-decoration: none;
+        }
+        &:link{
+        	text-decoration: none;
+        }
+        &:visited{
+        	text-decoration: none;
+        }
+        .tab-icon {
+          width: 50px;
+          height: 50px;
+          margin: 0 auto;
+          img {
+          	display: block;
+          	height: 100%;
+            width: 100%;
+          }
+        }
+        .tab-text {
+          margin-top: 4px;
+          font-size: 22px;
+          height: 30px;
+          line-height: 30px;
+          color: #818B8F;
+          letter-spacing: 0;
+          text-align: center;
+        }
+      }
+    }
+  }
 }
+
 </style>

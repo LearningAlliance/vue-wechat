@@ -12,7 +12,8 @@ const state = {
     toastMsg: '操作成功',
     showTimePicker: false,
     alertMsg: '退出登录',
-    showAlert: false
+    showAlert: false,
+    routeName: '',
 }
 
 const actions = {
@@ -60,14 +61,19 @@ const actions = {
         commit
     }, status) {
         commit(types.COM_SHOW_TIME_PICKER, status)
+    },
+    setRouteName({
+        commit
+    }, name) {
+        commit(types.COM_SET_ROUTE_NAME, name)
     }
-
 }
 
 const getters = {
     loading: state => state.loading,
     showToast: state => state.showToast,
-    showAlert: state => state.showAlert
+    showAlert: state => state.showAlert,
+    routeName: state => state.routeName,
 }
 
 
@@ -106,6 +112,9 @@ const mutations = {
     [types.COM_ALERT_MSG](state, str) {
         state.alertMsg = str
     },
+    [types.COM_SET_ROUTE_NAME](state, name) {
+        state.routeName = name;
+    }
 }
 
 

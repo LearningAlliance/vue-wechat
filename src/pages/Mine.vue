@@ -6,7 +6,7 @@
 </template>
 <script type="text/javascript">
 import userCard from '@/components/userCard'
-import userGroup from '@/components/userGroup'
+import userGroup from '@/components/group'
 import { mapGetters } from 'vuex'
 import api from '../fetch/api.js'
 
@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       cellLists1: [
-        { link: '', iconUrl: require('@/assets/images/ic_my_info.png'), text: '个人信息', desc: '', badg: '', more: true },
+        { link: '/mine/userinfo', iconUrl: require('@/assets/images/ic_my_info.png'), text: '个人信息', desc: '', badg: '', more: true },
         { link: '', iconUrl: require('@/assets/images/ic_my_account.png'), text: '养老金账户', desc: '', badg: '', more: true },
         { link: '', iconUrl: require('@/assets/images/ic_my_huiyuan.png'), text: '会员中心', desc: '签到奖励', badg: '', more: true },
         { link: '', iconUrl: require('@/assets/images/ic_my_odering.png'), text: '我的订单', desc: '', badg: '', more: true },
@@ -29,7 +29,6 @@ export default {
     'user-group': userGroup,
   },
   created() {
-    console.log(api); 
     api.user.getUserInfo({ userId: 33 }).then((res) => {
       let userInfo = res.data[0];
       this.$store.dispatch('setUserInfo', userInfo);

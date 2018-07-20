@@ -14,7 +14,7 @@ import Router from 'vue-router'
 // import UserMsg from '../pages/UserMsg'
 // import Navbar from '../pages/Navbar'
 
-//  测试页面
+// 测试页面
 import getToken from '../pages/getToken'
 
 import Collection from '../pages/Collection'
@@ -23,13 +23,16 @@ import Earning from '../pages/Earning'
 import Mine from '../pages/Mine'
 import NotFound from '../pages/NotFound'
 
+// user下的文件
+import UserInfo from '../pages/mine/UserInfo'
+
 Vue.use(Router)
 Vue.use(require('vue-wechat-title'))
 
 // meta中有 subtitle属性时 才会显示 header,和返回按钮
 
 export default new Router({
-  linkActiveClass: 'active',
+  // linkActiveClass: 'active',
   mode: 'history',
   routes: [{
     path: '/',
@@ -43,6 +46,7 @@ export default new Router({
     name: 'collection',
     meta: {
       title: '收藏',
+      showTabar: true,
     },
     component: Collection
   }, {
@@ -50,6 +54,7 @@ export default new Router({
     name: 'discovery',
     meta: {
       title: '发现',
+      showTabar: true,
     },
     component: Discovery
   }, {
@@ -57,6 +62,7 @@ export default new Router({
     name: 'earning',
     meta: {
       title: '赚赚',
+      showTabar: true,
     },
     component: Earning
   }, {
@@ -64,8 +70,17 @@ export default new Router({
     name: 'mine',
     meta: {
       title: '个人中心',
+      showTabar: true,
     },
     component: Mine
+  }, {
+    path: '/mine/userInfo',
+    name: 'userinfo',
+    meta: {
+      title: '个人中心',
+      subTitle: '个人信息',
+    },
+    component: UserInfo
   }, {
     path: '*',
     name: 'notfound',

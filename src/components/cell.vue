@@ -3,9 +3,9 @@
     <router-link :to="link" :class="['clearfix', {'no-border': hideBorder}]">
       <div class="cell-l">
         <img :src="iconUrl" class="cell-icon" v-show="iconUrl" alt="">
-        <span class="text">{{text}}</span>
+        <span :class="['text', {'margin-left-0': !iconUrl}]">{{text}}</span>
       </div>
-      <div class="cell-r">
+      <div :class="['cell-r', {'right-0': !more}]">
         <span class="text" v-show="desc">{{desc}}</span>
         <span class="badg" v-show="badg">{{badg}}</span>
         <span class="avatar" v-show="avatar"><img :src="avatar" alt=""></span>
@@ -46,7 +46,7 @@ export default {
     height: 88px;
     line-height: 88px;
     margin: 0 30px 0 30px;
-    border-bottom: 1px solid #E2E2E2;
+    border-bottom: 1px solid #E2E2E2;/*no*/
     position: relative;
     .cell-l {
       display: inline-block;
@@ -66,6 +66,9 @@ export default {
         letter-spacing: 0;
         line-height: 36.4px;
         margin-left: 20px;
+        &.margin-left-0{
+          margin-left: 0;
+        }
       }
     }
     .cell-r {
@@ -74,6 +77,9 @@ export default {
       right: -10px;
       display: inline-block;
       height: 88px;
+      &.right-0{
+        right: 0;
+      }
       .text {
         display: inline-block;
         font-family: PingFangSC-Regular;
