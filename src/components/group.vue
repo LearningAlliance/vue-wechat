@@ -27,7 +27,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 </style>
