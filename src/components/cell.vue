@@ -49,6 +49,7 @@ export default {
     border-bottom: 1px solid #E2E2E2;
     /*no*/
     position: relative;
+    box-sizing: border-box;
     &.has-avatar {
       height: 176px;
     }
@@ -103,7 +104,7 @@ export default {
         text-align: right;
         line-height: 36.4px;
         vertical-align: middle;
-        margin-right: 10px;
+        // margin-right: 10px;
       }
       .more {
         width: 50px;
