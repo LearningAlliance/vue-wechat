@@ -23,6 +23,9 @@ import Earning from '../pages/Earning'
 import Mine from '../pages/Mine'
 import NotFound from '../pages/NotFound'
 
+// 我的页面
+import ModifyUserNick from '../pages/Mine/ModifyUserNick'
+
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
 
@@ -81,6 +84,16 @@ export default new Router({
       subTitle: '个人信息',
     },
     component: UserInfo
+  }, {
+    path: '/mine/modifyUserNick',
+    name: 'modifyUserNick',
+    meta: {
+      title: '个人中心',
+      subTitle: '修改昵称',
+      rightText: '保存',
+      funName: 'updateUserNick',
+    },
+    component: ModifyUserNick
   }, {
     path: '*',
     name: 'notfound',

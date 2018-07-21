@@ -3,7 +3,7 @@
     <v-toast v-show="showToast"></v-toast>
     <v-alert v-show="showAlert"></v-alert>
     <v-loading v-show="loading"></v-loading>
-    <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay" :header-display="headerDisplay"></v-header>
+    <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay" :header-display="headerDisplay" :right-text="rightText" :fun-name="funName"></v-header>
     <div class="content" :class="{tabar: tabar, topbar: headerDisplay}">
       <transition name="slide-left">
         <router-view v-wechat-title="$route.meta.title"></router-view>
@@ -38,16 +38,16 @@ export default {
 
     }
   },
-  created(){
-      let routeName = this.$route.path.split('/')[1];
-      this.setRouteName(routeName || '');
+  created() {
+    let routeName = this.$route.path.split('/')[1];
+    this.setRouteName(routeName || '');
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'hideMenuSlide'
   },
   methods: {
-    ...mapActions({ setNavState: 'setNavState' , setRouteName: 'setRouteName'}),
+    ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName' }),
     // 隐藏MenuSlide
     hideMenuSlide() {
       this.setNavState(false);
@@ -97,6 +97,14 @@ export default {
       } = this.$route.meta;
       return !!subTitle;
       // return this.$route.path.split('/').length > 2 ? true : false
+    },
+    rightText() {
+      let { rightText } = this.$route.meta;
+      return !!rightText ? rightText : '';
+    },
+    funName() {
+      let { funName } = this.$route.meta;
+      return !!funName ? funName : '';
     },
     mapDisplay() {
       // TODO 默认不显示右边定位按钮

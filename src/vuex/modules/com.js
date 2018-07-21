@@ -14,6 +14,7 @@ const state = {
     alertMsg: '退出登录',
     showAlert: false,
     routeName: '',
+    headerRightFun: '',
 }
 
 const actions = {
@@ -66,6 +67,11 @@ const actions = {
         commit
     }, name) {
         commit(types.COM_SET_ROUTE_NAME, name)
+    },
+    setHeaderRightFun({
+        commit
+    }, funName) {
+        commit(types.COM_SET_HEADER_RIGHT_FUN, funName)
     }
 }
 
@@ -74,6 +80,7 @@ const getters = {
     showToast: state => state.showToast,
     showAlert: state => state.showAlert,
     routeName: state => state.routeName,
+    headerRightFun: state => state.headerRightFun,
 }
 
 
@@ -114,7 +121,10 @@ const mutations = {
     },
     [types.COM_SET_ROUTE_NAME](state, name) {
         state.routeName = name;
-    }
+    },
+    [types.COM_SET_HEADER_RIGHT_FUN](state, funName) {
+        state.headerRightFun = funName;
+    },
 }
 
 

@@ -11,12 +11,14 @@ export const COM_SHOW_ALERT = 'COM_SHOW_ALERT'
 export const COM_ALERT_MSG = 'COM_ALERT_MSG'
 export const COM_SHOW_TIME_PICKER = 'COM_SHOW_TIME_PICKER' //显示timepicker
 export const COM_SET_ROUTE_NAME = 'COM_SET_ROUTE_NAME' //当前路径
+export const COM_SET_HEADER_RIGHT_FUN = 'COM_SET_HEADER_RIGHT_FUN' //设置顶部栏右键按钮的点击事件
 
 
 //user 用户
 export const SET_USER_INFO = 'SETUSERINFO' //设置用户信息
 export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS' //设置登录状态
 export const GET_USER_DATA = 'GET_USER_DATA' //获取用户数据信息
+export const SET_USER_NICK = 'SET_USER_NICK' //设置用户昵称
 
 //sports
 export const GET_SPORTS_LIST = 'GET_SPORTS_LIST' //获取主题列表

@@ -12,9 +12,11 @@
     <div class="header-cont">
       <p>{{title}}</p>
     </div>
+    <div class="header-right-text" v-show="!!rightText" @click="onRightClick">{{rightText}}</div>
   </div>
 </template>
 <script>
+import * as types from '@/vuex/types.js';
 export default {
   props: {
     title: String,
@@ -22,6 +24,8 @@ export default {
     backDisplay: Boolean,
     mapDisplay: Boolean,
     headerDisplay: Boolean,
+    rightText: String,
+    funName: String,
   },
   data() {
     return {
@@ -37,6 +41,10 @@ export default {
     },
     showBar() {
       this.$store.dispatch('setNavState', true)
+    },
+    onRightClick() {
+      // 设置header点击右键时调用的funName
+      this.$store.dispatch('setHeaderRightFun', this.funName);
     }
   }
 }
@@ -60,13 +68,13 @@ export default {
     display: block;
     width: 50px;
     height: 50px;
-    .icon{
-        display: block;
-        width: 50px;
-        height: 50px;
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-        background-image: url(../assets/images/ic_back@2x.png);
+    .icon {
+      display: block;
+      width: 50px;
+      height: 50px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url(../assets/images/ic_back@2x.png);
     }
   }
   .header-cont {
@@ -79,6 +87,19 @@ export default {
     letter-spacing: 0;
     text-align: center;
     line-height: 100px;
+  }
+  .header-right-text {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    height: 100px;
+    font-family: PingFangSC-Regular;
+    font-size: 32px;
+    color: #2E3141;
+    letter-spacing: 0;
+    text-align: right;
+    line-height: 100px;
+    padding-left: 30px;
   }
 }
 

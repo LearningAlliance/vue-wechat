@@ -3,14 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 
 import store from './vuex/store'
 import * as filters from './util/filter'
 
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
 
-FastClick.attach(document.body);
+// FastClick.attach(document.body);
 
 /* eslint-disable no-new */
 new Vue({

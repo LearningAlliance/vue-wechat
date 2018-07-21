@@ -1,47 +1,41 @@
 <template>
-    <div class="alert">
-        <div class="alert-wrap">
-            <div class="text">
-                {{alertMsg}}
-            </div>
-        </div>
+  <div class="alert">
+    <div class="text">
+      {{alertMsg}}
     </div>
+  </div>
 </template>
-
 <script>
-    import { mapState } from 'vuex'
-    export default {
-        data() {
-            return {
+import { mapState } from 'vuex'
+export default {
+  data() {
+    return {
 
-            }
-        },
-        computed: mapState({
-            alertMsg: state => state.com.alertMsg
-        })
     }
+  },
+  computed: mapState({
+    alertMsg: state => state.com.alertMsg
+  })
+}
 
 </script>
-
 <style lang="scss" scoped>
-    @import '../assets/css/function';
-    .alert {
-        z-index: 1000;
-        .alert-wrap {
-            position: fixed;
-            width: px2rem(250px);
-            height: px2rem(90px);
-            line-height: px2rem(90px);
-            text-align: center;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: px2rem(45px);
-            background: rgba(0, 0, 0, 0.6);
-            .text {
-                font-size: 14px;
-                color: #fff;
-            }
-        }
-    }
+.alert {
+  z-index: 9999;
+  position: fixed;
+  padding: 18px 40px;
+  line-height: 1.4;
+  font-size: 48px;
+  text-align: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%,-50%);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  .text {
+    font-size: 14px;
+    color: #fff;
+  }
+}
 </style>
