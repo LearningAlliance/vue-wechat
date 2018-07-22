@@ -164,6 +164,9 @@ a.active {
   height: 100%;
   background: #F8F8FC;
   .content {
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
     background: #F8F8FC;
   }
   .topbar {
