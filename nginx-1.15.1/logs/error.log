@@ -78,3 +78,14 @@
 2018/07/20 11:48:51 [notice] 23372#3196: signal process started
 2018/07/20 11:48:52 [notice] 25284#12192: signal process started
 2018/07/20 11:48:57 [error] 15716#8756: *26 CreateFile() "D:\D\vue-wechat\dist/mine" failed (2: The system cannot find the file specified), client: 127.0.0.1, server: localhost, request: "GET /mine HTTP/1.1", host: "localhost:7080"
+2018/07/22 12:28:56 [emerg] 9356#9880: CreateDirectory() "D:\D\vue-wechat\nginx-1.15.1/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2018/07/22 12:29:34 [emerg] 7312#12860: CreateDirectory() "D:\D\vue-wechat\nginx-1.15.1/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2018/07/22 12:30:38 [notice] 17464#12076: signal process started
+2018/07/22 12:30:38 [error] 17464#12076: OpenEvent("Global\ngx_reload_6872") failed (2: The system cannot find the file specified)
+2018/07/22 12:30:52 [emerg] 15676#12616: CreateDirectory() "D:\D\vue-wechat\nginx-1.15.1/temp/client_body_temp" failed (3: The system cannot find the path specified)
+2018/07/22 12:32:14 [notice] 11792#2368: signal process started
+2018/07/22 12:32:14 [error] 11792#2368: OpenEvent("Global\ngx_reload_6872") failed (2: The system cannot find the file specified)
+2018/07/22 12:32:20 [notice] 16720#6492: signal process started
+2018/07/22 12:32:20 [error] 16720#6492: OpenEvent("Global\ngx_stop_6872") failed (2: The system cannot find the file specified)
+2018/07/22 12:32:43 [notice] 12092#15156: signal process started
+2018/07/22 12:32:43 [error] 12092#15156: OpenEvent("Global\ngx_stop_6872") failed (2: The system cannot find the file specified)

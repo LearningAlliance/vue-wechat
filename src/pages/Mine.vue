@@ -20,7 +20,7 @@ export default {
         { link: '', iconUrl: require('@/assets/images/ic_my_odering.png'), text: '我的订单', desc: '', badg: '', more: true },
         { link: '', iconUrl: require('@/assets/images/ic_my_egg.png'), text: '我的彩蛋', desc: '', badg: '', more: true },
         { link: '', iconUrl: require('@/assets/images/ic_my_ticket.png'), text: '我的优惠券', desc: '', badg: '', more: true },
-        { link: '', iconUrl: require('@/assets/images/ic_my_setting.png'), text: '设置', desc: '', badg: '', more: true },
+        { link: '/mine/userSettings', iconUrl: require('@/assets/images/ic_my_setting.png'), text: '设置', desc: '', badg: '', more: true },
       ]
     }
   },

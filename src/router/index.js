@@ -25,6 +25,8 @@ import NotFound from '../pages/NotFound'
 
 // 我的页面
 import ModifyUserNick from '../pages/Mine/ModifyUserNick'
+import UserSettings from '../pages/Mine/Settings'
+import ModifyMobile from '../pages/Mine/ModifyMobile'
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -95,77 +97,25 @@ export default new Router({
     },
     component: ModifyUserNick
   }, {
+    path: '/mine/userSettings',
+    name: 'userSettings',
+    meta: {
+      title: '个人中心',
+      subTitle: '设置',
+    },
+    component: UserSettings,
+  }, {
+    path: '/mine/userSettings/ModifyMobile',
+    name: 'ModifyMobile',
+    meta: {
+      title: '个人中心',
+      subTitle: ' ',
+    },
+    component: ModifyMobile,
+  }, {
     path: '*',
     name: 'notfound',
     meta: {},
     component: NotFound
   }]
 })
-
-// export default new Router({
-//   linkActiveClass: 'active',
-//   mode: 'history',
-//   routes: [{
-//     path: '/',
-//     name: 'home',
-//     meta: {
-//       title: '主页'
-//     },
-//     component: Home
-//   }, {
-//     path: '/home',
-//     name: 'home',
-//     meta: {
-//       title: '主页2'
-//     },
-//     component: Home
-//   }, {
-//     path: '/sport',
-//     name: 'sport',
-//     component: Sport
-//   }, {
-//     path: '/travel',
-//     name: 'travel',
-//     component: Travel
-//   }, {
-//     path: '/sport/:id',
-//     name: 'detail',
-//     component: Detail
-//   }, {
-//     path: '/travel/:id',
-//     name: 'detail',
-//     component: Detail
-//   }, {
-//     path: '/user',
-//     name: 'user',
-//     component: User
-//   }, {
-//     path: '/user/login',
-//     component: Login
-//   }, {
-//     path: '/user/regist',
-//     component: Regist
-//   }, {
-//     path: '/user/info',
-//     component: UserInfo
-//   }, {
-//     path: '/user/set',
-//     component: Set
-//   }, {
-//     path: '/user/post',
-//     component: Post
-//   }, {
-//     path: '/user/msg',
-//     component: UserMsg
-//   }, {
-//     path: '/user/navbar',
-//     meta: {
-//       title: '个人信息'
-//     },
-//     component: Navbar
-//   }, {
-//     path: '*',
-//     name: 'notfound',
-//     component: NotFound
-//   }]
-// })

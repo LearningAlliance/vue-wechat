@@ -40,5 +40,27 @@
 			"userBirthday": "1986-02-12 11:11:11"
 		}],
 		"resultCode": "0"
+	},
+	"updateMobile": {
+		"resultMsg": "Successful",
+		"data": [{
+			"userWecharId": "1111",
+			"stateDate": "2018-07-16 20:10:27",
+			"userId": 1,
+			"userNick": "阿斌",
+			"state": 1,
+			"userSex": 1,
+			"userAliId": "2222",
+			"userPhone": "15858208598",
+			"createDate": "2018-07-16 20:10:20",
+			"idcardNo": "1234543234565432",
+			"userHead": "http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKMyEiaZictpRgZAiarOCUFQ8b2Wymp8AdicXRCuFClT7bPjyh5M4fnTzTMHgrlyxQFJeZ7uC4A9kNGuQ/132",
+			"userBirthday": "1986-02-12 11:11:11"
+		}],
+		"resultCode": "0"
+	},
+	"getVerifyCode": {
+		"resultMsg": "Successful",
+		"resultCode": "0"
 	}
 }

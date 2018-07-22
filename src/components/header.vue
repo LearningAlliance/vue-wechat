@@ -61,6 +61,7 @@ export default {
   height: 100px;
   background: #fff;
   overflow: hidden;
+  z-index: 999;
   .header-icon {
     position: absolute;
     left: 20px;

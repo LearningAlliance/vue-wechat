@@ -17,3 +17,9 @@ export const getUserInfo = (params) => get('/userInfo', params)
  * 修改用户昵称
  */
 export const updateUserNick = (params) => get('/updateUserNick', params)
+
+// 获取手机验证码
+export const getVerifyCode = (params) => get('/getVerifyCode', params)
+
+// 更改手机号
+export const updateMobile = (params) => get('/updateMobile', params);
