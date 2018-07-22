@@ -10,7 +10,7 @@
         <p class="label-text">手机号</p>
       </div>
       <div class="value clearfix">
-        <input type="text" class="input" placeholder="请输入新的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="userPhone" onchange="if(value.length>11)value=value.slice(0, 11)"/>
+        <input type="text" class="input" placeholder="请输入新的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="userPhone" onchange="if(value.length>11)value=value.slice(0, 11)" />
         <div class="btn" @click="getVerifyCode">获取验证码</div>
       </div>
       <div class="line-box">
@@ -22,11 +22,14 @@
         <p class="label-text">验证码</p>
       </div>
       <div class="value clearfix">
-        <input type="text" class="input" placeholder="请输入验证码" oninput="if(value.length>4)value=value.slice(0, 4)" v-model="verifyCode" onchange="if(value.length>4)value=value.slice(0, 4)"/>
+        <input type="text" class="input" placeholder="请输入验证码" oninput="if(value.length>4)value=value.slice(0, 4)" v-model="verifyCode" onchange="if(value.length>4)value=value.slice(0, 4)" />
       </div>
       <div class="line-box">
         <div class="line"></div>
       </div>
+    </div>
+    <div class="err-box">
+      <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
     <div :class="['submit', {'canClick': userPhone.length == 11 && verifyCode.length == 4}]" @click="submit">提交</div>
   </div>
@@ -38,46 +41,50 @@ import api from '@/fetch/api'
 export default {
   data() {
     return {
-    	userPhone: '',
-    	verifyCode: '',
+      userPhone: '',
+      verifyCode: '',
+      resultMsg: '',
     }
   },
   methods: {
-  	getVerifyCode(){
-  		if(this.userPhone.length != 11){
-  			_.alert('请先输入完整的手机号');
-  			return;
-  		}
-  		api.user.getVerifyCode({
-  			userPhone: this.userPhone
-  		}).then((res) => {
-  			_.alert('验证码已发送，请注意查收');
-  		}).catch((err) => {
-  			console.log(err);
-  		});
-  	},
-  	submit(){
-  		if(this.userPhone.length != 11){
-  			_.alert('请输入完整的手机号');
-  			return;
-  		}
-  		if(this.verifyCode.length != 4){
-  			_.alert('请输入完整的验证码');
-  			return;
-  		}
-  		api.user.updateMobile({
-  			userPhone: this.userPhone,
-  			verifyCode: this.verifyCode
-  		}).then((res) => {
-  			_.alert('修改成功');
-  			// 默认返回了个人信息 则可以使用dispatch 更改全局的用户信息
-  			this.$store.dispatch('setUserInfo', res.data[0]);
-  			// 清空输入的信息
-  			this.userPhone = '';
-  			this.verifyCode = '';
-  			this.$router.history.go(-1);
-  		})
-  	}
+    getVerifyCode() {
+      if (this.userPhone.length != 11) {
+        _.alert('请先输入完整的手机号');
+        return;
+      }
+      api.user.getVerifyCode({
+        userPhone: this.userPhone
+      }).then((res) => {
+        _.alert('验证码已发送，请注意查收');
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    submit() {
+      if (this.userPhone.length != 11) {
+        _.alert('请输入完整的手机号');
+        return;
+      }
+      if (this.verifyCode.length != 4) {
+        _.alert('请输入完整的验证码');
+        return;
+      }
+      api.user.updateMobile({
+        userPhone: this.userPhone,
+        verifyCode: this.verifyCode
+      }).then((res) => {
+        _.alert('修改成功');
+        this.resultMsg = '';
+        // 默认返回了个人信息 则可以使用dispatch 更改全局的用户信息
+        this.$store.dispatch('setUserInfo', res.data[0]);
+        // 清空输入的信息
+        this.userPhone = '';
+        this.verifyCode = '';
+        this.$router.history.go(-1);
+      }).catch((err) => {
+      	this.resultMsg = err.data.resultMsg;
+      });
+    }
   }
 }
 
@@ -187,7 +194,7 @@ export default {
 }
 
 .submit {
-  margin: 141px auto 0 auto;
+  margin: 60px auto 0 auto;
   width: 570px;
   height: 88px;
   line-height: 88px;
@@ -198,8 +205,24 @@ export default {
   color: #FFFFFF;
   letter-spacing: 0;
   text-align: center;
-  &.canClick{
-  	background: #F05720;
+  &.canClick {
+    background: #F05720;
+  }
+}
+
+.err-box {
+  width: 100%;
+  height: 60px;
+  padding-top: 18.2px;
+  padding-left: 50px;
+  box-sizing: border-box;
+  .err-text {
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #D93312;
+    letter-spacing: 0;
+    line-height: 36.4px;
+    height: 36.4px;
   }
 }
 
