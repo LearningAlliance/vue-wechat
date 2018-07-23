@@ -37,21 +37,22 @@ export default {
   },
   methods: {
   	updateUserNick(){
+      this.$store.dispatch('setHeaderRightFun', '');
   		if(!this.tempNick){
   			_.alert('请先填写昵称再保存~');
-  			this.$store.dispatch('setHeaderRightFun', '');
+  			// this.$store.dispatch('setHeaderRightFun', '');
   			return;
   		}
   		api.user.updateUserNick({
   			userNick: this.tempNick
   		}).then((res) => {
-  			this.$store.dispatch('setHeaderRightFun', '');
+  			// this.$store.dispatch('setHeaderRightFun', '');
   			// res.data[0]中为新的用户信息
   			this.$store.dispatch('setUserInfo', res.data[0]);
   			this.$router.history.go(-1);
   		}).catch((err) => {
   			console.log(err);
-  			this.$store.dispatch('setHeaderRightFun', '');
+  			// this.$store.dispatch('setHeaderRightFun', '');
   		})
   	},
   	clear(){

@@ -8,6 +8,9 @@ import ModifyMobile from '../pages/mine/ModifyMobile'
 import Safeguard from '../pages/mine/Safeguard'
 // 保障金-完善信息
 import SafeguardComplete from '../pages/mine/SafeguardComplete'
+// 转赠
+import SafeguardGive from '../pages/mine/SafeguardGive'
+import GiveSuccess from '../pages/mine/GiveSuccess'
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -71,4 +74,21 @@ export default [{
 		subTitle: '完善信息',
 	},
 	component: SafeguardComplete,
+}, {
+	path: '/mine/safeguardGive',
+	name: 'safeguardGive',
+	meta: {
+		title: '个人中心',
+		subTitle: '转赠',
+		rightText: '记录',
+		funName: 'toDetail',
+	},
+	component: SafeguardGive,
+}, {
+	path: '/mine/GiveSuccess',
+	name: 'GiveSuccess',
+	meta: {
+		title: '个人中心',
+	},
+	component: GiveSuccess,
 }]

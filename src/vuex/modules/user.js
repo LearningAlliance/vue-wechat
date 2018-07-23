@@ -9,7 +9,8 @@ const state = {
 	// 用户数据信息
 	userData: [],
 	// 保障金是否已经完善了信息
-	canUseSafeguard: false,
+	// 默认为false， 为测试，暂时改为 true
+	canUseSafeguard: true,
 }
 
 const actions = {

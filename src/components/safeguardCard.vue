@@ -11,11 +11,11 @@
       </div>
       <div class="box clearfix" v-else>
         <div class="cell left">
-          <div class="btn">兑换</div>
+          <div class="btn" @click="toShop">兑换</div>
           <p>已兑换养老金100元</p>
         </div>
         <div class="cell right">
-          <div class="btn no-bg">转赠</div>
+          <div class="btn no-bg" @click="toGive">转赠</div>
           <p>可转赠给亲友</p>
         </div>
       </div>
@@ -23,6 +23,7 @@
   </div>
 </template>
 <script type="text/javascript">
+import * as _ from '@/util/tool.js'
 import { mapGetters } from 'vuex'
 export default {
   data() {
@@ -31,6 +32,12 @@ export default {
   methods: {
     toComplate() {
       this.$router.push('/mine/safeguardComplete')
+    },
+    toShop(){
+    	_.alert('TODO 跳转到兑换商城')
+    },
+    toGive(){
+      this.$router.push('/mine/safeguardGive')
     }
   },
   computed: {

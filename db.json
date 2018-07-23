@@ -66,5 +66,13 @@
 	"completeInfo": {
 		"resultMsg": "Successful",
 		"resultCode": "0"
+	},
+	"giveSafeGuard": {
+		"resultMsg": "Successful",
+		"data": {
+			"amount": "13.2",
+			"phone": 13333333333
+		},
+		"resultCode": "0"
 	}
 }

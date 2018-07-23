@@ -26,3 +26,6 @@ export const updateMobile = (params) => get('/updateMobile', params);
 
 // 保障金-完善信息
 export const completeInfo = (params) => get('/completeInfo', params);
+
+// 保障金-转增
+export const giveSafeGuard = (params) => get('/giveSafeGuard', params);
