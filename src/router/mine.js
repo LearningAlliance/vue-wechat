@@ -1,8 +1,13 @@
 import Mine from '../pages/Mine'
 // 我的页面
-import ModifyUserNick from '../pages/Mine/ModifyUserNick'
-import UserSettings from '../pages/Mine/Settings'
-import ModifyMobile from '../pages/Mine/ModifyMobile'
+import ModifyUserNick from '../pages/mine/ModifyUserNick'
+import UserSettings from '../pages/mine/Settings'
+import ModifyMobile from '../pages/mine/ModifyMobile'
+
+// 保障金部分
+import Safeguard from '../pages/mine/Safeguard'
+// 保障金-完善信息
+import SafeguardComplete from '../pages/mine/SafeguardComplete'
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -43,10 +48,27 @@ export default [{
 	component: UserSettings,
 }, {
 	path: '/mine/userSettings/ModifyMobile',
-	name: 'ModifyMobile',
+	name: 'modifyMobile',
 	meta: {
 		title: '个人中心',
 		subTitle: ' ',
 	},
 	component: ModifyMobile,
-}, ]
+}, {
+	path: '/mine/safeguard',
+	name: 'safeguard',
+	meta: {
+		title: '个人中心',
+		subTitle: '保障金',
+		rightText: '常见问题',
+	},
+	component: Safeguard,
+}, {
+	path: '/mine/safeguardComplete',
+	name: 'safeguardcomplete',
+	meta: {
+		title: '个人中心',
+		subTitle: '完善信息',
+	},
+	component: SafeguardComplete,
+}]

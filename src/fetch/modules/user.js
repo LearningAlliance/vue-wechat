@@ -23,3 +23,6 @@ export const getVerifyCode = (params) => get('/getVerifyCode', params)
 
 // 更改手机号
 export const updateMobile = (params) => get('/updateMobile', params);
+
+// 保障金-完善信息
+export const completeInfo = (params) => get('/completeInfo', params);

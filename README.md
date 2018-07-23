@@ -11,6 +11,10 @@
 > * localStorage
 > * webpack
 
+### 其他
+> * ui样式参照ui图
+> * 部分组件使用 Mint UI
+
 ## Build Setup
 
 ``` bash

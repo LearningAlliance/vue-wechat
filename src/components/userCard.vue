@@ -17,7 +17,7 @@
           </div>
         </div>
         <div class="box">
-          <div class="box-left">
+          <div class="box-left" @click="toSafeGuard">
             <p class="box-title">保障金(元)</p>
             <p class="box-content">2147.38</p>
           </div>
@@ -56,6 +56,11 @@ export default {
       return '';
     }
   },
+  methods: {
+    toSafeGuard() {
+      this.$router.push('/mine/safeguard');
+    }
+  }
 }
 
 </script>
@@ -110,18 +115,18 @@ export default {
         letter-spacing: 0;
         text-align: center;
         line-height: 41.6px;
-        .user-sex-hidden{
+        .user-sex-hidden {
           display: none;
           width: 40px;
           height: 40px;
           background-size: 100% 100%;
           background-repeat: no-repeat;
-          vertical-align:text-bottom;
-          &.male{
+          vertical-align: text-bottom;
+          &.male {
             display: inline-block;
             background-image: url('../assets/images/ic_male.png');
           }
-          &.female{
+          &.female {
             display: inline-block;
             background-image: url('../assets/images/ic_female.png');
           }

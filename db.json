@@ -62,5 +62,9 @@
 	"getVerifyCode": {
 		"resultMsg": "Successful",
 		"resultCode": "0"
+	},
+	"completeInfo": {
+		"resultMsg": "Successful",
+		"resultCode": "0"
 	}
 }

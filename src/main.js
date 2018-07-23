@@ -8,6 +8,9 @@ import router from './router'
 import store from './vuex/store'
 import * as filters from './util/filter'
 
+// import Mint from 'mint-ui';
+// Vue.use(Mint);
+
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
 
 // FastClick.attach(document.body);

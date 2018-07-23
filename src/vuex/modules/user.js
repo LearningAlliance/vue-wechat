@@ -7,7 +7,9 @@ const state = {
 	// 用户登录信息
 	userInfo: JSON.parse(localStorage.getItem('userInfo')) || {},
 	// 用户数据信息
-	userData: []
+	userData: [],
+	// 保障金是否已经完善了信息
+	canUseSafeguard: false,
 }
 
 const actions = {
@@ -45,12 +47,19 @@ const actions = {
 		commit(types.SET_LOGIN_STATUS, false)
 		commit(types.SET_USER_INFO, {})
 	},
+
+	setCanUseSafeguard({
+		commit
+	}, flag) {
+		commit(types.SET_CAN_USE_SAFEGUARD, flag)
+	}
 }
 
 const getters = {
 	getUserData: state => state.userData,
 	loginStatus: state => state.loginStatus,
-	userInfo: state => state.userInfo
+	userInfo: state => state.userInfo,
+	canUseSafeguard: state => state.canUseSafeguard,
 }
 
 const mutations = {
@@ -60,9 +69,12 @@ const mutations = {
 	},
 
 	[types.SET_LOGIN_STATUS](state, status) {
-		state.loginStatus = status
+		state.loginStatus = status;
 	},
 
+	[types.SET_CAN_USE_SAFEGUARD](state, flag) {
+		state.canUseSafeguard = flag;
+	}
 }
 
 export default {

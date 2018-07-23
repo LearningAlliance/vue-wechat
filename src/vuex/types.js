@@ -20,6 +20,9 @@ export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS' //设置登录状态
 export const GET_USER_DATA = 'GET_USER_DATA' //获取用户数据信息
 export const SET_USER_NICK = 'SET_USER_NICK' //设置用户昵称
 
+
+export const SET_CAN_USE_SAFEGUARD = 'SET_CAN_USE_SAFEGUARD' //设置保障金是否完善信息flag
+
 //sports
 export const GET_SPORTS_LIST = 'GET_SPORTS_LIST' //获取主题列表
 export const GET_SPORTS_SEARCH_KEY = 'GET_SPORTS_SEARCH_KEY' //获取主题列表参数

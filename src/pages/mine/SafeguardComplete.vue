@@ -2,16 +2,15 @@
   <div class="page">
     <div class="section">
       <div class="setcion-title">
-        <p class="section-title-p">修改手机</p>
+        <p class="section-title-p">完善信息开通保障金账户</p>
       </div>
     </div>
     <div class="input-box">
       <div class="label">
-        <p class="label-text">手机号</p>
+        <p class="label-text">姓名</p>
       </div>
       <div class="value clearfix">
-        <input type="text" class="input" placeholder="请输入新的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="userPhone" onchange="if(value.length>11)value=value.slice(0, 11)" />
-        <div class="btn" @click="getVerifyCode">获取验证码</div>
+        <input type="text" class="input" placeholder="请输入您的姓名" v-model="userName" />
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -19,10 +18,22 @@
     </div>
     <div class="input-box margin-top-20">
       <div class="label">
-        <p class="label-text">验证码</p>
+        <p class="label-text">身份证号</p>
       </div>
       <div class="value clearfix">
-        <input type="text" class="input" placeholder="请输入验证码" oninput="if(value.length>4)value=value.slice(0, 4)" v-model="verifyCode" onchange="if(value.length>4)value=value.slice(0, 4)" />
+        <input type="text" class="input" placeholder="请输入您的身份证号" oninput="if(value.length>18)value=value.slice(0, 18)" v-model="idCard" onchange="if(value.length>18)value=value.slice(0, 18)" />
+      </div>
+      <div class="line-box">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div class="input-box margin-top-20" @click="chooseBirth">
+      <div class="label">
+        <p class="label-text">生日</p>
+      </div>
+      <div class="value clearfix">
+        <input type="text" class="input" placeholder="请选择您的出生年月日" v-model="birthday" disabled="" />
+        <div class="btn-right"></div>
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -31,62 +42,85 @@
     <div class="err-box">
       <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
-    <div :class="['submit', {'canClick': userPhone.trim().length == 11 && verifyCode.trim().length == 4}]" @click="submit">提交</div>
+    <div :class="['submit', {'canClick': userName.trim().length > 0 && idCard.trim().length == 18 && birthday.length > 0}]" @click="submit">提交</div>
+    <mt-datetime-picker ref="picker" type="date" v-model="pickerValue" @confirm="handleConfirm" :startDate="startDate" :endDate="endDate">
+    </mt-datetime-picker>
   </div>
 </template>
 <script type="text/javascript">
 import * as _ from '@/util/tool.js'
+import { DatetimePicker } from 'mint-ui';
 import api from '@/fetch/api'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data() {
     return {
-      userPhone: '',
-      verifyCode: '',
+      userName: '',
+      idCard: '',
+      birthday: '',
+      pickerValue: '',
       resultMsg: '',
+      startDate: '',
+      endDate: ''
     }
   },
+  components: {
+    'mt-datetime-picker': DatetimePicker
+  },
+  created(){
+  	this.pickerValue = new Date();
+  	this.startDate = new Date('1899/01/01');
+  	this.endDate = new Date();
+  },
   methods: {
-    getVerifyCode() {
-      let userPhone = this.userPhone.trim();
-      if (userPhone.length != 11) {
-        _.alert('请先输入完整的手机号');
-        return;
-      }
-      api.user.getVerifyCode({
-        userPhone: userPhone
-      }).then((res) => {
-        _.alert('验证码已发送，请注意查收');
-      }).catch((err) => {
-        console.log(err);
-      });
-    },
+  	...mapActions({ setCanUseSafeguard: 'setCanUseSafeguard'}),
     submit() {
-      let userPhone = this.userPhone.trim();
-      let verifyCode = this.verifyCode.trim();
-      if (userPhone.length != 11) {
-        _.alert('请输入完整的手机号');
+      let idCard = this.idCard.trim();
+      let userName = this.userName.trim();
+      if (userName.length == 0) {
+        _.alert('请输入您的姓名');
         return;
       }
-      if (verifyCode.length != 4) {
-        _.alert('请输入完整的验证码');
+      if (idCard.length == 0) {
+        _.alert('请输入身份证号后再进行后续操作');
         return;
       }
-      api.user.updateMobile({
-        userPhone: userPhone,
-        verifyCode: verifyCode
+      if (!this.isCardNo(idCard)) {
+        _.alert('输入的身份证号不合法,请检查后再试');
+        return;
+      }
+      if(this.birthday.length == 0){
+      	_.alert('请选择您的出生年月日');
+      	return;
+      }
+      api.user.completeInfo({
+      	idCard,
+      	userName,
       }).then((res) => {
-        _.alert('修改成功');
-        this.resultMsg = '';
-        // 默认返回了个人信息 则可以使用dispatch 更改全局的用户信息
-        this.$store.dispatch('setUserInfo', res.data[0]);
-        // 清空输入的信息
-        this.userPhone = '';
-        this.verifyCode = '';
-        this.$router.history.go(-1);
-      }).catch((err) => {
-      	this.resultMsg = err.data.resultMsg;
-      });
+      	_.alert('保存成功');
+      	this.setCanUseSafeguard(true);
+      	this.$router.history.go(-1);
+      }).catch();
+    },
+    chooseBirth() {
+      if (this.showPicker) {
+        this.$refs.picker.open();
+      } else {
+        this.$refs.picker.close();
+      }
+      this.showPicker = !this.showPicker;
+    },
+    isCardNo(card) {
+      // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X  
+      var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+      if (reg.test(card) === false) {
+        return false;
+      }
+      return true;
+    },
+    handleConfirm(val) {
+      this.birthday = _.dateFormat(this.pickerValue, 'yyyy-MM-dd');
     }
   }
 }
@@ -152,15 +186,17 @@ export default {
     padding-left: 50px;
     padding-right: 50px;
     margin-bottom: 22px;
+    position: relative;
     .input {
       font-family: PingFangSC-Regular;
       font-size: 36px;
       color: #C4CACD;
       letter-spacing: 0;
       height: 68px;
-      width: 300px;
+      width: 100%;
       line-height: 68px;
       color: #2E3141;
+      background: #fff;
     }
     .btn {
       float: right;
@@ -175,6 +211,16 @@ export default {
       border: 1px solid #E2E2E2;
       /*no*/
       border-radius: 34px;
+    }
+    .btn-right {
+      position: absolute;
+      top: 9px;
+      right: 50px;
+      width: 50px;
+      height: 50px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_nextarrow.png');
     }
   }
   .line-box {
