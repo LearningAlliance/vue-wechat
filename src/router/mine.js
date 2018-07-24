@@ -11,6 +11,7 @@ import SafeguardComplete from '../pages/mine/SafeguardComplete'
 // 转赠
 import SafeguardGive from '../pages/mine/SafeguardGive'
 import GiveSuccess from '../pages/mine/GiveSuccess'
+import GivenList from '../pages/mine/GivenList'
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -85,10 +86,18 @@ export default [{
 	},
 	component: SafeguardGive,
 }, {
-	path: '/mine/GiveSuccess',
+	path: '/mine/giveSuccess',
 	name: 'giveSuccess',
 	meta: {
 		title: '个人中心',
 	},
 	component: GiveSuccess,
+}, {
+	path: '/mine/givenList',
+	name: 'givenList',
+	meta: {
+		title: '个人中心',
+		subTitle: '转赠记录',
+	},
+	component: GivenList
 }]

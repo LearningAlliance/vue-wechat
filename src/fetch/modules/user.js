@@ -29,3 +29,6 @@ export const completeInfo = (params) => get('/completeInfo', params);
 
 // 保障金-转增
 export const giveSafeGuard = (params) => get('/giveSafeGuard', params);
+
+// 保障金-获取转赠记录
+export const getGivenList = (params) => get('/getGivenList', params);

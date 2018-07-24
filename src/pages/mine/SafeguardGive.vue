@@ -60,8 +60,8 @@ export default {
   },
   methods: {
     toDetail() {
-      // 执行完成后
       this.$store.dispatch('setHeaderRightFun', '');
+      this.$router.push('/mine/givenList');
     },
     submit() {
       let phone = this.phone.trim();
@@ -83,7 +83,7 @@ export default {
         console.log(res);
         // 为了防止下一个页面刷新数据会消失，使用 path query模式
         this.$router.push({
-          path: '/mine/GiveSuccess',
+          path: '/mine/giveSuccess',
           query: {
           	...res.data
           }
