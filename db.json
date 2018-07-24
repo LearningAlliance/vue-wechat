@@ -82,5 +82,38 @@
 			"phone": 13333333333
 		}],
 		"resultCode": "0"
+	},
+	"UserFamilyRateList": {
+		"resultMsg": "Successful",
+		"data": [{
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}, {
+			"id": 3,
+			"rate": 12.12,
+			"name": "妈妈"
+		}],
+		"resultCode": "0"
 	}
 }

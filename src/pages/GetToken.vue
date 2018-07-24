@@ -29,7 +29,6 @@ export default {
     ...mapActions({ setSignIn: 'setSignIn' , setSignOut: 'setSignOut'}),
 
     login() {
-      console.log('login');
       // TODO 登录判断
       api.user.login({ username: 123, password: 123 }).then((res) => {
         console.log(res);

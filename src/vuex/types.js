@@ -19,7 +19,7 @@ export const SET_USER_INFO = 'SETUSERINFO' //设置用户信息
 export const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS' //设置登录状态
 export const GET_USER_DATA = 'GET_USER_DATA' //获取用户数据信息
 export const SET_USER_NICK = 'SET_USER_NICK' //设置用户昵称
-
+export const SET_USE_FAMILY_RATE_LIST = 'SET_USE_FAMILY_RATE_LIST' //用户亲情比例列表
 
 export const SET_CAN_USE_SAFEGUARD = 'SET_CAN_USE_SAFEGUARD' //设置保障金是否完善信息flag
 

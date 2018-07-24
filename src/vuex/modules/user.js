@@ -11,6 +11,7 @@ const state = {
 	// 保障金是否已经完善了信息
 	// 默认为false， 为测试，暂时改为 true
 	canUseSafeguard: true,
+	userFamilyRateList: [],
 }
 
 const actions = {
@@ -53,7 +54,13 @@ const actions = {
 		commit
 	}, flag) {
 		commit(types.SET_CAN_USE_SAFEGUARD, flag)
-	}
+	},
+
+	setUserFamilyRateList({
+		commit
+	}, arr) {
+		commit(types.SET_USE_FAMILY_RATE_LIST, arr)
+	},
 }
 
 const getters = {
@@ -61,6 +68,7 @@ const getters = {
 	loginStatus: state => state.loginStatus,
 	userInfo: state => state.userInfo,
 	canUseSafeguard: state => state.canUseSafeguard,
+	userFamilyRateList: state => state.userFamilyRateList,
 }
 
 const mutations = {
@@ -75,6 +83,10 @@ const mutations = {
 
 	[types.SET_CAN_USE_SAFEGUARD](state, flag) {
 		state.canUseSafeguard = flag;
+	},
+
+	[types.SET_USE_FAMILY_RATE_LIST](state, arr) {
+		state.userFamilyRateList = arr;
 	}
 }
 
