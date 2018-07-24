@@ -2,10 +2,13 @@
   <div class="page">
     <div class="banner"></div>
     <safeguard-card :can-use-safeguard="false"></safeguard-card>
+    <div class="height-46"></div>
+    <family-account></family-account>
   </div>
 </template>
 <script type="text/javascript">
 import safeguardCard from '@/components/safeguardCard'
+import familyAccount from '@/components/familyAccount'
 import api from '@/fetch/api.js'
 
 export default {
@@ -19,6 +22,7 @@ export default {
   },
   components: {
     'safeguard-card': safeguardCard,
+    'family-account': familyAccount,
   }
 }
 
@@ -31,6 +35,10 @@ export default {
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-image: url('../../assets/images/img_baozhangjin_banner.png');
+}
+.height-46{
+  width: 100%;
+  height: 46px;
 }
 
 </style>
