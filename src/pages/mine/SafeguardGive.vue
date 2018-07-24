@@ -76,11 +76,18 @@ export default {
         return;
       }
       api.user.giveSafeGuard({
-      	phone,
-      	amount,
-      }).then((res)=> {
-      	_.alert('转赠成功');
-      	this.$router.push('/mine/GiveSuccess');
+        phone,
+        amount,
+      }).then((res) => {
+        _.alert('转赠成功');
+        console.log(res);
+        // 为了防止下一个页面刷新数据会消失，使用 path query模式
+        this.$router.push({
+          path: '/mine/GiveSuccess',
+          query: {
+          	...res.data
+          }
+        });
       }).catch();
     }
   }
@@ -171,9 +178,9 @@ export default {
       line-height: 68px;
       color: #2E3141;
       background: #fff;
-      &.money-input{
-      	max-width: 500px;
-      	padding-left: 50px;
+      &.money-input {
+        max-width: 500px;
+        padding-left: 50px;
       }
     }
     .btn {

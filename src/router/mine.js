@@ -86,7 +86,7 @@ export default [{
 	component: SafeguardGive,
 }, {
 	path: '/mine/GiveSuccess',
-	name: 'GiveSuccess',
+	name: 'giveSuccess',
 	meta: {
 		title: '个人中心',
 	},
