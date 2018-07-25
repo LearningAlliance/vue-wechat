@@ -7,6 +7,7 @@ import router from './router'
 
 import store from './vuex/store'
 import * as filters from './util/filter'
+import '../static/css/my-mint.scss'; //全局修改mint-UI样式
 
 // import Mint from 'mint-ui';
 // Vue.use(Mint);

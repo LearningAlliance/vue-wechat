@@ -91,3 +91,10 @@
 2018/07/22 12:32:43 [error] 12092#15156: OpenEvent("Global\ngx_stop_6872") failed (2: The system cannot find the file specified)
 2018/07/23 17:07:39 [notice] 16848#17756: signal process started
 2018/07/23 17:10:49 [notice] 13944#4968: signal process started
+2018/07/25 13:10:38 [notice] 21992#12984: signal process started
+2018/07/25 13:10:38 [error] 21992#12984: OpenEvent("Global\ngx_reload_1520") failed (2: The system cannot find the file specified)
+2018/07/25 13:10:52 [notice] 21340#14620: signal process started
+2018/07/25 13:10:52 [error] 21340#14620: OpenEvent("Global\ngx_reload_1520") failed (2: The system cannot find the file specified)
+2018/07/25 13:10:53 [notice] 16440#14376: signal process started
+2018/07/25 13:10:53 [error] 16440#14376: OpenEvent("Global\ngx_stop_1520") failed (2: The system cannot find the file specified)
+2018/07/25 15:37:13 [notice] 10840#22692: signal process started

@@ -8,7 +8,7 @@
     <div class="body">
       <p class="desc">每笔消费获得的部分保障金到账亲人账户
         <br/>多一份你的关心</p>
-      <div class="record-btn">亲情记录</div>
+      <div class="record-btn" @click="toList">亲情记录</div>
       <div class="box clearfix">
         <div class="cell" v-for="(item, index) in userFamilyRateList">
           <div class="person">{{item.name}}</div>
@@ -16,7 +16,9 @@
           <div class="amount">转赠{{item.rate}}%</div>
         </div>
         <div class="cell" @click="add">
-          <div class="person add">+</div>
+          <div class="person add-box">
+          	<div class="add"></div>
+          </div>
           <div class="userName"></div>
           <div class="amount"></div>
         </div>
@@ -47,11 +49,14 @@ export default {
   methods: {
     ...mapActions({ setUserFamilyRateList: 'setUserFamilyRateList' }),
     toManage() {
-      _.alert('管理')
+      this.$router.push('/mine/editFamilyAccount');
     },
     add(){
-      _.alert('add')
-    }
+      this.$router.push('/mine/addFamilyAccount');
+    },
+    toList(){
+      _.alert('没有相关逻辑啊。。。')
+    },
   }
 }
 
@@ -149,11 +154,22 @@ export default {
           letter-spacing: 0;
           text-align: center;
           line-height: 108px;
-          &.add {
-            border-color: #C4CACD;
+          position: relative;
+          &.add-box{
             background: #F7F7FB;
-            color: #C4CACD;
-            font-size: 60px;
+            border-color: #C4CACD;
+          }
+          .add{
+          	position: absolute;
+          	top: 50%;
+          	left: 50%;
+          	margin-top: -18px;
+          	margin-left: -18px;
+          	width: 36px;
+          	height: 36px;
+          	background-size: 100% 100%;
+          	background-repeat: no-repeat;
+          	background-image: url('../assets/images/icon_add.png');
           }
         }
         .userName {

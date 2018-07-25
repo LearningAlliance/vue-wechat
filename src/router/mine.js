@@ -13,6 +13,10 @@ import SafeguardGive from '../pages/mine/SafeguardGive'
 import GiveSuccess from '../pages/mine/GiveSuccess'
 import GivenList from '../pages/mine/GivenList'
 
+// 添加亲情账户
+import AddFamilyAccount from '../pages/mine/AddFamilyAccount'
+import EditFamilyAccount from '../pages/mine/EditFamilyAccount'
+
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
 
@@ -99,5 +103,21 @@ export default [{
 		title: '个人中心',
 		subTitle: '转赠记录',
 	},
-	component: GivenList
+	component: GivenList,
+}, {
+	path: '/mine/addFamilyAccount',
+	name: 'addFamilyAccount',
+	meta: {
+		title: '个人中心',
+		subTitle: '添加亲情账户',
+	},
+	component: AddFamilyAccount,
+}, {
+	path: '/mine/editFamilyAccount',
+	name: 'editFamilyAccount',
+	meta: {
+		title: '个人中心',
+		subTitle: '管理亲情账户',
+	},
+	component: EditFamilyAccount,
 }]

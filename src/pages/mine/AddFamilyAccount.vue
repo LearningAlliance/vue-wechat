@@ -1,11 +1,14 @@
 <template>
   <div class="page">
-    <div class="section">
-      <div class="setcion-title">
-        <p class="section-title-p">修改手机</p>
+    <div class="header">选择对方角色</div>
+    <div class="box clearfix">
+      <div class="role" v-for="(item, index) in roleList" :key="item.roleId">
+        <div :class="['role-name', {'selected': item.selected}]" @click="setRole(index)">
+          {{item.roleName}}
+        </div>
       </div>
     </div>
-    <div class="input-box">
+    <div class="input-box margin-top-20">
       <div class="label">
         <p class="label-text">手机号</p>
       </div>
@@ -18,11 +21,11 @@
     </div>
     <div class="input-box margin-top-20">
       <div class="label">
-        <p class="label-text">金额</p>
+        <p class="label-text">转赠比例</p>
       </div>
       <div class="value clearfix">
-        <div class="money-label">￥</div>
-        <input type="number" class="input money-input" placeholder="请输入转赠金额" v-model.number="amount" />
+        <input type="number" class="input rate-input" placeholder="请输入转赠比例" v-model.number="rate" />
+        <div class="rate-label">%</div>
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -31,7 +34,7 @@
     <div class="err-box">
       <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
-    <div :class="['submit', {'canClick': phone.trim().length == 11 && amount > 0}]" @click="submit">提交</div>
+    <div :class="['submit', {'canClick': phone.trim().length == 11 && rate > 0 && rate <= 100}]" @click="submit">确定</div>
   </div>
 </template>
 <script type="text/javascript">
@@ -42,56 +45,98 @@ export default {
   data() {
     return {
       phone: '',
-      amount: null,
+      rate: null,
       resultMsg: '',
+      roleList: [{
+        roleId: 1,
+        roleName: '老公',
+        selected: false,
+      }, {
+        roleId: 2,
+        roleName: '老婆',
+        selected: false,
+      }, {
+        roleId: 3,
+        roleName: '爸爸',
+        selected: false,
+      }, {
+        roleId: 4,
+        roleName: '妈妈',
+        selected: false,
+      }, {
+        roleId: 5,
+        roleName: '公公',
+        selected: false,
+      }, {
+        roleId: 6,
+        roleName: '婆婆',
+        selected: false,
+      }, {
+        roleId: 7,
+        roleName: '岳父',
+        selected: false,
+      }, {
+        roleId: 8,
+        roleName: '岳母',
+        selected: false,
+      }, {
+        roleId: 9,
+        roleName: '儿子',
+        selected: false,
+      }, {
+        roleId: 10,
+        roleName: '女儿',
+        selected: false,
+      }]
     }
   },
-  computed: {
-    ...mapGetters([
-      'headerRightFun'
-    ]),
-  },
-  watch: {
-    headerRightFun(val, oldVal) {
-      if (!!val) {
-        this[val] && this[val]();
-      }
-    },
-  },
   methods: {
-    toDetail() {
-      this.$store.dispatch('setHeaderRightFun', '');
-      this.$router.push('/mine/givenList');
+    setRole(index) {
+      let item = this.roleList[index];
+      if (item.selected) {
+        item.selected = false;
+        this.$set(this.roleList, index, item);
+      } else {
+        this.roleList.forEach((obj) => {
+          obj.selected = false;
+        });
+        item.selected = true;
+        this.$set(this.roleList, index, item);
+      }
     },
     submit() {
       let phone = this.phone.trim();
-      let amount = this.amount;
+      let rate = this.rate;
       if (phone.length != 11) {
         _.alert('请输入完整的手机号');
         return;
       }
       let reg = /^(-?\d+)(\.\d{1,2})?$/;
-      if (!reg.test(amount)) {
+      if (!reg.test(rate)) {
         _.alert('转赠金额需大于0，且格式错误，请检查 ');
         return;
       }
-      if (amount < 0) {
-        _.alert('转赠金额需大于0，请检查 ');
+      if (rate < 0) {
+        _.alert('比例不能小于0%，请检查');
         return;
       }
-      api.user.giveSafeGuard({
+      if (rate > 100) {
+        _.alert('比例不能大于100%，请检查');
+        return;
+      }
+      api.user.saveUserFamily({
         phone,
-        amount,
+        rate,
       }).then((res) => {
-        _.alert('转赠成功');
-        console.log(res);
+        _.alert('新增成功');
         // 为了防止下一个页面刷新数据会消失，使用 path query模式
-        this.$router.push({
-          path: '/mine/giveSuccess',
-          query: {
-            ...res.data
-          }
-        });
+        // this.$router.push({
+        //   path: '/mine/giveSuccess',
+        //   query: {
+        //     ...res.data
+        //   }
+        // });
+        this.$router.history.go(-1);
       }).catch();
     }
   }
@@ -106,6 +151,44 @@ export default {
   background: #fff;
   box-sizing: border-box;
   overflow: hidden;
+  .header {
+    margin: 53px auto 0 auto;
+    width: 650px;
+    height: 42px;
+    font-family: PingFangSC-Regular;
+    font-size: 32px;
+    color: #2E3141;
+    letter-spacing: 0;
+    line-height: 42px;
+  }
+  .box {
+    width: 680px;
+    margin: 30px auto 0 auto;
+    .role {
+      display: inline-block;
+      float: left;
+      width: 170px;
+      height: 68px;
+      margin-bottom: 30px;
+      .role-name {
+        border: 3px solid #818B8F;
+        border-radius: 34px;
+        width: 140px;
+        height: 68px;
+        font-family: PingFangSC-Semibold;
+        font-size: 32px;
+        color: #818B8F;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 68px;
+        &.selected {
+          border-color: #F05720;
+          background: #F05720;
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 
 .margin-top-20 {
@@ -159,13 +242,13 @@ export default {
     padding-right: 50px;
     margin-bottom: 22px;
     position: relative;
-    .money-label {
+    .rate-label {
       display: inline-block;
       width: 34px;
       height: 68px;
       position: absolute;
       top: 0;
-      left: 50px;
+      right: 50px;
       font-family: PingFangSC-Regular;
       font-size: 36px;
       color: #2E3141;
@@ -182,9 +265,9 @@ export default {
       line-height: 68px;
       color: #2E3141;
       background: #fff;
-      &.money-input {
+      &.rate-input {
         max-width: 500px;
-        padding-left: 50px;
+        padding-right: 50px;
       }
     }
     .btn {

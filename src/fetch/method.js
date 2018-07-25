@@ -2,12 +2,13 @@ import axios from 'axios'
 import qs from 'qs'
 import store from '../vuex/store'
 import config from '../config/index'
+import md5 from 'js-md5'
 
 import * as _ from '../util/tool'
 
 // axios 配置
 axios.defaults.timeout = 5000;
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 if (process.env.NODE_ENV == "development") {
 	// 测试地址
@@ -19,6 +20,7 @@ if (process.env.NODE_ENV == "development") {
 
 //POST传参序列化
 axios.interceptors.request.use((config) => {
+	console.log(config);
 	store.dispatch('setLoadingState', true);
 	if (config.method === 'post') {
 		config.data = qs.stringify(config.data);
@@ -52,9 +54,78 @@ axios.interceptors.response.use((res) => {
 	return Promise.reject(error);
 });
 
-export function post(url, params) {
+function initRequest(params = {}, options = {}) {
+	let defaultOptions = {
+		head: {
+			withPid: true,
+			withTimestamp: true,
+			withSign: true,
+		},
+		body: {
+			withToken: true,
+			withUid: true,
+		}
+	};
+	// 合并选项
+	let newOption = {
+		head: { ...defaultOptions.head,
+			...options.head
+		},
+		body: { ...defaultOptions.body,
+			...options.body
+		}
+	};
+	let {
+		withPid,
+		withTimestamp,
+		withSign
+	} = newOption.head;
+	let {
+		withToken,
+		withUid
+	} = newOption.body;
+	let headers = {};
+	let pid = config.pId;
+	let timestamp = (parseInt(Math.random() * 10000000000000)).toString();
+	let pCode = config.pCode;
+	let sign = md5((`${timestamp}${pid}${pCode}`).toLowerCase());
+	if (withPid) {
+		headers.pid = pid;
+	}
+	if (withTimestamp) {
+		headers.timestamp = timestamp;
+	}
+	if (withSign) {
+		headers.sign = sign;
+	}
+	// headers = {
+	// 	pid,
+	// 	timestamp,
+	// 	sign
+	// };
+	// TODO 测试用数据
+	let token = 'e98e257d-09f8-4c64-ad37-d70a5cc981d9';
+	let uid = '1';
+	if (withToken) {
+		params.token = token;
+		params.uid = uid;
+	}
+	return {
+		params,
+		headers,
+	}
+}
+
+export function get(url, data, options = {}) {
 	return new Promise((resolve, reject) => {
-		axios.post(url, params)
+		let {
+			params,
+			headers
+		} = initRequest(data, options);
+		axios.get(url, {
+				params: params,
+				headers,
+			})
 			.then(response => {
 				resolve(response.data);
 			}, err => {
@@ -66,10 +137,22 @@ export function post(url, params) {
 	})
 }
 
-export function get(url, params) {
+export function post(url, data, options = {}) {
+	console.log(url, data, options);
 	return new Promise((resolve, reject) => {
-		axios.get(url, {
-				params: params
+		let {
+			params,
+			headers,
+		} = initRequest(data, options);
+		// axios.post(url, params, {
+		// 		headers,
+		// 		method: 'get',
+		// 	})
+		axios.request({
+				url,
+				data: params,
+				method: 'post',
+				headers,
 			})
 			.then(response => {
 				resolve(response.data);
