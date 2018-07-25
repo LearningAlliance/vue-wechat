@@ -1,15 +1,17 @@
 <template>
   <div class="cell">
-    <router-link :to="link" :class="['clearfix', {'no-border': hideBorder, 'has-avatar': !!avatar}]">
-      <div :class="['cell-l', {'has-avatar': !!avatar}]">
-        <img :src="iconUrl" class="cell-icon" v-show="iconUrl" alt="">
-        <span :class="['text', {'margin-left-0': !iconUrl}]">{{text}}</span>
-      </div>
-      <div :class="['cell-r', {'right-0': !more, 'has-avatar': !!avatar}]">
-        <span class="text" v-show="desc">{{desc}}</span>
-        <span class="badg" v-show="badg">{{badg}}</span>
-        <span class="avatar" v-show="avatar"><img :src="avatar" alt=""></span>
-        <img v-show="more" src="../assets/images/ic_back_right@2x.png" class="more" alt="">
+    <router-link :to="link">
+      <div :class="['cell-box', 'clearfix', {'no-border': hideBorder, 'has-avatar': !!avatar}]">
+        <div :class="['cell-l', {'has-avatar': !!avatar}]">
+          <img :src="iconUrl" class="cell-icon" v-show="iconUrl" alt="">
+          <span :class="['text', {'margin-left-0': !iconUrl}]">{{text}}</span>
+        </div>
+        <div :class="['cell-r', {'right-0': !more, 'has-avatar': !!avatar}]">
+          <span class="text" v-show="desc">{{desc}}</span>
+          <span class="badg" v-show="badg">{{badg}}</span>
+          <span class="avatar" v-show="avatar"><img :src="avatar" alt=""></span>
+          <img v-show="more" src="../assets/images/ic_back_right@2x.png" class="more" alt="">
+        </div>
       </div>
     </router-link>
   </div>
@@ -41,7 +43,7 @@ export default {
 .cell {
   position: relative;
   background: #fff;
-  a {
+  .cell-box {
     display: block;
     height: 88px;
     line-height: 88px;
@@ -103,8 +105,7 @@ export default {
         letter-spacing: 0;
         text-align: right;
         line-height: 36.4px;
-        vertical-align: middle;
-        // margin-right: 10px;
+        vertical-align: middle; // margin-right: 10px;
       }
       .more {
         width: 50px;
