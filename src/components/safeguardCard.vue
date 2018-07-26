@@ -4,7 +4,7 @@
     <div class="desc">
       我的保障金(元)
     </div>
-    <div class="amount">1000.00</div>
+    <div class="amount">{{accountSafeGuard}}</div>
     <div class="card-footer">
       <div class="complete" v-if="!canUseSafeguard" @click="toComplate">
         完善身份信息后可用，去完善>>
@@ -25,14 +25,15 @@
 <script type="text/javascript">
 import * as _ from '@/util/tool.js'
 import { mapGetters } from 'vuex'
+import api from '@/fetch/api.js'
 export default {
   data() {
     return {
-      
+      accountSafeGuard: 0,
     }
   },
   created(){
-
+this.getAccountSafeGuard();
   },
   methods: {
     toComplate() {
@@ -43,7 +44,13 @@ export default {
     },
     toGive(){
       this.$router.push('/mine/safeguardGive')
-    }
+    },
+        getAccountSafeGuard(){
+      api.user.getAccountSafeGuard().then((res) => {
+        let item = res.data[0];
+        this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
+      });
+    },
   },
   computed: {
     ...mapGetters([

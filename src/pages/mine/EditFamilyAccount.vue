@@ -13,30 +13,36 @@
     </div>
     <div class="list-section">
       <div class="list-title">当前绑定的账号</div>
-      <div class="list-box" v-for="(item, index) in list">
-        <div class="list-cell">
-          <div class="cell-top">
-            <p class="text">
-              {{item.roleName}}
-              <span class="rate">赠送比例 {{item.rate}}%</span>
-            </p>
-            <p class="text margin-top-10 phone">
-              {{item.phone}}
-              <span class="all">累计获赠<span class="amount">{{item.amount}}</span>保障金</span>
-            </p>
-          </div>
-          <div class="line"></div>
-          <div class="cell-bottom">
-            <div class="bottom-btn" @click="changeRate(item.id)">修改比例</div>
-            <div class="bottom-btn delete-btn" @click="deleteRate(item.id)">删除绑定</div>
-          </div>
-        </div>
+      <div :style="{'-webkit-overflow-scrolling': scrollMode}">
+        <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+          <ul>
+            <li class="list-box" v-for="(item, index) in list">
+              <div class="list-cell">
+                <div class="cell-top">
+                  <p class="text">
+                    {{item.roleName}}
+                    <span class="rate">赠送比例 {{item.rate}}%</span>
+                  </p>
+                  <p class="text margin-top-10 phone">
+                    {{item.phone}}
+                    <span class="all">累计获赠<span class="amount">{{item.amount}}</span>保障金</span>
+                  </p>
+                </div>
+                <div class="line"></div>
+                <div class="cell-bottom">
+                  <div class="bottom-btn" @click="changeRate(item)">修改比例</div>
+                  <div class="bottom-btn delete-btn" @click="deleteRate(item.id)">删除绑定</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </v-loadmore>
       </div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
-import { Switch } from 'mint-ui';
+import { Switch, MessageBox, Loadmore } from 'mint-ui';
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 
@@ -45,20 +51,24 @@ export default {
     return {
       value: false,
       list: [],
+      searchCondition: { //分页属性
+        pageNum: 1,
+        pageRow: 1000
+      },
+      allLoaded: false,
+      scrollMode: "auto",
     }
   },
   components: {
     'mt-switch': Switch,
+    'v-loadmore': Loadmore,
   },
   created() {
     _.alert('暂无获取是否开通到账通知接口')
     api.user.getFamilyAccoutNotice().then(() => {
       this.value = false;
     });
-    api.user.getUserFamilyList().then((res) => {
-    	console.log(res.data);
-    	this.list = res.data;
-    });
+    this.getInitList();
   },
   methods: {
     turn() {
@@ -70,13 +80,53 @@ export default {
 
       });
     },
-    changeRate(id){
-    	console.log('changeRate', id);
-    	_.alert('跳转到修改比例页面')
+    changeRate(item) {
+      this.$router.push({
+        path: '/mine/updateUserFamilyRate',
+        query: {
+          ...item
+        }
+      })
     },
-    deleteRate(id){
-    	console.log('deleteRate', id);
-    	_.alert('TODO 提示是否删除，缺少唯一删除标识')
+    deleteRate(id) {
+      MessageBox.confirm('确定要删除绑定吗?').then(action => {
+        if (action) {
+          console.log('deleteRate', id);
+          api.user.delUserFamily({
+            id,
+          }).then(() => {
+            this.getInitList();
+          });
+        }
+      }).catch((err) => {
+
+      });
+    },
+    loadTop() {
+      this.getList();
+      this.$refs.loadmore.onTopLoaded();
+    },
+    getInitList() {
+      this.searchCondition.pageNum = 1;
+      api.user.getUserFamilyList(this.searchCondition).then((res) => {
+        if (res.data.length == 0) {
+          this.allLoaded = true;
+        }
+        this.list = res.data;
+      });
+    },
+    loadBottom() {
+      this.searchCondition.pageNum = this.searchCondition.pageNum + 1;
+      api.user.getUserFamilyList(this.searchCondition).then((res) => {
+        if (res.data.length == 0) {
+          this.allLoaded = true;
+        }
+        this.$nextTick(function() {
+          this.scrollMode = "touch";
+        });
+        this.list = this.list.concat(res.data);
+        this.$refs.loadmore.onBottomLoaded();
+      });
     },
   }
 }

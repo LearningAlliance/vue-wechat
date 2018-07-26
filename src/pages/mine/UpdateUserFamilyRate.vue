@@ -1,17 +1,12 @@
 <template>
   <div class="page">
-    <div class="section">
-      <div class="setcion-title">
-        <p class="section-title-p">修改手机</p>
-      </div>
-    </div>
+    <div class="height-31"></div>
     <div class="input-box">
       <div class="label">
-        <p class="label-text">手机号</p>
+        <p class="label-text">{{info.roleName}}</p>
       </div>
       <div class="value clearfix">
-        <input type="number" class="input" placeholder="请输入新的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="userPhone" onchange="if(value.length>11)value=value.slice(0, 11)" />
-        <div class="btn" @click="getVerifyCode">获取验证码</div>
+        <input type="text" class="input" disabled="true" placeholder="请输入要转赠的账号所绑定的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="info.phone" onchange="if(value.length>11)value=value.slice(0, 11)" />
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -19,10 +14,11 @@
     </div>
     <div class="input-box margin-top-20">
       <div class="label">
-        <p class="label-text">验证码</p>
+        <p class="label-text">金额</p>
       </div>
       <div class="value clearfix">
-        <input type="number" class="input" placeholder="请输入验证码" oninput="if(value.length>4)value=value.slice(0, 4)" v-model="verifyCode" onchange="if(value.length>4)value=value.slice(0, 4)" />
+        <input type="number" class="input rate-input" placeholder="请输入转赠比例" v-model.number="info.rate" />
+        <div class="rate-label">%</div>
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -31,63 +27,75 @@
     <div class="err-box">
       <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
-    <div :class="['submit', {'canClick': userPhone.trim().length == 11 && verifyCode.trim().length == 4}]" @click="submit">提交</div>
+    <div :class="['submit', {'canClick': info.phone.trim().length == 11 && info.rate > 0 && info.rate <= 100}]" @click="submit">提交</div>
   </div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
+import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
-import api from '@/fetch/api'
-
 export default {
   data() {
     return {
-      userPhone: '',
-      verifyCode: '',
+      info: {
+        id: null,
+        roleName: null,
+        rate: 0,
+        phone: '',
+      },
       resultMsg: '',
     }
   },
-  methods: {
-    getVerifyCode() {
-      let userPhone = this.userPhone.trim();
-      if (userPhone.length != 11) {
-        _.alert('请先输入完整的手机号');
-        return;
+  watch: {
+    headerRightFun(val, oldVal) {
+      if (!!val) {
+        this[val] && this[val]();
       }
-      api.user.getVerifyCode({
-        userPhone: userPhone,
-        verifyType: 1,
-      }).then((res) => {
-        _.alert('验证码已发送，请注意查收');
-      }).catch((err) => {
-        console.log(err);
-      });
+    },
+  },
+  created() {
+    this.info = this.$route.query;
+  },
+  methods: {
+    toDetail() {
+      this.$store.dispatch('setHeaderRightFun', '');
+      this.$router.push('/mine/givenList');
     },
     submit() {
-      let userPhone = this.userPhone.trim();
-      let verifyCode = this.verifyCode.trim();
-      if (userPhone.length != 11) {
+      let id = this.info.id;
+      if(id == null || id == undefined){
+      	_.alert('未能获取到亲情id，请重新选择');
+      	this.$router.history.go(-1);
+      	return;
+      }
+      let phone = this.info.phone.trim();
+      let rate = this.info.rate;
+      if (phone.length != 11) {
         _.alert('请输入完整的手机号');
         return;
       }
-      if (verifyCode.length != 4) {
-        _.alert('请输入完整的验证码');
+      let reg = /^(-?\d+)(\.\d{1,2})?$/;
+      if (!reg.test(rate)) {
+        _.alert('转赠金额需大于0，且格式正确（最多两位小数），请检查 ');
         return;
       }
-      api.user.updateMobile({
-        userPhone: userPhone,
-        verifyCode: verifyCode
-      }).then((res) => {
-        _.alert('修改成功');
-        this.resultMsg = '';
-        // 默认返回了个人信息 则可以使用dispatch 更改全局的用户信息
-        this.$store.dispatch('setUserInfo', res.data[0]);
-        // 清空输入的信息
-        this.userPhone = '';
-        this.verifyCode = '';
-        this.$router.history.go(-1);
+      if (rate < 0) {
+        _.alert('比例不能小于0%，请检查');
+        return;
+      }
+      if (rate > 100) {
+        _.alert('比例不能大于100%，请检查');
+        return;
+      }
+      api.user.updateUserFamilyRate({
+      	id: 2,
+      	rate: 10.1,
+      }).then((res)=>{
+      	_.alert('修改成功');
+      	this.$router.history.go(-1);
       }).catch((err) => {
-      	this.resultMsg = err.data.resultMsg;
-      });
+      	
+      })
     }
   }
 }
@@ -99,12 +107,17 @@ export default {
   height: 100%;
   min-height: 100%;
   background: #fff;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   overflow: hidden;
 }
 
 .margin-top-20 {
   margin-top: 20px;
+}
+
+.height-31 {
+  width: 100%;
+  height: 31px;
 }
 
 .section {
@@ -153,15 +166,47 @@ export default {
     padding-left: 50px;
     padding-right: 50px;
     margin-bottom: 22px;
+    position: relative;
+    .money-label {
+      display: inline-block;
+      width: 34px;
+      height: 68px;
+      position: absolute;
+      top: 0;
+      left: 50px;
+      font-family: PingFangSC-Regular;
+      font-size: 36px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 68px;
+    }
+    .rate-label {
+      display: inline-block;
+      width: 34px;
+      height: 68px;
+      position: absolute;
+      top: 0;
+      right: 50px;
+      font-family: PingFangSC-Regular;
+      font-size: 36px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 68px;
+    }
     .input {
       font-family: PingFangSC-Regular;
       font-size: 36px;
       color: #C4CACD;
       letter-spacing: 0;
       height: 68px;
-      width: 300px;
+      width: 100%;
       line-height: 68px;
       color: #2E3141;
+      background: #fff;
+      &.money-input {
+        max-width: 500px;
+        padding-left: 50px;
+      }
     }
     .btn {
       float: right;
@@ -176,6 +221,16 @@ export default {
       border: 1px solid #E2E2E2;
       /*no*/
       border-radius: 34px;
+    }
+    .btn-right {
+      position: absolute;
+      top: 9px;
+      right: 50px;
+      width: 50px;
+      height: 50px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_nextarrow.png');
     }
   }
   .line-box {

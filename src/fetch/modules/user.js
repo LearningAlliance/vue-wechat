@@ -15,6 +15,30 @@ export const getUserInfo = (params) => post('/userServer/business/UserInfoAction
 	action: 'qryUser'
 })
 
+// 获取保障金
+export const getAccountSafeGuard = () => post('/userServer/business/UserInfoAction', {
+	action: 'qryAccount',
+	data: JSON.stringify({
+		balanceType: 10000
+	}),
+})
+
+// 获取积分
+export const getAccountCredits = () => post('/userServer/business/UserInfoAction', {
+	action: 'qryAccount',
+	data: JSON.stringify({
+		balanceType: 20000
+	}),
+})
+
+// 获取养老金
+export const getAccountPensions = () => post('/userServer/business/UserInfoAction', {
+	action: 'qryAccount',
+	data: JSON.stringify({
+		balanceType: 30000
+	}),
+})
+
 /**
  * 修改用户昵称
  */
@@ -81,4 +105,29 @@ export const getFamilyAccoutNotice = (params) => get('/common', params);
 export const changeFamilyAccoutNotice = (params) => get('/common', params);
 
 // 查询亲情列表-管理页面
-export const getUserFamilyList = (params) => get('/qryUserFamilyList', params);
+export const getUserFamilyList = (params) => post('/userServer/business/UserFamilyAccountAction', {
+	action: 'qryUserFamilyList',
+	data: JSON.stringify(params),
+});
+
+// 删除情亲账号
+export const delUserFamily = (params) => post('/userServer/business/UserFamilyAccountAction', {
+	action: 'delUserFamily',
+	data: JSON.stringify(params),
+})
+
+// 修改亲情比例
+export const updateUserFamilyRate = (params) => post('/userServer/business/UserFamilyAccountAction', {
+	action: 'updateUserFamilyRate',
+	data: JSON.stringify(params),
+})
+
+// 保障金-获取转赠记录
+export const getPensionList = (params) => post('/userServer/business/AcctBalanceLogAction', {
+	action: 'qryAcctLog',
+	data: JSON.stringify({ ...params,
+		...{
+			type: 30000
+		}
+	}),
+});

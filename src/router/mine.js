@@ -16,6 +16,11 @@ import GivenList from '../pages/mine/GivenList'
 // 添加亲情账户
 import AddFamilyAccount from '../pages/mine/AddFamilyAccount'
 import EditFamilyAccount from '../pages/mine/EditFamilyAccount'
+// 修改比例
+import UpdateUserFamilyRate from '../pages/mine/UpdateUserFamilyRate'
+
+// 养老金账户 
+import PensionAccount from '../pages/mine/PensionAccount';
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -120,4 +125,22 @@ export default [{
 		subTitle: '管理亲情账户',
 	},
 	component: EditFamilyAccount,
-}]
+}, {
+	path: '/mine/updateUserFamilyRate',
+	name: 'updateUserFamilyRate',
+	meta: {
+		title: '个人中心',
+		subTitle: '修改比例',
+	},
+	component: UpdateUserFamilyRate,
+}, {
+	path: '/mine/pensionAccount',
+	name: 'pensionAccount',
+	meta: {
+		title: '个人中心',
+		subTitle: '养老金账户',
+		// rightText: '明细',
+		// funName: 'toList',
+	},
+	component: PensionAccount,
+}, ]

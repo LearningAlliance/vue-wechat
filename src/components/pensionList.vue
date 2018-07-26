@@ -5,12 +5,12 @@
         <li class="list" v-for="(item, index) in pageList">
           <div :class="['box', {'no-border': index == 0}]">
             <div class="cell-1">
-              <p class="phone">接收手机号 {{item.phone}}</p>
-              <span class="amount">{{item.amount}}元</span>
+              <p class="phone">{{item.desc}}</p>
+              <span class="amount">{{item.amount}}</span>
             </div>
             <div class="cell-2 margin-top">
               <p class="time">{{item.time}}</p>
-              <span class="desc">{{item.desc}}</span>
+              <span class="desc">{{item.balance}}</span>
             </div>
           </div>
         </li>
@@ -53,7 +53,7 @@ export default {
     },
     loadPageList() {
       // 查询数据
-      api.user.getGivenList(this.searchCondition).then((res) => {
+      api.user.getPensionList(this.searchCondition).then((res) => {
         // 是否还有下一页，加个方法判断，没有下一页要禁止上拉
         // TODO 模拟数据
         let list = res.data;
@@ -67,7 +67,7 @@ export default {
     more() {
       // 分页查询
       this.searchCondition.pageNum = parseInt(this.searchCondition.pageNum) + 1;
-      api.user.getGivenList(this.searchCondition).then((res) => {
+      api.user.getPensionList(this.searchCondition).then((res) => {
         let list = res.data;
         this.isHaveMore(list.length > 0);
         this.pageList = this.pageList.concat(this.getData(list));
@@ -83,19 +83,20 @@ export default {
     getData(list) {
       // 获取数据
       let arr = [];
-      for (let i = 0, len = list.length; i<len ; i++) {
+      for (let i = 0, len = list.length; i < len; i++) {
         let item = list[i];
         let obj = {};
         obj.phone = item.phone;
         obj.amount = item.amount;
         obj.time = item.createDate;
-        if(item.type == 1){
+        if (item.type == 1) {
           obj.desc = '账户收益';
-        }else if(item.type == 2){
+        } else if (item.type == 2) {
           obj.desc = '兑换养老金';
-        }else if(item.type == 3){
+        } else if (item.type == 3) {
           obj.desc = '保障金转赠';
         }
+        obj.balance = item.balance;
         arr.push(obj);
       }
       return arr;
@@ -105,8 +106,21 @@ export default {
 
 </script>
 <style scoped lang="scss">
+.main-body{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 527px;
+  padding-bottom: 120px;
+  overflow:auto;
+  z-index: 10;
+}
+
 .list-box {
-  margin-top: 20px;
+  // margin-top: 20px;
   width: 100%;
   background: #fff;
   .list {
@@ -137,6 +151,7 @@ export default {
           position: absolute;
           top: 0;
           right: 0;
+          color: #00B59F;
         }
       }
       .cell-2 {

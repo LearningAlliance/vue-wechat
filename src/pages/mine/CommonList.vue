@@ -1,8 +1,8 @@
 <template>
   <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
     <v-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-      <ul class="list" v-for="(val, key) in pageList">
-        <li>
+      <ul class="list">
+        <li  v-for="(val, key) in pageList">
           <div>我是小11</div>
           <div>我是小11</div>
         </li>

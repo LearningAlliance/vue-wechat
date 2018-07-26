@@ -5,7 +5,6 @@
         <div class="sign-in-box">已签到</div>
         <div class="avatar">
           <img v-bind:src="userInfo.userHead" />
-<!--           <img v-bind:src="'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1532006746195&di=47e74eb4ed8a7b8e3befe47b19575533&imgtype=0&src=http%3A%2F%2Fcdnq.duitang.com%2Fuploads%2Fblog%2F201504%2F03%2F20150403225532_Jtxak.thumb.700_0.png'" /> -->
         </div>
         <div class="user-name">
           <span>{{userInfo.userNick}}</span>
@@ -19,11 +18,11 @@
         <div class="box">
           <div class="box-left" @click="toSafeGuard">
             <p class="box-title">保障金(元)</p>
-            <p class="box-content">2147.38</p>
+            <p class="box-content">{{accountSafeGuard}}</p>
           </div>
           <div class="box-right">
             <p class="box-title">积分</p>
-            <P class="box-content">32310</P>
+            <P class="box-content">{{accountCredits}}</P>
           </div>
         </div>
       </div>
@@ -32,14 +31,21 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   props: {
 
   },
   data() {
     return {
-
+      accountSafeGuard: 0,
+      accountCredits: 0,
     }
+  },
+  created(){
+    this.getAccountSafeGuard();
+    this.getAccountCredits();
   },
   computed: {
     ...mapGetters([
@@ -59,6 +65,18 @@ export default {
   methods: {
     toSafeGuard() {
       this.$router.push('/mine/safeguard');
+    },
+    getAccountSafeGuard(){
+      api.user.getAccountSafeGuard().then((res) => {
+        let item = res.data[0];
+        this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
+      });
+    },
+    getAccountCredits(){
+      api.user.getAccountCredits().then((res) => {
+        let item = res.data[0];
+        this.accountCredits = item.amount || 0;
+      });
     }
   }
 }

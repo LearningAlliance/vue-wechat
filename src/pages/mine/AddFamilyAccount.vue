@@ -125,7 +125,7 @@ export default {
       }
       let reg = /^(-?\d+)(\.\d{1,2})?$/;
       if (!reg.test(rate)) {
-        _.alert('转赠金额需大于0，且格式错误，请检查 ');
+        _.alert('转赠金额需大于0，且格式正确（最多两位小数），请检查 ');
         return;
       }
       if (rate < 0) {
@@ -150,7 +150,7 @@ export default {
         //   }
         // });
         this.$router.history.go(-1);
-      }).catch();
+      }).catch((err) => {});
     }
   }
 }
