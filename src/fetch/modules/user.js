@@ -131,3 +131,14 @@ export const getPensionList = (params) => post('/userServer/business/AcctBalance
 		}
 	}),
 });
+
+// 我的订单-我的买单
+export const getOrderBaseInfo = (params) => post('/userServer/business/OrderBaseInfoAction', {
+	action: 'qryOrderBaseInfo',
+	data: JSON.stringify({ ...params,
+		...{
+			orderType: '1',
+			orderState: '0'
+		}
+	}),
+});

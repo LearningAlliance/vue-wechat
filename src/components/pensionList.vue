@@ -38,7 +38,7 @@ export default {
   components: {
     'mt-loadmore': Loadmore
   },
-  mounted() {
+  created() {
     this.loadPageList(); //初次访问查询列表
   },
   methods: {

@@ -20,7 +20,12 @@ import EditFamilyAccount from '../pages/mine/EditFamilyAccount'
 import UpdateUserFamilyRate from '../pages/mine/UpdateUserFamilyRate'
 
 // 养老金账户 
-import PensionAccount from '../pages/mine/PensionAccount';
+import PensionAccount from '../pages/mine/PensionAccount'
+
+// 我的订单
+import MyOrder from '../pages/mine/MyOrder'
+import MyPay from '../pages/mine/MyPay'
+import MyCombo from '../pages/mine/MyCombo'
 
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
@@ -143,4 +148,28 @@ export default [{
 		// funName: 'toList',
 	},
 	component: PensionAccount,
+}, {
+	path: '/mine/myOrder',
+	name: 'myOrder',
+	meta: {
+		title: '个人中心',
+		subTitle: '我的订单',
+	},
+	component: MyOrder,
+}, {
+	path: '/mine/myPay',
+	name: 'myPay',
+	meta: {
+		title: '个人中心',
+		subTitle: '我的买单',
+	},
+	component: MyPay,
+}, {
+	path: '/mine/myCombo',
+	name: 'myCombo',
+	meta: {
+		title: '个人中心',
+		subTitle: '优惠套餐',
+	},
+	component: MyCombo,
 }, ]
