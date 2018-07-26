@@ -34,7 +34,7 @@
     <div class="err-box">
       <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
-    <div :class="['submit', {'canClick': phone.trim().length == 11 && rate > 0 && rate <= 100}]" @click="submit">确定</div>
+    <div :class="['submit', {'canClick': phone.trim().length == 11 && rate > 0 && rate <= 100 && selectedList.length > 0}]" @click="submit">确定</div>
   </div>
 </template>
 <script type="text/javascript">
@@ -47,6 +47,7 @@ export default {
       phone: '',
       rate: null,
       resultMsg: '',
+      selectedList: [],
       roleList: [{
         roleId: 1,
         roleName: '老公',
@@ -103,10 +104,21 @@ export default {
         item.selected = true;
         this.$set(this.roleList, index, item);
       }
+      let list = this.roleList.filter((obj) => {
+        return obj.selected;
+      })
+      this.selectedList = list;
     },
     submit() {
       let phone = this.phone.trim();
       let rate = this.rate;
+      let list = this.roleList.filter((obj) => {
+        return obj.selected;
+      })
+      if(list.length == 0){
+        _.alert('请先选择对方角色');
+        return;
+      }
       if (phone.length != 11) {
         _.alert('请输入完整的手机号');
         return;
@@ -125,6 +137,7 @@ export default {
         return;
       }
       api.user.saveUserFamily({
+        id: list[0].roleId,
         phone,
         rate,
       }).then((res) => {

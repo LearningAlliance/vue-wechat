@@ -68,13 +68,13 @@ export default {
   components: {
     'mt-datetime-picker': DatetimePicker
   },
-  created(){
-  	this.pickerValue = new Date();
-  	this.startDate = new Date('1899/01/01');
-  	this.endDate = new Date();
+  created() {
+    this.pickerValue = new Date();
+    this.startDate = new Date('1899/01/01');
+    this.endDate = new Date();
   },
   methods: {
-  	...mapActions({ setCanUseSafeguard: 'setCanUseSafeguard'}),
+    ...mapActions({ setCanUseSafeguard: 'setCanUseSafeguard' }),
     submit() {
       let idCard = this.idCard.trim();
       let userName = this.userName.trim();
@@ -90,17 +90,18 @@ export default {
         _.alert('输入的身份证号不合法,请检查后再试');
         return;
       }
-      if(this.birthday.length == 0){
-      	_.alert('请选择您的出生年月日');
-      	return;
+      if (this.birthday.length == 0) {
+        _.alert('请选择您的出生年月日');
+        return;
       }
       api.user.completeInfo({
-      	idCard,
-      	userName,
+        birthday: this.birthday,
+        idCard,
+        userName,
       }).then((res) => {
-      	_.alert('保存成功');
-      	this.setCanUseSafeguard(true);
-      	this.$router.history.go(-1);
+        _.alert('保存成功');
+        this.setCanUseSafeguard(true);
+        this.$router.history.go(-1);
       }).catch();
     },
     chooseBirth() {

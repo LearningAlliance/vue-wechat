@@ -54,7 +54,8 @@ export default {
         return;
       }
       api.user.getVerifyCode({
-        userPhone: userPhone
+        userPhone: userPhone,
+        verifyType: 1,
       }).then((res) => {
         _.alert('验证码已发送，请注意查收');
       }).catch((err) => {

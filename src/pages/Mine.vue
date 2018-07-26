@@ -29,7 +29,7 @@ export default {
     'user-group': userGroup,
   },
   created() {
-    api.user.getUserInfo({ userId: 33 }).then((res) => {
+    api.user.getUserInfo().then((res) => {
       let userInfo = res.data[0];
       this.$store.dispatch('setUserInfo', userInfo);
     });

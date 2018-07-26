@@ -27,7 +27,12 @@ import * as _ from '@/util/tool.js'
 import { mapGetters } from 'vuex'
 export default {
   data() {
-    return {}
+    return {
+      
+    }
+  },
+  created(){
+
   },
   methods: {
     toComplate() {

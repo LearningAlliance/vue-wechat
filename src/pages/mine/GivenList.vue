@@ -27,8 +27,8 @@ export default {
   data: function() {
     return {
       searchCondition: { //分页属性
-        pageNo: "1",
-        pageSize: "10"
+        pageNum: 1,
+        pageRow: 10
       },
       pageList: [],
       allLoaded: false,
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     loadTop() {
+      this.searchCondition.pageNum = 1;
       this.loadPageList();
       this.$refs.loadmore.onTopLoaded();
     },
@@ -52,23 +53,25 @@ export default {
     },
     loadPageList() {
       // 查询数据
-      // api.user.getGivenList(this.searchCondition).then(data => {
-      // 是否还有下一页，加个方法判断，没有下一页要禁止上拉
-      // TODO 模拟数据
-      this.isHaveMore(true);
-      this.pageList = this.getData();
-      this.$nextTick(function() {
-        this.scrollMode = "touch";
+      api.user.getGivenList(this.searchCondition).then((res) => {
+        // 是否还有下一页，加个方法判断，没有下一页要禁止上拉
+        // TODO 模拟数据
+        let list = res.data;
+        this.isHaveMore(list.length > 0);
+        this.pageList = this.getData(list);
+        this.$nextTick(function() {
+          this.scrollMode = "touch";
+        });
       });
-      // });
     },
     more() {
       // 分页查询
-      this.searchCondition.pageNo = parseInt(this.searchCondition.pageNo) + 1;
-      // api.user.getGivenList(this.searchCondition).then(data => {
-      this.pageList = this.pageList.concat(this.getData());
-      this.isHaveMore(false);
-      // });
+      this.searchCondition.pageNum = parseInt(this.searchCondition.pageNum) + 1;
+      api.user.getGivenList(this.searchCondition).then((res) => {
+        let list = res.data;
+        this.isHaveMore(list.length > 0);
+        this.pageList = this.pageList.concat(this.getData(list));
+      });
     },
     isHaveMore(isHaveMore) {
       // 是否还有下一页，如果没有就禁止上拉刷新
@@ -77,18 +80,25 @@ export default {
         this.allLoaded = false;
       }
     },
-    getData() {
-      // 获取假数据
+    getData(list) {
+      // 获取数据
       let arr = [];
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0, len = list.length; i<len ; i++) {
+        let item = list[i];
         let obj = {};
-        obj.phone = '18868195887';
-        obj.amount = (Math.random() * 100).toFixed(2);
-        obj.time = _.dateFormat(new Date(), 'yyyy-MM-dd hh:mm:ss');
-        obj.desc = '保障金';
+        obj.phone = item.phone;
+        obj.amount = item.amount;
+        obj.time = item.createDate;
+        if(item.type == 1){
+          obj.desc = '账户收益';
+        }else if(item.type == 2){
+          obj.desc = '兑换养老金';
+        }else if(item.type == 3){
+          obj.desc = '保障金转赠';
+        }
         arr.push(obj);
       }
-      console.log(arr);
+      return [];
       return arr;
     }
   }

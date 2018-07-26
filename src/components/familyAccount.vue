@@ -12,7 +12,7 @@
       <div class="box clearfix">
         <div class="cell" v-for="(item, index) in userFamilyRateList">
           <div class="person">{{item.name}}</div>
-          <div class="userName">张三</div>
+          <div class="userName">{{item.userName}}</div>
           <div class="amount">转赠{{item.rate}}%</div>
         </div>
         <div class="cell" @click="add">

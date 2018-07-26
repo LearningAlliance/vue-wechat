@@ -8,7 +8,7 @@ import * as _ from '../util/tool'
 
 // axios 配置
 axios.defaults.timeout = 5000;
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 if (process.env.NODE_ENV == "development") {
 	// 测试地址
