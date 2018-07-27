@@ -26,3 +26,33 @@ export const formatDate = (str) => {
         return parseInt(time / 31536000000) + '年前'
     }
 }
+
+// 订单状态（1-待支付，2-已支付，3-已使用，4-已取消，5-退款中，6-已退款）
+export const formatOrderState = (key) => {
+    if (key == null || key == undefined) {
+        return '';
+    }
+    switch (key) {
+        case 1:
+            return '待支付';
+            break;
+        case 2:
+            return '已支付';
+            break;
+        case 3:
+            return '已使用';
+            break;
+        case 4:
+            return '已取消';
+            break;
+        case 5:
+            return '退款中';
+            break;
+        case 6:
+            return '已退款';
+            break;
+        default:
+            return '';
+            break;
+    }
+}

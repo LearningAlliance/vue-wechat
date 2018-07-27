@@ -91,7 +91,6 @@ export default {
     deleteRate(id) {
       MessageBox.confirm('确定要删除绑定吗?').then(action => {
         if (action) {
-          console.log('deleteRate', id);
           api.user.delUserFamily({
             id,
           }).then(() => {

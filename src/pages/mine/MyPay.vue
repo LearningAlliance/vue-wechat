@@ -6,17 +6,22 @@
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <ul class="list-box">
           <li class="list" v-for="(item, index) in pageList">
-            <div class="box">
+            <div class="box" @click="toDetail(item.orderNo, item.createDate)">
               <div class="box-content clearfix">
-                <img class="box-logo" src="http://p-shop.jfb315.cn/uploadfiles/shop/2016/01/24/2016012408051593.jpg" />
+                <img class="box-logo" :src="item.shopLogo" />
                 <div class="box-center">
-                  <div class="box-shopname">快乐肥宅茶武林店</div>
-                  <div class="box-price">消费 <span class="color-151515">120.5</span>元 实付 <span class="color-151515">86</span>元</div>
+                  <div class="box-shopname">{{item.shopName}}</div>
+                  <div class="box-price">消费 <span class="color-151515">{{item.amount}}</span>元 实付 <span class="color-151515">{{item.realAmount}}</span>元</div>
                 </div>
-                <div class="box-status">待支付</div>
+                <div :class="['box-status', {'order-state-1': item.orderState == 1, 'order-state-2': item.orderState == 2 || item.orderState == 3} ]">{{item.orderState | formatOrderState}}</div>
               </div>
               <div class="box-line"></div>
-              <div class="box-footer"></div>
+              <div class="box-footer">
+                <div class="box-create-time">下单时间：2018-07-18 12:37:11</div>
+                <div class="footer-btn-group clearfix">
+                  <div class="footer-btn" @click.stop="cancelOrder(item.orderNo)" v-show="item.orderState == 1">取消</div>
+                </div>
+              </div>
             </div>
           </li>
         </ul>
@@ -26,7 +31,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import { Loadmore } from 'mint-ui';
+import { Loadmore, MessageBox } from 'mint-ui';
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
@@ -59,12 +64,12 @@ export default {
     },
     loadPageList() {
       // 查询数据
-      api.user.getOrderBaseInfo(this.searchCondition).then((res) => {
+      api.trade.getOrderBaseInfo(this.searchCondition).then((res) => {
         // 是否还有下一页，加个方法判断，没有下一页要禁止上拉
         // TODO 模拟数据
         let list = res.data;
         this.isHaveMore(list.length > 0);
-        this.pageList = this.getData(list);
+        this.pageList = list;
         this.$nextTick(function() {
           this.scrollMode = "touch";
         });
@@ -73,10 +78,10 @@ export default {
     more() {
       // 分页查询
       this.searchCondition.pageNum = parseInt(this.searchCondition.pageNum) + 1;
-      api.user.getOrderBaseInfo(this.searchCondition).then((res) => {
+      api.trade.getOrderBaseInfo(this.searchCondition).then((res) => {
         let list = res.data;
         this.isHaveMore(list.length > 0);
-        this.pageList = this.pageList.concat(this.getData(list));
+        this.pageList = this.pageList.concat(list);
       });
     },
     isHaveMore(isHaveMore) {
@@ -86,26 +91,28 @@ export default {
         this.allLoaded = false;
       }
     },
-    getData(list) {
-      // 获取数据
-      let arr = [];
-      for (let i = 0, len = list.length; i < len; i++) {
-        let item = list[i];
-        let obj = {};
-        obj.phone = item.phone;
-        obj.amount = item.amount;
-        obj.time = item.createDate;
-        if (item.type == 1) {
-          obj.desc = '账户收益';
-        } else if (item.type == 2) {
-          obj.desc = '兑换养老金';
-        } else if (item.type == 3) {
-          obj.desc = '保障金转赠';
+    toDetail(orderNo, createDate){
+      this.$router.push({
+        path: '/mine/orderDetail',
+        query: {
+          orderNo,
+          createDate,
         }
-        obj.balance = item.balance;
-        arr.push(obj);
-      }
-      return arr;
+      });
+    },
+    cancelOrder(orderNo) {
+      MessageBox.confirm('确定要取消吗?').then(action => {
+        console.log(action);
+        if (action) {
+          api.trade.cancelOrder({
+            orderNo,
+          }).then((res) => {
+            this.loadTop();
+          });
+        }
+      }).catch((err) => {
+
+      });
     }
   }
 }
@@ -149,6 +156,7 @@ export default {
     height: 247px;
     background: #FFF;
     overflow: hidden;
+    margin-bottom: 20px;
     .box {
       margin: 0 auto;
       width: 690px;
@@ -160,12 +168,30 @@ export default {
         padding-top: 28px;
         padding-bottom: 30px;
         box-sizing: border-box;
+        position: relative;
         .box-logo {
           display: inline-block;
           float: left;
           width: 100px;
           height: 100px;
           margin-right: 30px;
+        }
+        .box-status {
+          position: absolute;
+          top: 30px;
+          right: 0;
+          font-family: PingFangSC-Regular;
+          font-size: 32px;
+          color: #818B8F;
+          letter-spacing: 0;
+          text-align: right;
+          line-height: 41.6px;
+          &.order-state-1 {
+            color: #F05720;
+          }
+          &.order-state-2 {
+            color: #00B59F;
+          }
         }
         .box-center {
           position: relative;
@@ -213,6 +239,39 @@ export default {
       .box-footer {
         width: 100%;
         height: 88px;
+        position: relative;
+        .box-create-time {
+          font-family: PingFangSC-Regular;
+          font-size: 24px;
+          color: #818B8F;
+          letter-spacing: -0.58px;
+          line-height: 88px;
+        }
+        .footer-btn-group {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 50%;
+          height: 88px;
+          box-sizing: border-box;
+          padding-top: 19px;
+          padding-bottom: 19px;
+          .footer-btn {
+            display: inline-block;
+            float: right;
+            width: 120px;
+            height: 50px;
+            font-family: PingFangSC-Regular;
+            font-size: 28px;
+            color: #818B8F;
+            letter-spacing: 0;
+            text-align: center;
+            line-height: 50px;
+            border: 2px solid #818B8F;
+            border-radius: 25px;
+            box-sizing: border-box;
+          }
+        }
       }
     }
   }

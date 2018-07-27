@@ -27,6 +27,9 @@ import MyOrder from '../pages/mine/MyOrder'
 import MyPay from '../pages/mine/MyPay'
 import MyCombo from '../pages/mine/MyCombo'
 
+import OrderDetail from '../pages/mine/OrderDetail'
+import ComboDetail from '../pages/mine/ComboDetail'
+
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
 
@@ -172,4 +175,20 @@ export default [{
 		subTitle: '优惠套餐',
 	},
 	component: MyCombo,
+}, {
+	path: '/mine/orderDetail',
+	name: 'orderDetail',
+	meta: {
+		title: '个人中心',
+		subTitle: '买单详情',
+	},
+	component: OrderDetail,
+}, {
+	path: '/mine/comboDetail',
+	name: 'comboDetail',
+	meta: {
+		title: '个人中心',
+		subTitle: '套餐订单详情',
+	},
+	component: ComboDetail,
 }, ]
