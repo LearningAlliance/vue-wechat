@@ -3,11 +3,14 @@ import qs from 'qs'
 import store from '../vuex/store'
 import config from '../config/index'
 import md5 from 'js-md5'
+import {
+	MessageBox
+} from 'mint-ui';
 
 import * as _ from '../util/tool'
 
 // axios 配置
-axios.defaults.timeout = 5000;
+axios.defaults.timeout = 10000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 if (process.env.NODE_ENV == "development") {
@@ -42,9 +45,37 @@ axios.interceptors.response.use((res) => {
 		// _.toast(res.data.msg);
 		return res;
 	}
+	if (res.data.resultCode == 9985) {
+		MessageBox.confirm('【测试用】当前token已过期，是否重新获取?').then(action => {
+			if (action) {
+				// 测试用获取token
+				post('/userServer/business/UserInfoAction', {
+					action: 'qryToken',
+					data: JSON.stringify({
+						user: 13333333333
+					}),
+				}).then((res) => {
+					console.log('getToken', res);
+					let {
+						token,
+						uid
+					} = res.data;
+					localStorage.setItem('token', token);
+					localStorage.setItem('uid', uid);
+					location.reload();
+				}).cathc((err) => {
+					reject(err);
+					// location.reload();
+				})
+			}
+		}).catch((err) => {
+
+		});
+	} else {
+		_.toast(res.data.resultMsg, 'fail');
+	}
 	// TODO 此处可做其他判断，
 	// 暂时 只对 resultCode不为0的 弹出错误信息
-	_.toast(res.data.resultMsg, 'fail');
 	return Promise.reject(res);
 }, (error) => {
 	setTimeout(() => {
@@ -104,8 +135,10 @@ function initRequest(params = {}, options = {}) {
 	// 	sign
 	// };
 	// TODO 测试用数据
-	let token = 'e98e257d-09f8-4c64-ad37-d70a5cc981d9';
-	let uid = '1';
+	// let token = 'e98e257d-09f8-4c64-ad37-d70a5cc981d9';
+	// let uid = '1';
+	let token = localStorage.getItem('token') || null;
+	let uid = localStorage.getItem('uid') || null;
 	if (withToken) {
 		params.token = token;
 		params.uid = uid;

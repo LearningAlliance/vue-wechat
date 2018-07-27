@@ -6,6 +6,8 @@
 </template>
 <script type="text/javascript">
 import orderDetail from '@/components/orderDetail'
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
@@ -19,6 +21,22 @@ export default {
   created() {
     this.orderNo = this.$route.query.orderNo;
     this.createDate = this.$route.query.createDate;
+    this.getOrderDetail();
+  },
+  methods: {
+    getOrderDetail() {
+      api.trade.getOrderDetail({
+        orderNo: this.orderNo,
+        createDate: this.createDate,
+      }).then((res) => {
+        let item = res.data[0];
+        this.order = item;
+        this.coupons = item.coupons || [];
+        this.orderDetail = item.orderDetail || null;
+      }).catch((err) => {
+
+      });
+    },
   }
 }
 

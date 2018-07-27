@@ -46,19 +46,7 @@ export default {
     }
   },
   created() {
-    this.getOrderDetail();
-  },
-  methods: {
-    getOrderDetail() {
-      api.trade.getOrderDetail().then((res) => {
-        let item = res.data[0];
-        this.order = item;
-        this.coupons = item.coupons || [];
-        this.orderDetail = item.orderDetail || null;
-      }).catch((err) => {
 
-      });
-    },
   },
 }
 
