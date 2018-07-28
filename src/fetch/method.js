@@ -54,6 +54,11 @@ axios.interceptors.response.use((res) => {
 					data: JSON.stringify({
 						user: 13333333333
 					}),
+				}, {
+					body: {
+						withToken: false,
+						withUid: false,
+					}
 				}).then((res) => {
 					console.log('getToken', res);
 					let {
