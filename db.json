@@ -270,5 +270,20 @@
       "shopLogo": ""
     }],
     "resultCode": "0"
+  },
+  "getEggDetail": {
+    "resultMsg": "Successful",
+    "data": {
+      "zoneType": 1,
+      "price": "",
+      "remark": "这里有奖",
+      "file": "http://ssss",
+      "name": "XXX套餐",
+      "userName": "阿斌5",
+      "reType": 1,
+      "amount": "",
+      "code": ""
+    },
+    "resultCode": "0"
   }
 }

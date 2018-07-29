@@ -1,4 +1,4 @@
-<!-- 个人中心-我的订单-我的买单 -->
+<!-- 个人中心-我的买单-优惠套餐 -->
 <template>
   <div class="page">
     <div class="section">

@@ -131,3 +131,39 @@ export const getPensionList = (params) => post('/userServer/business/AcctBalance
 		}
 	}),
 });
+
+// 我的彩蛋--我放置的
+export const getMyeggs = (params) => post('/userServer/business/UserReceiveZoneAction', {
+	action: 'qryUserZoneList',
+	data: JSON.stringify(params),
+})
+
+// 我的彩蛋-菜单详情
+export const getEggDetail = (params) => post('/userServer/business/UserReceiveZoneAction', {
+	action: 'qryUserZone',
+	data: JSON.stringify(params),
+})
+
+// export const getEggDetail = (params) => get('/getEggDetail', params)
+
+// 我的代金券-可使用
+export const getVoucher = (params) => post('/userServer/business/UserCouponAction', {
+	action: 'qryUserCoupons',
+	data: JSON.stringify({ ...params,
+		...{
+			couponType: '1',
+			state: '2',
+		}
+	}),
+})
+
+// 我的代金券-已失效
+export const getInvalidVoucher = (params) => post('/userServer/business/UserCouponAction', {
+	action: 'qryUserCoupons',
+	data: JSON.stringify({ ...params,
+		...{
+			couponType: '1',
+			state: '-1',
+		}
+	}),
+})

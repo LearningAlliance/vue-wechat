@@ -30,6 +30,16 @@ import MyCombo from '../pages/mine/MyCombo'
 import OrderDetail from '../pages/mine/OrderDetail'
 import ComboDetail from '../pages/mine/ComboDetail'
 
+// 我的彩蛋
+import Myeggs from '../pages/mine/Myeggs'
+// 彩蛋详情
+import EggDetail from '../pages/mine/EggDetail'
+
+// 代金券
+import Voucher from '../pages/mine/Voucher'
+// 失效的代金券
+import InvalidVoucher from '../pages/mine/InvalidVoucher'
+
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
 
@@ -187,8 +197,40 @@ export default [{
 	path: '/mine/comboDetail',
 	name: 'comboDetail',
 	meta: {
-		title: '个人中心',
+		title: '收藏',
 		subTitle: '套餐订单详情',
 	},
 	component: ComboDetail,
-}, ]
+}, {
+	path: '/mine/myeggs',
+	name: 'myeggs',
+	meta: {
+		title: '收藏',
+		subTitle: '我的彩蛋',
+	},
+	component: Myeggs,
+}, {
+	path: '/mine/eggDetail',
+	name: 'eggDetail',
+	meta: {
+		title: '彩蛋',
+		subTitle: '我的彩蛋',
+	},
+	component: EggDetail,
+}, {
+	path: '/mine/voucher',
+	name: 'voucher',
+	meta: {
+		title: '代金券',
+		subTitle: '我的代金券',
+	},
+	component: Voucher,
+}, {
+	path: '/mine/invalidVoucher',
+	name: 'invalidVoucher',
+	meta: {
+		title: '优惠券',
+		subTitle: '失效的代金券',
+	},
+	component: InvalidVoucher,
+}]

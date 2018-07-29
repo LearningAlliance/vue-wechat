@@ -56,3 +56,27 @@ export const formatOrderState = (key) => {
             break;
     }
 }
+
+// 状态1有效0无效2已打开4已退回
+export const formatReType = (key) => {
+    if (key == null || key == undefined) {
+        return '';
+    }
+    switch (key) {
+        case 1:
+            return '未打开';
+            break;
+        case 2:
+            return '无效';
+            break;
+        case 3:
+            return '已打开';
+            break;
+        case 4:
+            return '已退回';
+            break;
+        default:
+            return '';
+            break;
+    }
+}
