@@ -152,6 +152,9 @@ export default {
       padding-left: 40px;
       padding-right: 34px;
       box-sizing: border-box;
+      background-image: url('../../assets/images/ic_voucher_bg.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
       .box-content {
         width: 100%;
         height: 174px;

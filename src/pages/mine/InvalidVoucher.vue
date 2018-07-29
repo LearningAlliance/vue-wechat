@@ -147,6 +147,9 @@ export default {
       padding-left: 40px;
       padding-right: 34px;
       box-sizing: border-box;
+      background-image: url('../../assets/images/ic_voucher_invalid_bg.png');
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
       .box-content {
         width: 100%;
         height: 174px;
@@ -165,8 +168,8 @@ export default {
           letter-spacing: 0;
           text-align: center;
           line-height: 31.2px;
-          &.invalid{
-          	color: #818B8F;
+          &.invalid {
+            color: #818B8F;
           }
         }
         .box-logo {
@@ -189,13 +192,13 @@ export default {
           letter-spacing: 0;
           text-align: center;
           line-height: 63px;
-          &.invalid{
-          	color: #818B8F;
+          &.invalid {
+            color: #818B8F;
           }
           .currency {
             font-size: 32px;
-            &.invalid{
-            	color: #818B8F;
+            &.invalid {
+              color: #818B8F;
             }
           }
         }
@@ -216,8 +219,8 @@ export default {
             letter-spacing: 0;
             line-height: 41.6px;
             white-space: nowrap;
-            &.invalid{
-            	color: #818B8F;
+            &.invalid {
+              color: #818B8F;
             }
           }
           .box-price {

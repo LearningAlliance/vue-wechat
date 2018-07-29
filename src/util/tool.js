@@ -1,4 +1,7 @@
 import store from '../vuex/store'
+import {
+    Toast
+} from 'mint-ui'
 
 /** 
  *   Toast公共方法
@@ -24,10 +27,15 @@ export function toast(str, icon, cb) {
  */
 
 export function alert(str, cb) {
-    store.dispatch('showAlert', true)
-    store.dispatch('alertMsg', str)
+    // store.dispatch('showAlert', true)
+    // store.dispatch('alertMsg', str)
+    // setTimeout(() => {
+    //     store.dispatch('showAlert', false);
+    //     cb && cb();
+    // }, 1500);
+    let instance = Toast(str);
     setTimeout(() => {
-        store.dispatch('showAlert', false);
+        instance.close();
         cb && cb();
     }, 1500);
 }
