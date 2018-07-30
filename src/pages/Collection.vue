@@ -4,8 +4,12 @@
       <i class="icon icon-loc"></i>
       <p class="loc-text">当前地理位置</p>
       <i class="icon icon-down"></i>
-      <div class="search-box">
-        <input class="search-input" type="text" v-model="keyWords" />
+      <div class="search-box" @click="toSearch">
+        <div class="search-placeholder clearfix" v-show="!keyWords">
+          <i class="icon-search"></i>
+          <span class="icon-search-desc">查找我的收藏</span>
+        </div>
+        <input class="search-input" disabled="true" type="text" v-model="keyWords" />
       </div>
     </div>
     <div class="tab"></div>
@@ -15,12 +19,15 @@
 export default {
   data() {
     return {
-      keyWords: null,
+      keyWords: '',
     }
   },
-  mounted() {
-
-  },
+  methods: {
+    toSearch(){
+      console.log(this.keyWords);
+      this.$router.push('/collection/search');
+    },
+  }
 }
 
 </script>
@@ -81,13 +88,38 @@ export default {
     background: #F8F8FC;
     border-radius: 30px;
     position: relative;
-    .search-icon{
-    	position: absolute;
-    	width: 34px;
-    	height: 34px;
-    	background-size: 100% 100%;
-    	background-repeat: no-repeat;
-    	background-image: url('../assets/images/ic_search.png');
+    .search-placeholder {
+      position: absolute;
+      width: 231px;
+      height: 60px;
+      box-sizing: border-box;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      top: 50%;
+      left: 50%;
+      margin-top: -30px;
+      margin-left: -115.5px;
+      vertical-align: middle;
+      .icon-search {
+        display: inline-block;
+        float: left;
+        width: 40px;
+        height: 40px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url('../assets/images/ic_search.png');
+        margin-right: 9px;
+      }
+      .icon-search-desc {
+        display: inline-block;
+        float: left;
+        height: 40px;
+        line-height: 40px;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #C4CACD;
+        letter-spacing: 0;
+      }
     }
     .search-input {
       width: 100%;
@@ -96,8 +128,8 @@ export default {
       border-radius: 30px;
       box-sizing: border-box;
       padding-left: 50px;
-      padding-right: 50px;
-      // text-align: center;
+      padding-right: 50px; 
+      text-align: center;
     }
   }
 }
