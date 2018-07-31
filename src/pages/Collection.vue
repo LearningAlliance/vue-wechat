@@ -22,9 +22,13 @@ export default {
       keyWords: '',
     }
   },
+  created() {
+    console.log(this.$route);
+    let { keyWords } = this.$route.query;
+    this.keyWords = keyWords || ''
+  },
   methods: {
-    toSearch(){
-      console.log(this.keyWords);
+    toSearch() {
       this.$router.push('/collection/search');
     },
   }
@@ -36,6 +40,7 @@ export default {
   width: 100%;
   background: #F8F8FC;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .header {
@@ -47,6 +52,7 @@ export default {
   padding-top: 14px;
   padding-bottom: 14px;
   background: #FFF;
+  position: relative;
   .icon {
     display: inline-block;
     float: left;
@@ -81,13 +87,14 @@ export default {
   }
   .search-box {
     display: inline-block;
-    float: left;
     width: 470px;
     height: 60px;
     line-height: 60px;
     background: #F8F8FC;
     border-radius: 30px;
-    position: relative;
+    position: absolute;
+    top: 15px;
+    right: 30px;
     .search-placeholder {
       position: absolute;
       width: 231px;
@@ -122,14 +129,14 @@ export default {
       }
     }
     .search-input {
-      width: 100%;
+      width: 470px;
       height: 100%;
       background: #F8F8FC;
       border-radius: 30px;
       box-sizing: border-box;
       padding-left: 50px;
-      padding-right: 50px; 
-      text-align: center;
+      padding-right: 50px;
+      text-align: left;
     }
   }
 }

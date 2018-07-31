@@ -173,7 +173,7 @@ a.active {
     padding-top: 100px;
   }
   .tabar {
-    padding-bottom: 120px;
+    // padding-bottom: 120px;
   } //渐变动效
   .slide-left-enter-active,
   .slide-left-leave-active {
