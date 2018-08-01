@@ -189,6 +189,12 @@ a.active {
   // }
 }
 
+.with-shadow {
+  -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
 .clearfix:after {
   display: block;
   content: '';

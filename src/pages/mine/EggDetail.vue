@@ -12,12 +12,12 @@ export default {
     }
   },
   created() {
-    let id = this.$route.query.id;
+    let { id } = this.$route.query;
     this.getInfo(id);
   },
   methods: {
     getInfo(id) {
-      api.user.getEggDetail().then((res) => {
+      api.user.getEggDetail({ id, }).then((res) => {
 
       })
     }
