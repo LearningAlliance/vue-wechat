@@ -51,7 +51,7 @@ export default {
       height: 220px;
       margin-bottom: 30px;
       position: relative;
-      border-radius: 15px;
+      border-radius: 12px;
       .image {
         display: block;
         width: 100%;
