@@ -72,7 +72,7 @@ export default {
       }
       let reg = /^(-?\d+)(\.\d{1,2})?$/;
       if (!reg.test(amount)) {
-        _.alert('转赠金额需大于0，且格式错误，请检查 ');
+        _.alert('转赠金额需大于0，且格式正确，请检查 ');
         return;
       }
       if (amount < 0) {
