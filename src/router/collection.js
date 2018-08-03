@@ -1,6 +1,7 @@
 import Collection from '../pages/Collection'
 
 import Search from '../pages/collection/Search'
+import PlacementSuccess from '../pages/collection/PlacementSuccess'
 
 export default [{
 	path: '/collection',
@@ -17,4 +18,11 @@ export default [{
 		title: '收藏',
 	},
 	component: Search,
-}, ]
+}, {
+	path: '/collection/placementSuccess',
+	name: 'search',
+	meta: {
+		title: '微信',
+	},
+	component: PlacementSuccess,
+}]
