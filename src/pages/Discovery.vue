@@ -150,7 +150,9 @@ export default {
           .comment {
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            /* autoprefixer: off */
             -webkit-box-orient: vertical;
+            /* autoprefixer: on */
             width: 300px;
             height: 72.8px;
             font-family: PingFangSC-Medium;

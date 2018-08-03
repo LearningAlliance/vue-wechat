@@ -76,7 +76,9 @@ export default {
                     overflow: hidden;
                     text-overflow: ellipsis;
                     white-space: normal!important;
+                    /* autoprefixer: off */
                     -webkit-line-clamp: 2;
+                    /* autoprefixer: on */
                     -webkit-box-orient: vertical;
                 }
             }
