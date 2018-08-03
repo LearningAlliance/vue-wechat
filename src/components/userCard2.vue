@@ -10,10 +10,11 @@
           <span>{{userInfo.userNick}}</span>
         </div>
         <div class="box">
-          <div class="box-left" @click="toSafeGuard">
+          <div class="box-left">
             <p class="box-title">累计获得积分</p>
             <p class="box-content">{{accountCredits}}</p>
           </div>
+          <!-- <div class="box-right" @click="toSafeGuard"> -->
           <div class="box-right">
             <p class="box-title">累计获得保障金(元)</p>
             <P class="box-content">{{accountSafeGuard}}</P>

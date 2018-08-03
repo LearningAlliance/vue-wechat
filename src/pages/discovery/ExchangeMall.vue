@@ -7,12 +7,12 @@
         <div class="box-left">
           <p class="box-title">保障金(元)</p>
           <p class="box-content">{{accountSafeGuard}}</p>
-          <div class="box-btn">保障金兑成积分</div>
+          <div class="box-btn" @click="toCreditsExchange">保障金兑成积分</div>
         </div>
         <div class="box-right">
           <p class="box-title">积分</p>
           <P class="box-content">{{accountCredits}}</P>
-          <div class="box-btn">保障金兑成养老金</div>
+          <div class="box-btn" @click="toPensionExchange">保障金兑成养老金</div>
         </div>
       </div>
     </div>
@@ -64,8 +64,14 @@ export default {
       api.user.getAccountCredits().then((res) => {
         let item = res.data[0];
         this.accountCredits = item.amount || 0;
-      });
-    }
+      }); 
+    },
+    toCreditsExchange() {
+      this.$router.push('/discovery/creditsExchange');
+    },
+    toPensionExchange() {
+      this.$router.push('/discovery/pensionExchange');
+    },
   }
 }
 

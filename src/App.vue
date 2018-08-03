@@ -153,6 +153,10 @@ body {
   background: #F8F8FC;
 }
 
+::-webkit-scrollbar {
+  display: none
+}
+
 a.active {
   text-decoration: none;
 }
