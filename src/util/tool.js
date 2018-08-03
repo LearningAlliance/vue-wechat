@@ -40,6 +40,17 @@ export function alert(str, cb) {
     }, 1500);
 }
 
+export function alertButtom(str, cb) {
+    let instance = Toast({
+        message: str,
+        position: 'bottom'
+    });
+    setTimeout(() => {
+        instance.close();
+        cb && cb();
+    }, 1500);
+}
+
 Date.prototype.format = function(format) {
     var o = {
         "M+": this.getMonth() + 1, //month

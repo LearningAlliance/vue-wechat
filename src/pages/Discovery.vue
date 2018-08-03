@@ -40,6 +40,7 @@
           </div>
         </div>
       </div>
+      <div class="no-more" v-show="!hasMore">没有更多了</div>
     </div>
   </div>
 </template>
@@ -50,43 +51,61 @@ import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
-      list: [{
+      hasMore: true,
+      pageNum: 0,
+      list: [],
+      defaultList: [{
         userName: '皮卡丘',
-        picUrl: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
+        picUrl: 'https://ss1.baidu.com/5aR1cTe9KgQFm2e88IuM_a/it?qt=spg&c=179&coord=L|13381648.01,3512769.12;13377440.63,3515346.60;13374513.07,3519404.70;13375639.71,3519245.17;13369533.31,3518722.78;',
         userComments: '真的不错的一家海鲜自助餐厅，服务员态度非常好十分满意',
         userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
       }, {
         userName: '肯泰罗',
-        picUrl: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
+        picUrl: 'https://ss3.baidu.com/-rVXeDTa2gU2pMbgoY3K/it/u=35675958,1784347126&fm=202&src=2000&mola=new&crop=v1',
         userComments: '缤纷多彩的夏日滋味',
         userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
       }, {
-        userName: '奥特曼',
-        picUrl: 'http://img1.imgtn.bdimg.com/it/u=1221783501,3812481500&fm=27&gp=0.jpg',
-        userComments: '放置了口令彩蛋，在银泰第一次见面的地方',
-        userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
-      }, {
         userName: '蝙蝠侠',
-        picUrl: 'http://img3.imgtn.bdimg.com/it/u=3609715430,818893913&fm=27&gp=0.jpg',
+        picUrl: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2985556964,4179404362&fm=27&gp=0.jpg',
         userComments: '彩蛋袭来~快进店来',
         userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
       }, {
         userName: '名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊',
-        picUrl: 'http://img0.imgtn.bdimg.com/it/u=3129060174,250262574&fm=27&gp=0.jpg',
+        picUrl: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=4023123360,4102988295&fm=27&gp=0.jpg',
         userComments: '彩蛋袭来~快进店来',
         userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
-      }, ],
+      }, {
+        userName: '名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊名字啊',
+        picUrl: 'https://ss0.baidu.com/73x1bjeh1BF3odCf/it/u=4004991133,1010136548&fm=85&s=B989F311583BA801665C105E03009060',
+        userComments: '彩蛋袭来~快进店来',
+        userAvatar: 'http://img5.imgtn.bdimg.com/it/u=1760549374,2354433619&fm=27&gp=0.jpg',
+      }],
     }
   },
-  mounted() {
-
+  created() {
+  	this.defaultList = this.defaultList.concat(this.defaultList);
+  	this.list = this.defaultList;
   },
   methods: {
     toMall() {
       this.$router.push('/discovery/exchangeMall');
     },
     handleScroll() {
-      console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
+      // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
+      if(this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight){
+      	console.log('111');
+      	this.loadMore();
+      }
+    },
+    loadMore(){
+    	if(this.pageNum == 3){
+    		this.hasMore = false;
+    		// _.alertButtom('没有更多了~');
+    		return;
+    	}
+    	// 测试实际上应该调用接口
+    	this.list = this.list.concat(this.defaultList);
+    	this.pageNum++;
     },
   },
   components: {
@@ -199,6 +218,19 @@ export default {
       }
     }
   }
+}
+
+.no-more {
+  margin: 30px auto 0 auto;
+  padding-bottom: 30px;
+  width: 372px;
+  height: 41.6px;
+  font-family: PingFangSC-Regular;
+  font-size: 32px;
+  color: #818B8F;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 41.6px;
 }
 
 .blank {
