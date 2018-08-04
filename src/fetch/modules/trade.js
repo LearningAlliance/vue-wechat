@@ -31,3 +31,14 @@ export const getOrderDetail = (params) => post('/userServer/business/OrderBaseIn
 	action: 'orderDetail',
 	data: JSON.stringify(params),
 });
+
+// 获取代金券可用分店
+export const getShopByCoupon = (params) => post('/userServer/business/MerShopAction?action=qryShopByCoupon', {
+	action: 'qryShopByCoupon',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		// withToken: false,
+		// withUid: false,
+	}
+});

@@ -2,7 +2,7 @@
 <template>
   <div class="page">
     <div class="box">
-      <img src="../../assets/images/img_success.png" />
+      <img src="../../assets/images/img_setegg_success.png" />
       <p class="text">彩蛋放置成功</p>
       <p class="text-2">在该店或附近即可打开该彩蛋</p>
     </div>
@@ -32,12 +32,12 @@ export default {
     width: 100%;
     img {
       display: block;
-      width: 159.8px;
-      height: 159.8px;
-      margin: 60.1px auto 30.1px auto;
+      width: 270px;
+      height: 230px;
+      margin: 30px auto 0 auto;
     }
     .text {
-      margin-top: 32.3px;
+      margin-top: 4.7px;
       font-family: PingFangSC-Medium;
       font-size: 32px;
       color: #2E3141;
