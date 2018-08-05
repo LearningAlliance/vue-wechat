@@ -199,6 +199,20 @@ a.active {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
+input[type=search]::-webkit-search-cancel-button {
+  -webkit-appearance: none; //此处只是去掉默认的小×
+}
+
+input[type=number] {
+    -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
 .clearfix:after {
   display: block;
   content: '';

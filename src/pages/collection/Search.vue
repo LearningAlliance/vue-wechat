@@ -119,9 +119,6 @@ export default {
 
 </script>
 <style scoped lang="scss">
-input[type=search]::-webkit-search-cancel-button {
-  -webkit-appearance: none; //此处只是去掉默认的小×
-}
 
 .page {
   width: 100%;
