@@ -13,6 +13,46 @@
       <div class="amount-label">不参与活动金额(元)</div>
       <input type="number" class="amount" v-model.number="price" placeholder="请与收银员确认金额" />
     </div>
+    <div class="section">
+      <div class="section-cell line clearfix">
+        <div class="cell-left">
+          <span class="label">满100减20</span>
+        </div>
+        <div class="cell-right">
+          <span class="value orange">-40元</span>
+        </div>
+      </div>
+      <div class="section-cell clearfix">
+        <div class="cell-left">
+          <span class="label">代金券</span>
+        </div>
+        <div class="cell-right">
+          <div class="icon-right-box">
+            <i class="icon-right"></i>
+          </div>
+          <span class="value">未使用</span>
+        </div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-cell clearfix">
+        <div class="cell-left">
+          <span class="label">赠送养老金</span>
+          <div class="icon-left-box">
+            <i class="icon-left"></i>
+          </div>
+        </div>
+        <div class="cell-right">
+          <span class="value orange">8元</span>
+        </div>
+      </div>
+    </div>
+    <div class="blank"></div>
+    <div class="footer clearfix">
+      <div class="footer-label">合计</div>
+      <div class="footer-price">494元</div>
+      <div class="footer-btn">确认支付</div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -25,7 +65,7 @@ export default {
     }
   },
   methods: {
-    changeHasPrice(){
+    changeHasPrice() {
       this.hasPrice = !this.hasPrice;
     }
   },
@@ -33,6 +73,11 @@ export default {
 
 </script>
 <style scoped lang="scss">
+.blank {
+  width: 100%;
+  height: 140px;
+}
+
 .page {
   width: 100%;
   height: 100%;
@@ -85,7 +130,6 @@ export default {
     height: 88px;
     font-family: PingFangSC-Medium;
     font-size: 36px;
-    color: #2E3141;
     letter-spacing: 0;
     text-align: right;
     color: #2E3141;
@@ -124,7 +168,139 @@ export default {
 input.amount::-webkit-input-placeholder {
   font-size: 28px;
   color: #C4CACD;
-  line-height: 88px;
+}
+
+.section {
+  margin-top: 38px;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+  background: #FFF;
+  .section-cell {
+    width: 100%;
+    box-sizing: border-box;
+    height: 88px;
+    position: relative;
+    &.line {
+      border-bottom: 1px solid #E2E2E2;
+      /*no*/
+    }
+    .cell-left {
+      display: inline-block;
+      float: left;
+      .label {
+        display: inline-block;
+        float: left;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #2E3141;
+        letter-spacing: 0;
+        line-height: 88px;
+      }
+      .icon-left-box {
+        display: inline-block;
+        float: left;
+        width: 50px;
+        height: 88px;
+        position: relative;
+        .icon-left {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -15px;
+          margin-left: -15px;
+          width: 50px;
+          height: 30px;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-image: url('../../assets/images/img_youli.png');
+        }
+      }
+    }
+    .cell-right {
+      display: inline-block;
+      float: right;
+      .value {
+        display: inline-block;
+        float: right;
+        font-family: PingFangSC-Regular;
+        letter-spacing: 0;
+        text-align: right;
+        line-height: 88px;
+        font-size: 28px;
+        color: #818B8F;
+        &.orange {
+          color: #F05720;
+        }
+      }
+      .icon-right-box {
+        float: right;
+        display: inline-block;
+        width: 32px;
+        height: 88px;
+        position: relative;
+        .icon-right {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 32px;
+          height: 32px;
+          margin-left: -16px;
+          margin-top: -16px;
+          display: inline-block;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-image: url('../../assets/images/ic_back_right@2x.png');
+        }
+      }
+    }
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: #FFF;
+  .footer-label {
+    display: inline-block;
+    float: left;
+    font-family: PingFangSC-Medium;
+    font-size: 32px;
+    color: #818B8F;
+    margin-left: 30px;
+    letter-spacing: 0;
+    line-height: 120px;
+  }
+  .footer-price {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    font-family: PingFangSC-Medium;
+    font-size: 48px;
+    color: #00001D;
+    letter-spacing: 0;
+    line-height: 120px;
+  }
+  .footer-btn {
+    display: inline-block;
+    float: right;
+    margin-top: 16px;
+    margin-right: 30px;
+    width: 270px;
+    height: 88px;
+    background: #F05720;
+    border-radius: 44px;
+    font-family: PingFangSC-Semibold;
+    font-size: 36px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 88px;
+  }
 }
 
 </style>

@@ -13,4 +13,16 @@ export const getOpenIdByCode = (params) => post('/userServer/business/UserInfoAc
 		withToken: false,
 		withUid: false,
 	}
-})
+});
+
+// 根据openId获取token
+// 参数userWecharId
+export const getTokenByOpenId = (params) => post('/userServer/business/UserInfoAction', {
+	action: 'action',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		withToken: false,
+		withUid: false,
+	}
+});
