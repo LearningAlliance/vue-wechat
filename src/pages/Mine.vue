@@ -32,6 +32,8 @@ export default {
     api.user.getUserInfo().then((res) => {
       let userInfo = res.data[0];
       this.$store.dispatch('setUserInfo', userInfo);
+    }).catch((err)=>{
+      console.log(err);
     });
   },
   mounted() {

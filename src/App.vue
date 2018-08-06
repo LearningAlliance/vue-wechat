@@ -20,6 +20,8 @@ import sidebar from '@/components/sidebar'
 import toast from '@/components/toast'
 import alert from '@/components/alert'
 import loading from '@/components/loading'
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -41,6 +43,19 @@ export default {
   created() {
     let routeName = this.$route.path.split('/')[1];
     this.setRouteName(routeName || '');
+    try {
+      let code = _.getRequest('code');
+      // console.log(code);
+      if (!!code) {
+        api.common.getOpenIdByCode({ code, }).then((res) => {
+          console.log(res);
+        }).catch((err) => {
+          console.log(err);
+        });
+      }
+    } catch (e) {
+
+    }
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -172,12 +187,12 @@ a.active {
     min-height: 100%;
     box-sizing: border-box;
     background: #F8F8FC;
-  }
-  .topbar {
-    padding-top: 100px;
-  }
-  .tabar {
-    // padding-bottom: 120px;
+    &.tabar {
+      margin-bottom: 120px;
+    }
+    &.topbar {
+      padding-top: 100px;
+    }
   } //渐变动效
   .slide-left-enter-active,
   .slide-left-leave-active {
@@ -204,12 +219,13 @@ input[type=search]::-webkit-search-cancel-button {
 }
 
 input[type=number] {
-    -moz-appearance:textfield;
+  -moz-appearance: textfield;
 }
+
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 

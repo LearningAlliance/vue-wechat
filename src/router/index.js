@@ -8,6 +8,7 @@ import mineRouter from './mine.js'
 // 测试页面
 import getToken from '../pages/getToken'
 import NotFound from '../pages/NotFound'
+import Redirect from '../pages/Redirect'
 
 Vue.use(Router)
 Vue.use(require('vue-wechat-title'))
@@ -24,6 +25,13 @@ export default new Router({
         title: '主页',
       },
       component: getToken
+    }, {
+      path: '/redirect',
+      name: 'redirect',
+      meta: {
+        title: '',
+      },
+      component: Redirect,
     },
     ...collectionRouter,
     ...discoveryRouter,

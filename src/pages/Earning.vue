@@ -19,12 +19,21 @@
 </template>
 <script type="text/javascript">
 import userCard from '@/components/userCard2'
+import api from '../fetch/api.js'
 export default {
   data() {
     return {}
   },
   components: {
     'user-card': userCard,
+  },
+  created() {
+    api.user.getUserInfo().then((res) => {
+      let userInfo = res.data[0];
+      this.$store.dispatch('setUserInfo', userInfo);
+    }).catch((err)=>{
+      console.log(err);
+    });
   },
   mounted() {
 

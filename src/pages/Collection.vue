@@ -52,7 +52,10 @@ export default {
   padding-top: 14px;
   padding-bottom: 14px;
   background: #FFF;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
   .icon {
     display: inline-block;
     float: left;

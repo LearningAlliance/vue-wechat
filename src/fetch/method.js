@@ -23,7 +23,7 @@ if (process.env.NODE_ENV == "development") {
 
 //POST传参序列化
 axios.interceptors.request.use((config) => {
-	console.log(config);
+	// console.log(config);
 	store.dispatch('setLoadingState', true);
 	if (config.method === 'post') {
 		config.data = qs.stringify(config.data);
@@ -36,7 +36,7 @@ axios.interceptors.request.use((config) => {
 
 //返回状态判断
 axios.interceptors.response.use((res) => {
-	console.log('interceptors', res);
+	// console.log('interceptors', res);
 	setTimeout(() => {
 		store.dispatch('setLoadingState', false);
 	}, 100);
@@ -60,7 +60,7 @@ axios.interceptors.response.use((res) => {
 						withUid: false,
 					}
 				}).then((res) => {
-					console.log('getToken', res);
+					// console.log('getToken', res);
 					let {
 						token,
 						uid
@@ -176,7 +176,7 @@ export function get(url, data, options = {}) {
 }
 
 export function post(url, data, options = {}) {
-	console.log(url, data, options);
+	// console.log(url, data, options);
 	return new Promise((resolve, reject) => {
 		let {
 			params,
