@@ -3,7 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-// import FastClick from 'fastclick'
+import FastClick from 'fastclick'
+import {
+	WechatPlugin
+} from 'vux'
 
 import store from './vuex/store'
 import * as filters from './util/filter'
@@ -14,7 +17,9 @@ import '../static/css/my-mint.scss'; //全局修改mint-UI样式
 
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k])) //注册过滤器
 
-// FastClick.attach(document.body);
+FastClick.attach(document.body)
+
+Vue.use(WechatPlugin)
 
 /* eslint-disable no-new */
 new Vue({

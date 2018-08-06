@@ -22,7 +22,7 @@
           <span class="value orange">-40元</span>
         </div>
       </div>
-      <div class="section-cell clearfix">
+      <div class="section-cell clearfix" @click="toUseCoupons">
         <div class="cell-left">
           <span class="label">代金券</span>
         </div>
@@ -67,7 +67,10 @@ export default {
   methods: {
     changeHasPrice() {
       this.hasPrice = !this.hasPrice;
-    }
+    },
+    toUseCoupons(){
+      this.$router.push('/collection/useCoupons');
+    },
   },
 }
 

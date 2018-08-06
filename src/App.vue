@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    console.log(this.$wechat);
     let routeName = this.$route.path.split('/')[1];
     this.setRouteName(routeName || '');
     try {

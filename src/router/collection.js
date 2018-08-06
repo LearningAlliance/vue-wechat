@@ -4,6 +4,7 @@ import Search from '../pages/collection/Search'
 import PlacementSuccess from '../pages/collection/PlacementSuccess'
 import PayTheBill from '../pages/collection/PayTheBill'
 import Branch from '../pages/collection/Branch'
+import UseCoupons from '../pages/collection/UseCoupons'
 
 export default [{
 	path: '/collection',
@@ -43,4 +44,12 @@ export default [{
 		subTitle: '分店',
 	},
 	component: Branch,
+}, {
+	path: '/collection/useCoupons',
+	name: 'useCoupons',
+	meta: {
+		title: '代金券使用',
+		subTitle: '代金券使用',
+	},
+	component: UseCoupons,
 }, ]
