@@ -154,7 +154,9 @@ export default {
     &.has-price {
       background-image: url('../../assets/images/ic_select.png');
     }
-    &.no-price {}
+    &.no-price {
+      background-image: url('../../assets/images/ic_select_grey.png');
+    }
   }
   .choice-desc {
     float: left;
@@ -217,7 +219,7 @@ input.amount::-webkit-input-placeholder {
           height: 30px;
           background-size: 100% 100%;
           background-repeat: no-repeat;
-          background-image: url('../../assets/images/img_youli.png');
+          background-image: url('../../assets/images/img_zengsong.png');
         }
       }
     }

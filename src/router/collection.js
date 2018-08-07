@@ -12,6 +12,8 @@ export default [{
 	meta: {
 		title: '收藏',
 		showTabar: true,
+		wxConfig: true,
+		jsApiList: ['getLocation'],
 	},
 	component: Collection
 }, {

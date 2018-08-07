@@ -93,7 +93,6 @@ export default {
     handleScroll() {
       // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
       if(this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight){
-      	console.log('111');
       	this.loadMore();
       }
     },

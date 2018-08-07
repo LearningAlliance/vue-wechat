@@ -15,6 +15,12 @@ Vue.use(require('vue-wechat-title'))
 
 // meta中有 subtitle属性时 才会显示 header,和返回按钮
 
+// 路由配置
+// meta: {
+//   wxConfig: true,
+//   jsApiList: ['getLocation'], 
+// }
+
 export default new Router({
   // linkActiveClass: 'active',
   mode: 'history',

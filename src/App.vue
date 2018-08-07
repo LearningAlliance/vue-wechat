@@ -41,6 +41,7 @@ export default {
     }
   },
   created() {
+    this.wxConfig();
     console.log(this.$wechat);
     let routeName = this.$route.path.split('/')[1];
     this.setRouteName(routeName || '');
@@ -60,16 +61,79 @@ export default {
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    '$route': 'hideMenuSlide'
+    '$route': 'routeChanged'
   },
   methods: {
     ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName' }),
     // 隐藏MenuSlide
-    hideMenuSlide() {
+    routeChanged() {
+      console.log(new Date());
       this.setNavState(false);
       let routeName = this.$route.path.split('/')[1];
       this.setRouteName(routeName || '');
-    }
+      this.wxConfig();
+    },
+    wxConfig() {
+      let { wxConfig, jsApiList } = this.$route.meta;
+      if (!wxConfig) {
+        return;
+      }
+      console.log(new Date());
+      api.common.getWxConfig().then((res) => {
+        console.log(res);
+        this.doConfig();
+      }).catch((err) => {
+        this.doConfig();
+        console.log(err);
+      });
+    },
+    doConfig(config) {
+      const wx = this.$wechat;
+      let appId = '';
+      let timestamp = '';
+      let nonceStr = '';
+      let signature = '';
+      let jsApiList = this.$route.meta.jsApiList || [];
+      wx.config({
+        debug: process.env.NODE_ENV == "development" ? false : true,
+        appId: appId || '',
+        timestamp: timestamp || '',
+        nonceStr: nonceStr || '',
+        signature: signature || '',
+        jsApiList: jsApiList || [],
+      });
+      wx.ready(function() {
+        wx.checkJsApi({
+          jsApiList: jsApiList,
+          success: function(res) {
+            let flag = true;
+            for (let key in res.checkResult) {
+              if (!res.checkResult[key]) {
+                flag = false;
+              }
+            }
+            if (!flag) {
+              _.alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+              return;
+            }
+          }
+        });
+        wx.error(function(res) {
+          _.alert("接口调取失败")
+        });
+        // 调用js-sdk
+        if (jsApiList.indexOf('getLocation') > -1) {
+          wx.getLocation({
+            success: function(res) {
+              _.alert(JSON.stringify(res));
+            },
+            cancel: function(res) {
+              _.alert('用户拒绝授权获取地理位置');
+            }
+          });
+        }
+      });
+    },
   },
   computed: {
     ...mapGetters([

@@ -26,3 +26,15 @@ export const getTokenByOpenId = (params) => post('/userServer/business/UserInfoA
 		withUid: false,
 	}
 });
+
+// 获取微信公众号信息 用于 wxconfig
+export const getWxConfig = (params) => post('/userServer/business/SysWechatAction', {
+	action: 'getSignaTure',
+	data: JSON.stringify({
+		url: location.href.split('#')[0],
+	})
+}, {
+	body: {
+		withToken: false,
+	}
+});
