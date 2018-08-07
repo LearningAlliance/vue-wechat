@@ -88,6 +88,7 @@ export default {
       let nonceStr = config.noncestr || '';
       let signature = config.signature || '';
       let jsApiList = this.$route.meta.jsApiList || [];
+      let getLocation = this.$route.meta.getLocation || false;
       wx.config({
         debug: false,
         appId: appId,
@@ -101,7 +102,7 @@ export default {
           jsApiList: jsApiList,
           success: function(res) {
             let flag = true;
-            if(typeof(res.checkResult) == 'string'){
+            if (typeof(res.checkResult) == 'string') {
               res.checkResult = JSON.parse(res.checkResult);
             }
             for (let key in res.checkResult) {
@@ -116,7 +117,7 @@ export default {
           }
         });
         // 调用js-sdk
-        if (jsApiList.indexOf('getLocation') > -1) {
+        if (getLocation) {
           wx.getLocation({
             type: 'gcj02',
             success: function(res) {

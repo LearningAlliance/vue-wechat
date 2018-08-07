@@ -14,6 +14,7 @@ export default [{
 		showTabar: true,
 		wxConfig: true,
 		jsApiList: ['getLocation'],
+		getLocation: true,
 	},
 	component: Collection
 }, {

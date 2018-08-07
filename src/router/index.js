@@ -19,6 +19,7 @@ Vue.use(require('vue-wechat-title'))
 // meta: {
 //   wxConfig: true,
 //   jsApiList: ['getLocation'], 
+//   getLocation, //获取地理位置（火星坐标）
 // }
 
 export default new Router({

@@ -31,7 +31,7 @@ export const getTokenByOpenId = (params) => post('/userServer/business/UserInfoA
 export const getWxConfig = (params) => post('/userServer/business/SysWechatAction', {
 	action: 'getSignaTure',
 	data: JSON.stringify({
-		url: location.href.split('?')[0],
+		url: location.href.split('#')[0],
 	})
 }, {
 	body: {
