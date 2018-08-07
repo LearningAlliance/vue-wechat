@@ -42,12 +42,10 @@ export default {
   },
   created() {
     this.wxConfig();
-    console.log(this.$wechat);
     let routeName = this.$route.path.split('/')[1];
     this.setRouteName(routeName || '');
     try {
       let code = _.getRequest('code');
-      // console.log(code);
       if (!!code) {
         api.common.getOpenIdByCode({ code, }).then((res) => {
           console.log(res);
@@ -67,7 +65,6 @@ export default {
     ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName' }),
     // 隐藏MenuSlide
     routeChanged() {
-      console.log(new Date());
       this.setNavState(false);
       let routeName = this.$route.path.split('/')[1];
       this.setRouteName(routeName || '');
@@ -78,35 +75,35 @@ export default {
       if (!wxConfig) {
         return;
       }
-      console.log(new Date());
       api.common.getWxConfig().then((res) => {
-        console.log(res);
-        this.doConfig();
+        this.doConfig(res.data[0]);
       }).catch((err) => {
-        this.doConfig();
         console.log(err);
       });
     },
     doConfig(config) {
       const wx = this.$wechat;
-      let appId = '';
-      let timestamp = '';
-      let nonceStr = '';
-      let signature = '';
+      let appId = config.appid || '';
+      let timestamp = config.timestamp || '';
+      let nonceStr = config.noncestr || '';
+      let signature = config.signature || '';
       let jsApiList = this.$route.meta.jsApiList || [];
       wx.config({
-        debug: process.env.NODE_ENV == "development" ? false : true,
-        appId: appId || '',
-        timestamp: timestamp || '',
-        nonceStr: nonceStr || '',
-        signature: signature || '',
-        jsApiList: jsApiList || [],
+        debug: false,
+        appId: appId,
+        timestamp: timestamp,
+        nonceStr: nonceStr,
+        signature: signature,
+        jsApiList: jsApiList,
       });
       wx.ready(function() {
         wx.checkJsApi({
           jsApiList: jsApiList,
           success: function(res) {
             let flag = true;
+            if(typeof(res.checkResult) == 'string'){
+              res.checkResult = JSON.parse(res.checkResult);
+            }
             for (let key in res.checkResult) {
               if (!res.checkResult[key]) {
                 flag = false;
@@ -118,12 +115,10 @@ export default {
             }
           }
         });
-        wx.error(function(res) {
-          _.alert("接口调取失败")
-        });
         // 调用js-sdk
         if (jsApiList.indexOf('getLocation') > -1) {
           wx.getLocation({
+            type: 'gcj02',
             success: function(res) {
               _.alert(JSON.stringify(res));
             },
@@ -132,6 +127,10 @@ export default {
             }
           });
         }
+      });
+      wx.error(function(res) {
+        console.log('wx.error:' + res);
+        _.alert('wx.error:' + res.errMsg);
       });
     },
   },
