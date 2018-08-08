@@ -38,3 +38,25 @@ export const getWxConfig = (params) => post('/userServer/business/SysWechatActio
 		withToken: false,
 	}
 });
+
+// 根据经纬度获取地理位置信息  参数 lon   lat
+export const getAddress = (params) => post('/userServer/business/SysGaoDeAction', {
+	action: 'getAddress',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		withToken: false,
+		withUid: false,
+	}
+});
+
+//根据地址获取经纬度  参数  addres 地址
+export const getLonLat = (params) => post('/userServer/business/SysGaoDeAction', {
+	action: 'getLonLat',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		withToken: false,
+		withUid: false,
+	}
+});

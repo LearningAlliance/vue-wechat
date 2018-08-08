@@ -11,13 +11,17 @@
     <div class="address">
       {{address}}
     </div>
+    <p>longitude: {{longitude}}</p>
+    <p>latitude: {{latitude}}</p>
+    <p>formattedAddress: {{formattedAddress}}</p>
   </div>
 </template>
 <style>
 .amap-demo {
   height: 300px;
 }
-.address{
+
+.address {
   margin-top: 50px;
 }
 
@@ -42,61 +46,67 @@ export default {
       address: null,
       events: {
         init: (o) => {
-          var geocoder = new AMap.Geocoder({
-            radius: 1000,
-            extensions: "all"
-          });
-          geocoder.getAddress(self.center, function(status, result) {
-            console.log('getAddress:', status, result);
-            if (status === 'complete' && result.info === 'OK') {
-              self.address = result.regeocode.formattedAddress;
-            } 
-          });
+          // var geocoder = new AMap.Geocoder({
+          //   radius: 1000,
+          //   extensions: "all"
+          // });
+          // geocoder.getAddress(self.center, function(status, result) {
+          //   console.log('getAddress:', status, result);
+          //   if (status === 'complete' && result.info === 'OK') {
+          //     self.address = result.regeocode.formattedAddress;
+          //   } 
+          // });
+
+
+
+          // var geolocation = new AMap.Geolocation({
+          //   // 是否使用高精度定位，默认：true
+          //   enableHighAccuracy: true,
+          //   // 设置定位超时时间，默认：无穷大
+          //   timeout: 10000,
+          //   // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
+          //   buttonOffset: new AMap.Pixel(10, 20),
+          //   //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+          //   zoomToAccuracy: true,
+          //   //  定位按钮的排放位置,  RB表示右下
+          //   buttonPosition: 'RB'
+          // })
+
+          // geolocation.getCurrentPosition()
+          // AMap.event.addListener(geolocation, 'complete', onComplete)
+          // AMap.event.addListener(geolocation, 'error', onError)
+
+          // function onComplete(data) {
+          //   // data是具体的定位信息
+          //   // console.log('具体信息:' + JSON.stringify(data));
+          //   // _.alert(data.formattedAddress);
+          //   console.log('console in demo', data);
+          //   // this.setFormattedAddress(data.formattedAddress);
+          // }
+
+          // function onError(err) {
+          //   // 定位出错
+          //   console.log(err.message);
+          // }
+
+
         },
       },
-      plugin: [
-        // {
-        //   pName: 'Geolocation',
-        //   events: {
-        //     init(o) {
-        //       if (!!self.longitude && !!self.latitude) {
-        //         self.center = [self.longitude, self.latitude];
-        //         self.lng = self.longitude;
-        //         self.lat = self.latitude;
-        //         self.loaded = true;
-        //         self.$nextTick();
-        //         return;
-        //       }
-        //       // o 是高德地图定位插件实例
-        //       // o.getCurrentPosition((status, result) => {
-        //       //   if (result && result.position) {
-        //       //     self.lng = result.position.lng;
-        //       //     self.lat = result.position.lat;
-        //       //     console.log(status, result);
-        //       //     self.center = [self.lng, self.lat];
-        //       //     self.loaded = true;
-        //       //     self.$nextTick();
-        //       //   }
-        //       // });
-        //     }
-        //   }
-        // }, 
-        {
-          pName: 'ToolBar',
-          events: {
-            init(instance) {
-              // console.log(instance);
-            }
+      plugin: [{
+        pName: 'ToolBar',
+        events: {
+          init(instance) {
+            // console.log(instance);
           }
-        }, {
-          pName: 'Scale',
-          events: {
-            init(instance) {
-              // console.log(instance);
-            }
+        }
+      }, {
+        pName: 'Scale',
+        events: {
+          init(instance) {
+            // console.log(instance);
           }
-        }, 
-      ]
+        }
+      }, ]
     };
   },
   mounted() {
@@ -111,7 +121,8 @@ export default {
   computed: {
     ...mapGetters([
       'longitude',
-      'latitude'
+      'latitude',
+      'formattedAddress',
     ]),
     newCenter() {
       if (!!this.longitude && !!this.latitude) {
@@ -136,7 +147,8 @@ export default {
         strokeOpacity: 0.2,
         strokeWeight: 16,
       };
-      this.markers.push(marker);
+      // this.markers.push(marker);
+      this.markers = [marker];
     },
   },
 };

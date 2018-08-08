@@ -20,10 +20,11 @@ const state = {
     // longitude: 116.397428, // 经度
 
     // 杭州测试
-    // latitude: 30.31974,
-    // longitude: 120.1421,
-    latitude: null,
-    longitude: null,
+    latitude: 30.31974,
+    longitude: 120.1421,
+    // latitude: null,
+    // longitude: null,
+    formattedAddress: null, // 用户详细地址
 }
 
 const actions = {
@@ -92,6 +93,11 @@ const actions = {
     }, longitude) {
         commit(types.COM_SET_LONGITUDE, longitude)
     },
+    setFormattedAddress({
+        commit
+    }, formattedAddress) {
+        commit(types.COM_SET_FORMATTED_ADDRESS, formattedAddress);
+    },
 }
 
 const getters = {
@@ -102,6 +108,7 @@ const getters = {
     headerRightFun: state => state.headerRightFun,
     latitude: state => state.latitude,
     longitude: state => state.longitude,
+    formattedAddress: state => state.formattedAddress,
 }
 
 
@@ -151,7 +158,10 @@ const mutations = {
     },
     [types.COM_SET_LONGITUDE](state, longitude) {
         state.longitude = longitude;
-    }
+    },
+    [types.COM_SET_FORMATTED_ADDRESS](state, formattedAddress) {
+        state.formattedAddress = formattedAddress;
+    },
 }
 
 

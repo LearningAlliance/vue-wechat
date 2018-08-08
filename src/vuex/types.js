@@ -14,6 +14,7 @@ export const COM_SET_ROUTE_NAME = 'COM_SET_ROUTE_NAME' //当前路径
 export const COM_SET_HEADER_RIGHT_FUN = 'COM_SET_HEADER_RIGHT_FUN' //设置顶部栏右键按钮的点击事件
 export const COM_SET_LATITUDE = 'COM_SET_LATITUDE'; // 设置地理位置-纬度
 export const COM_SET_LONGITUDE = 'COM_SET_LONGITUDE'; // 设置地理位置-经度
+export const COM_SET_FORMATTED_ADDRESS = 'COM_SET_FORMATTED_ADDRESS'; // 获取设置用户的详细位置
 
 //user 用户
 export const SET_USER_INFO = 'SETUSERINFO' //设置用户信息

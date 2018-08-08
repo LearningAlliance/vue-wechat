@@ -2,7 +2,8 @@
   <div class="page">
     <div class="header clearfix">
       <i class="icon icon-loc"></i>
-      <p class="loc-text">当前地理位置</p>
+      <p class="loc-text" v-show="formattedAddress">{{formattedAddress}}</p>
+      <p class="loc-text" v-show="!formattedAddress">无定位</p>
       <i class="icon icon-down"></i>
       <div class="search-box" @click="toSearch">
         <div class="search-placeholder clearfix" v-show="!keyWords">
@@ -18,10 +19,10 @@
   </div>
 </template>
 <script type="text/javascript">
-import VueAMap from 'vue-amap';
 import mapDemo from '@/components/mapDemo.vue'
 import map from '@/components/map.vue'
 import { mapGetters } from 'vuex'
+import api from '../fetch/api.js'
 export default {
   data() {
     return {
@@ -31,25 +32,38 @@ export default {
   },
   components: {
     'map-demo': mapDemo,
-    'my-map': map, 
+    'my-map': map,
   },
   computed: {
     ...mapGetters([
       'longitude',
-      'latitude'
-    ])
+      'latitude',
+      'formattedAddress', // 详细地址
+    ]),
+    hasLocation() {
+      let flag = !!this.longitude && !!this.latitude;
+      if (flag) {
+        this.getAddress();
+      }
+      return flag;
+    }
   },
   created() {
     // console.log(this.$route);
     let { keyWords } = this.$route.query;
     this.keyWords = keyWords || '';
   },
-  mounted() {
-    // console.log(VueAMap);
-  },
   methods: {
     toSearch() {
       this.$router.push('/collection/search');
+    },
+    getAddress() {
+      // api.common.getAddress({ lon: this.longitude, lat: this.latitude }).then((res) => {
+      //   console.log(res);
+      //   // TODO 地址设置
+      // }).catch((err) => {
+      //   console.log(err);
+      // });
     },
   }
 }

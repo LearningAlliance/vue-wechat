@@ -22,6 +22,8 @@ import alert from '@/components/alert'
 import loading from '@/components/loading'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import VueAMap from 'vue-amap';
+import { lazyAMapApiLoaderInstance } from 'vue-amap';
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -62,13 +64,67 @@ export default {
     '$route': 'routeChanged'
   },
   methods: {
-    ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName', setLatitude: 'setLatitude', setLongitude: 'setLongitude' }),
+    ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName', setLatitude: 'setLatitude', setLongitude: 'setLongitude', setFormattedAddress: 'setFormattedAddress', setLatitude: 'setLatitude', setLongitude: 'setLongitude' }),
     // 隐藏MenuSlide
     routeChanged() {
       this.setNavState(false);
       let routeName = this.$route.path.split('/')[1];
       this.setRouteName(routeName || '');
       this.wxConfig();
+    },
+    // 通过高德api获取地址信息
+    getLocationByAMap() {
+      var self = this;
+      lazyAMapApiLoaderInstance.load().then(() => {
+        var geolocation = new AMap.Geolocation({
+          // 是否使用高精度定位，默认：true
+          enableHighAccuracy: true,
+          // 设置定位超时时间，默认：无穷大
+          timeout: 10000,
+          // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
+          buttonOffset: new AMap.Pixel(10, 20),
+          //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+          zoomToAccuracy: true,
+          //  定位按钮的排放位置,  RB表示右下
+          buttonPosition: 'RB'
+        })
+
+        geolocation.getCurrentPosition()
+        AMap.event.addListener(geolocation, 'complete', onComplete)
+        AMap.event.addListener(geolocation, 'error', onError)
+
+        function onComplete(data) {
+          // data是具体的定位信息
+          // console.log('具体信息:' + JSON.stringify(data));
+          // _.alert(data.formattedAddress);
+          self.setFormattedAddress(data.formattedAddress);
+          // lng、lat
+          self.setLatitude(data.position.lat);
+          self.setLongitude(data.position.lng);
+        }
+
+        function onError(err) {
+          // 定位出错
+          _.alert(err.message);
+        }
+      });
+    },
+    getAddress(longitude, latitude) {
+      var self = this;
+      lazyAMapApiLoaderInstance.load().then(() => {
+        var geocoder = new AMap.Geocoder({
+          radius: 1000,
+          extensions: "all"
+        });
+        geocoder.getAddress([longitude, latitude], function(status, result) {
+          console.log('getAddress:', status, result);
+          if (status === 'complete' && result.info === 'OK') {
+            self.address = result.regeocode.formattedAddress;
+            self.setFormattedAddress(result.regeocode.formattedAddress);
+          }
+        });
+      });
+
     },
     wxConfig() {
       let { wxConfig, jsApiList } = this.$route.meta;
@@ -91,7 +147,8 @@ export default {
       let jsApiList = this.$route.meta.jsApiList || [];
       let getLocation = this.$route.meta.getLocation || false;
       wx.config({
-        debug: process.env.NODE_ENV == "development" ? true : false,
+        // debug: process.env.NODE_ENV == "development" ? true : false,
+        debug: false,
         appId: appId,
         timestamp: timestamp,
         nonceStr: nonceStr,
@@ -125,15 +182,26 @@ export default {
               _.alert(JSON.stringify(res));
               self.setLatitude(res.latitude);
               self.setLongitude(res.longitude);
+              self.getAddress(res.longitude, res.latitude);
+              // api.common.getAddress({ lon: this.longitude, lat: this.latitude }).then((res) => {
+              //   console.log(res);
+              //   // TODO 地址设置
+              // }).catch((err) => {
+              //   console.log(err);
+              // });
             },
             cancel: function(res) {
               _.alert('用户拒绝授权获取地理位置');
+              self.getLocationByAMap();
             }
           });
         }
       });
       wx.error(function(res) {
         console.log('wx.error:' + res.errMsg);
+        if (getLocation) {
+          self.getLocationByAMap();
+        }
       });
     },
   },
@@ -196,7 +264,7 @@ export default {
       }
       return false
     }
-  }
+  },
 }
 
 </script>
