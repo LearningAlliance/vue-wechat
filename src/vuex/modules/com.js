@@ -15,6 +15,15 @@ const state = {
     showAlert: false,
     routeName: '',
     headerRightFun: '',
+    // 北京
+    // latitude: 39.90923, // 纬度
+    // longitude: 116.397428, // 经度
+
+    // 杭州测试
+    // latitude: 30.31974,
+    // longitude: 120.1421,
+    latitude: null,
+    longitude: null,
 }
 
 const actions = {
@@ -72,7 +81,17 @@ const actions = {
         commit
     }, funName) {
         commit(types.COM_SET_HEADER_RIGHT_FUN, funName)
-    }
+    },
+    setLatitude({
+        commit
+    }, latitude) {
+        commit(types.COM_SET_LATITUDE, latitude)
+    },
+    setLongitude({
+        commit
+    }, longitude) {
+        commit(types.COM_SET_LONGITUDE, longitude)
+    },
 }
 
 const getters = {
@@ -81,6 +100,8 @@ const getters = {
     showAlert: state => state.showAlert,
     routeName: state => state.routeName,
     headerRightFun: state => state.headerRightFun,
+    latitude: state => state.latitude,
+    longitude: state => state.longitude,
 }
 
 
@@ -125,6 +146,12 @@ const mutations = {
     [types.COM_SET_HEADER_RIGHT_FUN](state, funName) {
         state.headerRightFun = funName;
     },
+    [types.COM_SET_LATITUDE](state, latitude) {
+        state.latitude = latitude;
+    },
+    [types.COM_SET_LONGITUDE](state, longitude) {
+        state.longitude = longitude;
+    }
 }
 
 

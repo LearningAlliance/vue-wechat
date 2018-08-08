@@ -13,19 +13,39 @@
       </div>
     </div>
     <div class="tab"></div>
+    <!-- <map-demo></map-demo> -->
+    <my-map></my-map>
   </div>
 </template>
 <script type="text/javascript">
+import VueAMap from 'vue-amap';
+import mapDemo from '@/components/mapDemo.vue'
+import map from '@/components/map.vue'
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       keyWords: '',
+      map: null,
     }
   },
+  components: {
+    'map-demo': mapDemo,
+    'my-map': map, 
+  },
+  computed: {
+    ...mapGetters([
+      'longitude',
+      'latitude'
+    ])
+  },
   created() {
-    console.log(this.$route);
+    // console.log(this.$route);
     let { keyWords } = this.$route.query;
-    this.keyWords = keyWords || ''
+    this.keyWords = keyWords || '';
+  },
+  mounted() {
+    // console.log(VueAMap);
   },
   methods: {
     toSearch() {

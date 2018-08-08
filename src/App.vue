@@ -62,7 +62,7 @@ export default {
     '$route': 'routeChanged'
   },
   methods: {
-    ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName' }),
+    ...mapActions({ setNavState: 'setNavState', setRouteName: 'setRouteName', setLatitude: 'setLatitude', setLongitude: 'setLongitude' }),
     // 隐藏MenuSlide
     routeChanged() {
       this.setNavState(false);
@@ -82,6 +82,7 @@ export default {
       });
     },
     doConfig(config) {
+      var self = this;
       const wx = this.$wechat;
       let appId = config.appid || '';
       let timestamp = config.timestamp || '';
@@ -90,7 +91,7 @@ export default {
       let jsApiList = this.$route.meta.jsApiList || [];
       let getLocation = this.$route.meta.getLocation || false;
       wx.config({
-        debug: false,
+        debug: process.env.NODE_ENV == "development" ? true : false,
         appId: appId,
         timestamp: timestamp,
         nonceStr: nonceStr,
@@ -122,6 +123,8 @@ export default {
             type: 'gcj02',
             success: function(res) {
               _.alert(JSON.stringify(res));
+              self.setLatitude(res.latitude);
+              self.setLongitude(res.longitude);
             },
             cancel: function(res) {
               _.alert('用户拒绝授权获取地理位置');
@@ -130,8 +133,7 @@ export default {
         }
       });
       wx.error(function(res) {
-        console.log('wx.error:' + res);
-        _.alert('wx.error:' + res.errMsg);
+        console.log('wx.error:' + res.errMsg);
       });
     },
   },
