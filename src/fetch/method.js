@@ -148,6 +148,9 @@ function initRequest(params = {}, options = {}) {
 		params.token = token;
 		params.uid = uid;
 	}
+	if (withUid) {
+		params.uid = uid;
+	}
 	return {
 		params,
 		headers,

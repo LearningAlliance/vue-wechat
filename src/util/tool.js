@@ -81,3 +81,8 @@ export function getRequest(name) {
     if (r != null) return decodeURI(unescape(r[2]));
     return null;
 }
+
+export function isWx() { //判断是否是微信
+    var ua = navigator.userAgent.toLowerCase();
+    return ua.match(/MicroMessenger/i) == "micromessenger";
+};

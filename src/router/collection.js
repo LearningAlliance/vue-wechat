@@ -5,6 +5,7 @@ import PlacementSuccess from '../pages/collection/PlacementSuccess'
 import PayTheBill from '../pages/collection/PayTheBill'
 import Branch from '../pages/collection/Branch'
 import UseCoupons from '../pages/collection/UseCoupons'
+import MapSearch from '../pages/collection/MapSearch'
 
 export default [{
 	path: '/collection',
@@ -55,4 +56,14 @@ export default [{
 		subTitle: '代金券使用',
 	},
 	component: UseCoupons,
+}, {
+	path: '/collection/mapSearch',
+	name: 'mapSearch',
+	meta: {
+		title: '收藏',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+		getLocation: true,
+	},
+	component: MapSearch,
 }, ]

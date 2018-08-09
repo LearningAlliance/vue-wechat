@@ -61,6 +61,7 @@ export default {
       margin-bottom: 30px;
       position: relative;
       border-radius: 12px;
+      overflow: hidden;
       .image {
         display: block;
         width: 100%;

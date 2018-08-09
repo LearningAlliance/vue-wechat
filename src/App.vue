@@ -43,7 +43,6 @@ export default {
     }
   },
   created() {
-    this.wxConfig();
     let routeName = this.$route.path.split('/')[1];
     this.setRouteName(routeName || '');
     try {
@@ -54,6 +53,15 @@ export default {
         }).catch((err) => {
           console.log(err);
         });
+      }
+    } catch (e) {
+
+    }
+    try {
+      if (_.isWx()) {
+        this.wxConfig();
+      } else {
+        this.pcConfig();
       }
     } catch (e) {
 
@@ -70,7 +78,15 @@ export default {
       this.setNavState(false);
       let routeName = this.$route.path.split('/')[1];
       this.setRouteName(routeName || '');
-      this.wxConfig();
+      try {
+        if (_.isWx()) {
+          this.wxConfig();
+        } else {
+          this.pcConfig();
+        }
+      } catch (e) {
+
+      }
     },
     // 通过高德api获取地址信息
     getLocationByAMap() {
@@ -95,8 +111,6 @@ export default {
 
         function onComplete(data) {
           // data是具体的定位信息
-          // console.log('具体信息:' + JSON.stringify(data));
-          // _.alert(data.formattedAddress);
           self.setFormattedAddress(data.formattedAddress);
           // lng、lat
           self.setLatitude(data.position.lat);
@@ -105,7 +119,9 @@ export default {
 
         function onError(err) {
           // 定位出错
-          _.alert(err.message);
+          self.setFormattedAddress('定位失败');
+          _.alert('定位出错，可刷新页面进行重新定位');
+          // _.alert(err.message);
         }
       });
     },
@@ -124,7 +140,13 @@ export default {
           }
         });
       });
-
+    },
+    pcConfig() { // 方便测试时使用的兼容浏览器的方法
+      var self = this;
+      let getLocation = this.$route.meta.getLocation || false;
+      if (getLocation) {
+        self.getLocationByAMap();
+      }
     },
     wxConfig() {
       let { wxConfig, jsApiList } = this.$route.meta;
@@ -191,7 +213,7 @@ export default {
               // });
             },
             cancel: function(res) {
-              _.alert('用户拒绝授权获取地理位置');
+              _.alert('用户拒绝授权获取地理位置,尝试使用浏览器定位...');
               self.getLocationByAMap();
             }
           });

@@ -1,28 +1,98 @@
 <template>
   <div class="amap-page-container">
-    <el-amap vid="amap" :plugin="plugin" class="amap-demo" :center="center" :zoom="zoom" v-if="!!center" :events="events">
+    <el-amap vid="amap" :plugin="plugin" class="amap-demo cs1111" :center="center" :zoom="zoom" v-if="!!longitude && !!latitude" :events="events">
       <el-amap-circle-marker v-for="(marker, index) in markers" :center="marker.center" :radius="marker.radius" :fill-color="marker.fillColor" :stroke-weight="marker.strokeWeight" :stroke-color="marker.strokeColor" :stroke-opacity="marker.strokeOpacity" :fill-opacity="marker.fillOpacity" :events="marker.events" :key="'amap1' + index"></el-amap-circle-marker>
+      <el-amap-marker v-for="(marker, index) in shopMarkers" :icon="marker.icon" :title="marker.title" :key="'shopMarkers1' + index" :position="marker.position" :events="marker.events" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
     </el-amap>
-    <el-amap vid="amap" :plugin="plugin" class="amap-demo" :zoom="zoom" :events="events" v-else>
+    <!--     <el-amap vid="amap" :plugin="plugin" class="amap-demo cs2222" :zoom="zoom" :events="events" v-else>
       <el-amap-circle-marker v-for="(marker, index) in markers" :center="marker.center" :radius="marker.radius" :fill-color="marker.fillColor" :stroke-weight="marker.strokeWeight" :stroke-color="marker.strokeColor" :stroke-opacity="marker.strokeOpacity" :fill-opacity="marker.fillOpacity" :events="marker.events" :key="'amap2' + index"></el-amap-circle-marker>
-    </el-amap>
-    <div class="toolbar">
+      <el-amap-marker v-for="(marker, index) in shopMarkers" :icon="marker.icon" :title="marker.title" :key="'shopMarkers2' + index" :position="marker.position" :events="marker.events" :visible="marker.visible" :draggable="marker.draggable" :vid="index"></el-amap-marker>
+    </el-amap> -->
+    <!--     <div class="toolbar">
     </div>
-    <div class="address">
+    <div class="">
       {{address}}
     </div>
     <p>longitude: {{longitude}}</p>
     <p>latitude: {{latitude}}</p>
-    <p>formattedAddress: {{formattedAddress}}</p>
+    <p>formattedAddress: {{formattedAddress}}</p> -->
+    <div class="pos-box with-shadow" v-show="loaded " @click="toMyPos">
+      <i class="icon-pos-my"></i>
+    </div>
+    <div class="list-box">
+      <div :class="['cell', {'no-border': shopMarkers.length - 1 == index, 'selected': selectedIndex == index}]" v-for="(marker, index) in shopMarkers" @click="selectPos(index)">
+        <i class="icon-pos" v-show="selectedIndex == index"></i>
+        <div class="shopName">{{marker.shopName}}</div>
+        <div class="address">{{marker.tradingArea}}</div>
+      </div>
+    </div>
   </div>
 </template>
-<style>
-.amap-demo {
-  height: 300px;
+<style scoped lang="scss">
+.amap-page-container {
+  position: relative;
+  width: 100%;
+  height: 534px;
+  .pos-box {
+    position: absolute;
+    background: #FFF;
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+    overflow: hidden;
+    bottom: 100px;
+    left: 30px; // z-index: 999;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('../assets/images/icon_pos_my.png');
+  }
 }
 
-.address {
-  margin-top: 50px;
+.list-box {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+  background: #FFF;
+  .cell {
+    position: relative;
+    height: 134px;
+    overflow: hidden;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #C4CACD;
+    /*no*/
+    &.no-border {
+      border: none;
+    }
+    &.selected {
+      padding-left: 50px;
+    }
+    .icon-pos {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 30px;
+      left: 0;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../assets/images/ic_location.png');
+    }
+    .shopName {
+      font-family: PingFangSC-Semibold;
+      font-size: 32px;
+      color: #2E3141;
+      line-height: 41.6px;
+    }
+    .address {
+      margin-top: 10px;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #818B8F;
+      line-height: 31.2px;
+    }
+  }
 }
 
 </style>
@@ -30,11 +100,19 @@
 import { mapGetters } from 'vuex'
 import { AMapManager } from 'vue-amap';
 export default {
+  props: [
+    'shopMarkers',
+    // 'center',
+    'longitude',
+    'latitude',
+  ],
   data() {
     let self = this;
     return {
-      // center: null,
       center: null,
+      selectedIndex: -1,
+      showPosMy: false,
+      // center: [this.longitude, this.latitude],
       lng: 0,
       lat: 0,
       loaded: false,
@@ -46,50 +124,8 @@ export default {
       address: null,
       events: {
         init: (o) => {
-          // var geocoder = new AMap.Geocoder({
-          //   radius: 1000,
-          //   extensions: "all"
-          // });
-          // geocoder.getAddress(self.center, function(status, result) {
-          //   console.log('getAddress:', status, result);
-          //   if (status === 'complete' && result.info === 'OK') {
-          //     self.address = result.regeocode.formattedAddress;
-          //   } 
-          // });
-
-
-
-          // var geolocation = new AMap.Geolocation({
-          //   // 是否使用高精度定位，默认：true
-          //   enableHighAccuracy: true,
-          //   // 设置定位超时时间，默认：无穷大
-          //   timeout: 10000,
-          //   // 定位按钮的停靠位置的偏移量，默认：Pixel(10, 20)
-          //   buttonOffset: new AMap.Pixel(10, 20),
-          //   //  定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
-          //   zoomToAccuracy: true,
-          //   //  定位按钮的排放位置,  RB表示右下
-          //   buttonPosition: 'RB'
-          // })
-
-          // geolocation.getCurrentPosition()
-          // AMap.event.addListener(geolocation, 'complete', onComplete)
-          // AMap.event.addListener(geolocation, 'error', onError)
-
-          // function onComplete(data) {
-          //   // data是具体的定位信息
-          //   // console.log('具体信息:' + JSON.stringify(data));
-          //   // _.alert(data.formattedAddress);
-          //   console.log('console in demo', data);
-          //   // this.setFormattedAddress(data.formattedAddress);
-          // }
-
-          // function onError(err) {
-          //   // 定位出错
-          //   console.log(err.message);
-          // }
-
-
+          self.showPosMy = true;
+          self.loaded = true;
         },
       },
       plugin: [{
@@ -109,32 +145,34 @@ export default {
       }, ]
     };
   },
+  created() {
+    this.center = [120.1421, 30.31974]; // 默认定位到北京 
+  },
   mounted() {
-    var self = this;
-    if (!!self.longitude && !!self.latitude) {
-      self.center = [self.longitude, self.latitude];
-      self.lng = self.longitude;
-      self.lat = self.latitude;
-      self.loaded = true;
-    }
+    this.initPos();
   },
   computed: {
     ...mapGetters([
-      'longitude',
-      'latitude',
-      'formattedAddress',
+      // 'longitude',
+      // 'latitude',
+      // 'formattedAddress',
     ]),
-    newCenter() {
-      if (!!this.longitude && !!this.latitude) {
-        this.setCurrent(this.longitude, this.latitude);
-        return [this.longitude, this.latitude]
-      }
-    }
   },
   watch: {
-    newCenter(val, oldVal) {
-      this.center = val;
-      this.$nextTick();
+    shopMarkers(val, oldVal) {
+      this.selectedIndex = -1;
+      this.$set(this.center, 0, this.longitude);
+      this.$set(this.center, 1, this.latitude);
+    },
+    longitude(val, oldVal) {
+      if(!!val && !!this.latitude){
+        this.initPos();
+      }
+    },
+    latitude(val, oldVal) {
+      if(!!val && !!this.longitude){
+        this.initPos();
+      }
     },
   },
   methods: {
@@ -149,6 +187,22 @@ export default {
       };
       // this.markers.push(marker);
       this.markers = [marker];
+    },
+    selectPos(index) {
+      this.selectedIndex = index;
+      this.$set(this.center, 0, this.shopMarkers[index].position[0]);
+      this.$set(this.center, 1, this.shopMarkers[index].position[1]);
+    },
+    toMyPos() {
+      this.$set(this.center, 0, this.longitude);
+      this.$set(this.center, 1, this.latitude);
+    },
+    initPos() {
+      if (!!this.longitude && !!this.latitude) {
+        this.$set(this.center, 0, this.longitude);
+        this.$set(this.center, 1, this.latitude);
+        this.setCurrent(this.longitude, this.latitude);
+      }
     },
   },
 };

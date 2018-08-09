@@ -1,10 +1,10 @@
 <template>
   <div class="page">
     <div class="header clearfix">
-      <i class="icon icon-loc"></i>
-      <p class="loc-text" v-show="formattedAddress">{{formattedAddress}}</p>
-      <p class="loc-text" v-show="!formattedAddress">无定位</p>
-      <i class="icon icon-down"></i>
+      <i class="icon icon-loc" @click="toMapSearch"></i>
+      <p class="loc-text" v-show="formattedAddress" @click="toMapSearch">{{formattedAddress}}</p>
+      <p class="loc-text" v-show="!formattedAddress" @click="toMapSearch">定位中...</p>
+      <i class="icon icon-down" @click="toMapSearch"></i>
       <div class="search-box" @click="toSearch">
         <div class="search-placeholder clearfix" v-show="!keyWords">
           <i class="icon-search"></i>
@@ -13,9 +13,19 @@
         <input class="search-input" disabled="true" type="text" v-model="keyWords" />
       </div>
     </div>
-    <div class="tab"></div>
+    <div class="tab clearfix">
+      <div class="tab-left">
+        <div :class="['tab-cell', {'on': tabOn == 'tab1'}]" @click="tabClick('tab1')">常去</div>
+      </div>
+      <div class="tab-right">
+        <div :class="['tab-cell', {'on': tabOn == 'tab2'}]" @click="tabClick('tab2')">有活动</div>
+      </div>
+    </div>
+    <div class="kind">
+      
+    </div>
     <!-- <map-demo></map-demo> -->
-    <my-map></my-map>
+    <!-- <my-map></my-map> -->
   </div>
 </template>
 <script type="text/javascript">
@@ -26,6 +36,7 @@ import api from '../fetch/api.js'
 export default {
   data() {
     return {
+      tabOn: 'tab1',
       keyWords: '',
       map: null,
     }
@@ -65,6 +76,12 @@ export default {
       //   console.log(err);
       // });
     },
+    toMapSearch() {
+      this.$router.push('/collection/mapSearch');
+    },
+    tabClick(num){
+      this.tabOn = num;
+    }
   }
 }
 
@@ -176,6 +193,55 @@ export default {
       text-align: left;
     }
   }
+}
+
+.tab {
+  position: fixed;
+  top: 88px;
+  left: 0;
+  width: 100%;
+  height: 88px;
+  background: #FFF;
+  z-index: 999;
+  .tab-left,
+  .tab-right {
+    display: inline-block;
+    width: 50%;
+    height: 88px;
+    text-align: center;
+    .tab-cell {
+      height: 88px;
+      display: inline-block;
+      font-family: PingFangSC-Semibold;
+      font-size: 36px;
+      color: #2E3141;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 88px;
+      padding-left: 20px;
+      padding-right: 20px;
+      box-sizing: border-box;
+      &.on{
+        border-bottom: 6px solid #F05720;
+      }
+    }
+  }
+  .tab-left {
+    float: left;
+  }
+  .tab-right {
+    float: right;
+  }
+}
+
+.kind{
+  position: fixed;
+  top: 176px;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  background: #F8F8FC;
+  z-index: 999;
 }
 
 </style>
