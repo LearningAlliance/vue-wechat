@@ -11,6 +11,7 @@
   </div>
 </template>
 <script type="text/javascript">
+import { Indicator } from 'mint-ui';
 import map from '@/components/map.vue'
 import * as _ from '@/util/tool.js'
 import api from '@/fetch/api.js'
@@ -35,14 +36,20 @@ export default {
       'latitude',
       'formattedAddress',
     ]),
-    canGetShops() {
-      return this.longitude && this.latitude;
-    }
+  },
+  created(){
+    Indicator.open();
   },
   watch: {
-    canGetShops(val, oldVal) {
-      if (val) {
-        // this.center = [this.longitude, this.latitude];
+    longitude(val, oldVal) {
+      if(!!val && !!this.latitude){
+        Indicator.close();
+        this.getShops();
+      }
+    },
+    latitude(val, oldVal) {
+      if(!!val && !!this.longitude){
+        Indicator.close();
         this.getShops();
       }
     },
@@ -50,7 +57,7 @@ export default {
   methods: {
     search() {
       this.getShops();
-      console.log(this.$refs.search);
+      // console.log(this.$refs.search);
       this.$refs.search.blur();
     },
     back() {
@@ -66,7 +73,7 @@ export default {
         // shopMainTypes: '1',
         keyWords: this.keyWords || '',
       }).then((res) => {
-        console.log(res);
+        // console.log(res);
         let shopMarkers = [];
         res.data.forEach((obj) => {
           let o = {};
