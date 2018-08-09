@@ -38,18 +38,21 @@ export default {
     ]),
   },
   created(){
-    Indicator.open();
+    // Indicator.open();
+    this.$store.dispatch('setLoadingState', true);
   },
   watch: {
     longitude(val, oldVal) {
       if(!!val && !!this.latitude){
-        Indicator.close();
+        // Indicator.close();
+        this.$store.dispatch('setLoadingState', false);
         this.getShops();
       }
     },
     latitude(val, oldVal) {
       if(!!val && !!this.longitude){
-        Indicator.close();
+        // Indicator.close();
+        this.$store.dispatch('setLoadingState', false);
         this.getShops();
       }
     },
