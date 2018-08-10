@@ -31,7 +31,7 @@
     <div class="shop-list">
       <div class="common-list collecttion-list">
         <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList">
-          <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2}]">
+          <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
             <div class="icon-collect"></div>
             <div class="cell-header">
               <div class="cell-logo">
@@ -49,7 +49,7 @@
             <div class="cell-tag"></div>
             <div class="cell-footer-btn" @click="showDiscounts(index)">查看优惠</div>
           </div>
-          <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2}]">
+          <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': !item.reverse}]">
             <div class="cell-footer-btn" @click="showDiscounts(index)">回到正面</div>
           </div>
         </div>
@@ -100,6 +100,7 @@ export default {
     }
   },
   created() {
+    // TODO 测试数据
     localStorage.setItem('token', '9314c6f9-11be-40fa-be0f-580d7f9baf36');
     localStorage.setItem('uid', '1');
     // Indicator.open();
@@ -473,6 +474,8 @@ export default {
       }
       .reverse-side,
       .front-side {
+        display: block;
+        opacity: 1;
         position: absolute;
         top: 0;
         left: 0;
@@ -488,6 +491,14 @@ export default {
         overflow: hidden;
         background-size: 100% 100%;
         background-repeat: no-repeat;
+        transition: all ease 1s;
+        -webkit-transition: all ease 1s;
+        &.hidden {
+          // display: none;
+          opacity: 0;
+          transition: all ease 1s;
+          -webkit-transition: all ease 1s;
+        }
         &.bg-1 {
           background-image: url('../assets/images/bg_foodcard.png');
         }
