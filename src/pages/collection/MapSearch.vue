@@ -76,9 +76,9 @@ export default {
       api.collection.qryMyCollect({
         pageNum: 1,
         pageRow: 10000,
-        shopLon: '120.082565',
-        shopLat: '30.200684',
-        range: '10000',
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+        range: '100000',
         // shopMainTypes: '1',
         keyWords: this.keyWords || '',
       }).then((res) => {

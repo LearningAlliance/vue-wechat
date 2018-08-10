@@ -4,7 +4,8 @@ import store from '../vuex/store'
 import config from '../config/index'
 import md5 from 'js-md5'
 import {
-	MessageBox
+	MessageBox,
+	Indicator,
 } from 'mint-ui';
 
 import * as _ from '../util/tool'
@@ -25,6 +26,7 @@ if (process.env.NODE_ENV == "development") {
 axios.interceptors.request.use((config) => {
 	// console.log(config);
 	store.dispatch('setLoadingState', true);
+	// Indicator.open();
 	if (config.method === 'post') {
 		config.data = qs.stringify(config.data);
 	}
@@ -37,9 +39,10 @@ axios.interceptors.request.use((config) => {
 //返回状态判断
 axios.interceptors.response.use((res) => {
 	// console.log('interceptors', res);
-	setTimeout(() => {
-		store.dispatch('setLoadingState', false);
-	}, 100);
+	// setTimeout(() => {
+	store.dispatch('setLoadingState', false);
+	// Indicator.close();
+	// }, 100);
 	if (res.data.resultCode == 0) {
 		// 请求成功时
 		// _.toast(res.data.msg);
@@ -85,6 +88,7 @@ axios.interceptors.response.use((res) => {
 }, (error) => {
 	setTimeout(() => {
 		store.dispatch('setLoadingState', false);
+		// Indicator.close();
 	}, 100);
 	_.toast("网络异常", 'fail');
 	return Promise.reject(error);

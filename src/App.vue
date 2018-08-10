@@ -91,6 +91,9 @@ export default {
     // 通过高德api获取地址信息
     getLocationByAMap() {
       var self = this;
+      if(!!self.longitude && !!self.latitude){
+        return;
+      }
       lazyAMapApiLoaderInstance.load().then(() => {
         var geolocation = new AMap.Geolocation({
           // 是否使用高精度定位，默认：true
@@ -232,6 +235,8 @@ export default {
       'loading',
       'showToast',
       'showAlert',
+      'longitude',
+      'latitude',
     ]),
     title() {
       let {

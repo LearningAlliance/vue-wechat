@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page" @scroll="handleScroll">
     <div class="header clearfix">
       <i class="icon icon-loc" @click="toMapSearch"></i>
       <p class="loc-text" v-show="formattedAddress" @click="toMapSearch">{{formattedAddress}}</p>
@@ -24,15 +24,45 @@
     <div :class="['kind', {'show-all': showAll}]">
       <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index <= 3">{{item.name}}</div>
       <div class="kind-cell icon-down" @click="showAllKinds" v-show="!showAll">更多</div>
-      <br v-show="!showAll"/>
+      <br v-show="!showAll" />
       <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 4">{{item.name}}</div>
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
+    <div class="shop-list">
+      <div class="common-list collecttion-list">
+        <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList">
+          <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2}]">
+            <div class="icon-collect"></div>
+            <div class="cell-header">
+              <div class="cell-logo">
+                <img class="cell-logo-img" :src="item.shopLogo" />
+              </div>
+              <div class="cell-content">
+                <div class="cell-shop-name">{{item.shopName}}</div>
+                <div class="cell-shop-info">
+                  <span class="text">去过{{item.consumeNums}}次</span>
+                  <span class="text">{{item.tradingArea}}</span>
+                  <span class="text">距您{{item.distance}}米</span>
+                </div>
+              </div>
+            </div>
+            <div class="cell-tag"></div>
+            <div class="cell-footer-btn" @click="showDiscounts(index)">查看优惠</div>
+          </div>
+          <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2}]">
+            <div class="cell-footer-btn" @click="showDiscounts(index)">回到正面</div>
+          </div>
+        </div>
+      </div>
+      <div class="recomment-list-title">没有更多收藏店铺，已为您推荐</div>
+      <div class="recommend-list"></div>
+    </div>
     <!-- <map-demo></map-demo> -->
     <!-- <my-map></my-map> -->
   </div>
 </template>
 <script type="text/javascript">
+import { Indicator } from 'mint-ui';
 import mapDemo from '@/components/mapDemo.vue'
 import map from '@/components/map.vue'
 import { mapGetters } from 'vuex'
@@ -46,6 +76,9 @@ export default {
       kinds: [],
       selectedKindId: '',
       showAll: false,
+      collectionList: [],
+      recommendList: [],
+      firstLoad: true,
     }
   },
   components: {
@@ -67,10 +100,36 @@ export default {
     }
   },
   created() {
+    localStorage.setItem('token', '9314c6f9-11be-40fa-be0f-580d7f9baf36');
+    localStorage.setItem('uid', '1');
+    // Indicator.open();
+    this.$store.dispatch('setLoadingState', true);
     // console.log(this.$route);
     let { keyWords } = this.$route.query;
     this.keyWords = keyWords || '';
     this.getKinds();
+  },
+  mounted() {
+    if (!!this.longitude && !!this.latitude) {
+      // this.$store.dispatch('setLoadingState', false);
+      this.getShops();
+    }
+  },
+  watch: {
+    longitude(val, oldVal) {
+      if (!!val && !!this.latitude) {
+        // Indicator.close();
+        // this.$store.dispatch('setLoadingState', false);
+        this.getShops();
+      }
+    },
+    latitude(val, oldVal) {
+      if (!!val && !!this.longitude) {
+        // Indicator.close();
+        // this.$store.dispatch('setLoadingState', false);
+        this.getShops();
+      }
+    },
   },
   methods: {
     toSearch() {
@@ -94,23 +153,71 @@ export default {
     },
     getKinds() {
       api.collection.qryShopTypeList({ id: null }).then((res) => {
-        let obj = {name: '全部', id: ''};
+        let obj = { name: '全部', id: '' };
         res.data.unshift(obj);
         this.kinds = res.data;
       }).catch((err) => {
         console.log(err);
+      }).then(() => {
+        this.$store.dispatch('setLoadingState', true);
       });
     },
-    changeKind(id){
+    changeKind(id) {
       this.selectedKindId = id;
       this.showAll = false;
     },
-    showAllKinds(){
+    showAllKinds() {
       this.showAll = true;
     },
-    closeShade(){
+    closeShade() {
       this.showAll = false;
     },
+    handleScroll() {
+      // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
+      if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
+        this.loadMore();
+      }
+    },
+    loadMore() {
+      console.log('loadMore');
+    },
+    // 常去收藏店铺
+    getShops() {
+      api.collection.qryMyCollect({
+        pageNum: 1,
+        pageRow: 10000,
+        // shopLon: this.longitude.toString(),
+        // shopLat: this.latitude.toString(),
+        shopLon: '120.082565',
+        shopLat: '30.200684',
+        range: '100000',
+        // shopMainTypes: '1',
+        keyWords: this.keyWords || '',
+      }).then((res) => {
+        res.data.forEach((obj) => {
+          obj.reverse = false;
+        });
+        this.collectionList = res.data;
+        // dom更新的1s后 动画完成，去掉效果
+        this.$nextTick(() => {
+          setTimeout(() => {
+            this.firstLoad = false;
+          }, 1000);
+        });
+      }).catch((err) => {});
+    },
+    showDiscounts(index) {
+      this.firstLoad = false;
+      this.$nextTick(() => {
+        let item = this.collectionList[index];
+        if (item.reverse) {
+          item.reverse = false;
+        } else {
+          item.reverse = true;
+        }
+        this.$set(this.collectionList, index, item);
+      });
+    }
   }
 }
 
@@ -120,6 +227,7 @@ export default {
   width: 100%;
   background: #F8F8FC;
   height: 100%;
+  overflow: scroll;
   box-sizing: border-box;
 }
 
@@ -263,13 +371,14 @@ export default {
   }
 }
 
-.kind-shade{
+.kind-shade {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 990;
 }
 
 .kind {
@@ -283,11 +392,11 @@ export default {
   overflow: hidden;
   box-sizing: border-box;
   padding: 30px;
-  &.show-all{
+  &.show-all {
     background: #FFF;
     height: 265px;
     overflow: scroll;
-    .kind-cell{
+    .kind-cell {
       border-color: #E2E2E2;
     }
   }
@@ -309,11 +418,11 @@ export default {
     letter-spacing: 0;
     color: #2E3141;
     position: relative;
-    &.icon-down{
-      padding-right: 52px; 
+    &.icon-down {
+      padding-right: 52px;
       margin-right: 0;
     }
-    &.icon-down::after{
+    &.icon-down::after {
       content: '';
       position: absolute;
       width: 40px;
@@ -328,6 +437,192 @@ export default {
     &.active {
       color: #F05720;
       border-color: #F05720;
+    }
+  }
+}
+
+.shop-list {
+  width: 100%;
+  height: 100%; // overflow: scroll;
+  padding-top: 286px;
+  box-sizing: border-box;
+  .recomment-list-title {
+    font-family: PingFangSC-Regular;
+    font-size: 32px;
+    color: #2E3141;
+    text-align: center;
+    line-height: 41.6px;
+  }
+  .common-list {
+    width: 100%;
+    .common-cell {
+      margin: 0 auto 30px auto;
+      border-radius: 35px;
+      width: 690px;
+      height: 360px;
+      position: relative;
+      transform-style: preserve-3d;
+      -webkit-transform-style: preserve-3d;
+      transition: all ease 1s;
+      -webkit-transition: all ease 1s;
+      &.reverse {
+        transition: all ease 1s;
+        -webkit-transition: all ease 1s;
+        transform: perspective(400px) rotateY(180deg);
+        -webkit-transform: perspective(400px) rotateY(180deg);
+      }
+      .reverse-side,
+      .front-side {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 690px;
+        height: 360px;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        /* Chrome 和 Safari */
+        -moz-backface-visibility: hidden;
+        /* Firefox */
+        -ms-backface-visibility: hidden;
+        border-radius: 35px;
+        overflow: hidden;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        &.bg-1 {
+          background-image: url('../assets/images/bg_foodcard.png');
+        }
+        &.bg-2 {
+          background-image: url('../assets/images/bg_beautycard.png');
+        }
+        &.bg-3 {
+          background-image: url('../assets/images/bg_entertainmentcard.png');
+        }
+      }
+
+      .front-side {
+        box-sizing: border-box;
+        padding: 40px 30px 20px 30px;
+        .icon-collect {
+          display: block;
+          width: 50px;
+          height: 50px;
+          position: absolute;
+          top: 30px;
+          right: 30px;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-image: url('../assets/images/ic_like.png');
+        }
+        .cell-header {
+          width: 100%;
+          height: 146px;
+          overflow: hidden;
+          position: relative;
+          .cell-logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 146px;
+            height: 146px;
+            border-radius: 12px;
+            overflow: hidden;
+            .cell-logo-img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .cell-content {
+            width: 100%;
+            height: 146px;
+            box-sizing: border-box;
+            padding-left: 166px;
+            padding-top: 20px;
+            .cell-shop-name {
+              width: 414px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              font-family: PingFangSC-Semibold;
+              font-size: 36px;
+              color: #FFFFFF;
+              line-height: 46.8px;
+            }
+            .cell-shop-info {
+              margin-top: 10.8px;
+              opacity: 0.8;
+              font-family: PingFangSC-Regular;
+              font-size: 24px;
+              color: #FFFFFF;
+              line-height: 31.2px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
+        }
+        .cell-tag {
+          margin-top: 20px;
+          width: 100%;
+          height: 40px;
+        }
+        .cell-footer-btn {
+          display: inline-block;
+          position: absolute;
+          bottom: 35.4px;
+          right: 46px;
+          margin-top: 37px;
+          height: 41.6px;
+          font-family: PingFangSC-Regular;
+          font-size: 32px;
+          color: #FFFFFF;
+          letter-spacing: 0;
+          text-align: center;
+          line-height: 41.6px;
+          &::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            right: -40px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-image: url('../assets/images/ic_angleright.png');
+          }
+        }
+      }
+
+      .reverse-side {
+        transform: rotateY(180deg);
+        -webkit-transform: rotateY(180deg);
+        .cell-footer-btn {
+          display: inline-block;
+          position: absolute;
+          bottom: 35.4px;
+          right: 46px;
+          margin-top: 37px;
+          height: 41.6px;
+          font-family: PingFangSC-Regular;
+          font-size: 32px;
+          color: #FFFFFF;
+          letter-spacing: 0;
+          text-align: center;
+          line-height: 41.6px;
+          &::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            right: -40px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-image: url('../assets/images/ic_angleright.png');
+          }
+        }
+      }
     }
   }
 }
