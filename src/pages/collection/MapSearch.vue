@@ -57,6 +57,12 @@ export default {
       }
     },
   },
+  mounted(){
+    if(!!this.longitude && !!this.latitude){
+      this.$store.dispatch('setLoadingState', false);
+      this.getShops();
+    }
+  },
   methods: {
     search() {
       this.getShops();

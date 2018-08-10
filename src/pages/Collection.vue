@@ -21,9 +21,13 @@
         <div :class="['tab-cell', {'on': tabOn == 'tab2'}]" @click="tabClick('tab2')">有活动</div>
       </div>
     </div>
-    <div class="kind">
-      
+    <div :class="['kind', {'show-all': showAll}]">
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index <= 3">{{item.name}}</div>
+      <div class="kind-cell icon-down" @click="showAllKinds" v-show="!showAll">更多</div>
+      <br v-show="!showAll"/>
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 4">{{item.name}}</div>
     </div>
+    <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
     <!-- <map-demo></map-demo> -->
     <!-- <my-map></my-map> -->
   </div>
@@ -39,6 +43,9 @@ export default {
       tabOn: 'tab1',
       keyWords: '',
       map: null,
+      kinds: [],
+      selectedKindId: '',
+      showAll: false,
     }
   },
   components: {
@@ -63,6 +70,7 @@ export default {
     // console.log(this.$route);
     let { keyWords } = this.$route.query;
     this.keyWords = keyWords || '';
+    this.getKinds();
   },
   methods: {
     toSearch() {
@@ -79,9 +87,30 @@ export default {
     toMapSearch() {
       this.$router.push('/collection/mapSearch');
     },
-    tabClick(num){
+    tabClick(num) {
       this.tabOn = num;
-    }
+      this.showAll = false;
+      this.selectedKindId = '';
+    },
+    getKinds() {
+      api.collection.qryShopTypeList({ id: null }).then((res) => {
+        let obj = {name: '全部', id: ''};
+        res.data.unshift(obj);
+        this.kinds = res.data;
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    changeKind(id){
+      this.selectedKindId = id;
+      this.showAll = false;
+    },
+    showAllKinds(){
+      this.showAll = true;
+    },
+    closeShade(){
+      this.showAll = false;
+    },
   }
 }
 
@@ -221,7 +250,7 @@ export default {
       padding-left: 20px;
       padding-right: 20px;
       box-sizing: border-box;
-      &.on{
+      &.on {
         border-bottom: 6px solid #F05720;
       }
     }
@@ -234,7 +263,16 @@ export default {
   }
 }
 
-.kind{
+.kind-shade{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+}
+
+.kind {
   position: fixed;
   top: 176px;
   left: 0;
@@ -242,6 +280,56 @@ export default {
   height: 110px;
   background: #F8F8FC;
   z-index: 999;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 30px;
+  &.show-all{
+    background: #FFF;
+    height: 265px;
+    overflow: scroll;
+    .kind-cell{
+      border-color: #E2E2E2;
+    }
+  }
+  .kind-cell {
+    margin-bottom: 30px;
+    margin-right: 20px;
+    font-family: PingFangSC-Regular;
+    display: inline-block;
+    height: 50px;
+    line-height: 44px;
+    text-align: center;
+    padding-left: 22px;
+    padding-right: 22px;
+    background: #FFFFFF;
+    border: 3px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 25px;
+    font-size: 28px;
+    letter-spacing: 0;
+    color: #2E3141;
+    position: relative;
+    &.icon-down{
+      padding-right: 52px; 
+      margin-right: 0;
+    }
+    &.icon-down::after{
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      top: 2px;
+      right: 10px;
+      display: block;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../assets/images/ic_angledown.png');
+    }
+    &.active {
+      color: #F05720;
+      border-color: #F05720;
+    }
+  }
 }
 
 </style>
