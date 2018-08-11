@@ -46,7 +46,9 @@
                 </div>
               </div>
             </div>
-            <div class="cell-tag"></div>
+            <div class="cell-tag">
+              <div class="tag-info"></div>
+            </div>
             <div class="cell-footer-btn" @click="showDiscounts(index)">查看优惠</div>
           </div>
           <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': !item.reverse}]">
@@ -547,7 +549,7 @@ export default {
             height: 146px;
             box-sizing: border-box;
             padding-left: 166px;
-            padding-top: 20px;
+            padding-top: 25px;
             .cell-shop-name {
               width: 414px;
               overflow: hidden;
