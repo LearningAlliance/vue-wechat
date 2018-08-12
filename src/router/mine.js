@@ -21,6 +21,7 @@ import UpdateUserFamilyRate from '../pages/mine/UpdateUserFamilyRate'
 
 // 养老金账户 
 import PensionAccount from '../pages/mine/PensionAccount'
+import PensionList from '../pages/mine/PensionList'
 
 // 我的订单
 import MyOrder from '../pages/mine/MyOrder'
@@ -161,6 +162,13 @@ export default [{
 		// funName: 'toList',
 	},
 	component: PensionAccount,
+}, {
+	path: '/mine/pensionList',
+	name: 'pensionList',
+	meta: {
+		title: '养老金账户明细'
+	},
+	component: PensionList,
 }, {
 	path: '/mine/myOrder',
 	name: 'myOrder',

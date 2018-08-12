@@ -113,8 +113,9 @@ export default {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  padding-top: 527px;
-  padding-bottom: 120px;
+  // padding-top: 527px;
+  // padding-bottom: 120px;
+  padding-top: 120px;
   overflow:auto;
   z-index: 10;
 }
