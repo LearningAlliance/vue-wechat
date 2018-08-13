@@ -78,7 +78,7 @@ export default {
         pageRow: 10000,
         shopLon: this.longitude.toString(),
         shopLat: this.latitude.toString(),
-        range: '100000',
+        range: '10000',
         // shopMainTypes: '1',
         keyWords: this.keyWords || '',
       }).then((res) => {

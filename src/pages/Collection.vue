@@ -28,11 +28,15 @@
       <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 4">{{item.name}}</div>
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
-    <div class="shop-list">
+    <div class="activity-list" v-show="tabOn == 'tab2'">
+      这里是有活动列表
+    </div>
+    <div class="shop-list" v-show="tabOn == 'tab1'">
       <div class="common-list collecttion-list">
-        <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList">
+        <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList" :key="'collection' + index" @click.stop="toShopDetail(item.shopId)">
           <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
-            <div class="icon-collect"></div>
+            <div class="icon-egg" v-show="item.zoneCount > 0"></div>
+            <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div>
             <div class="cell-header">
               <div class="cell-logo">
                 <img class="cell-logo-img" :src="item.shopLogo" />
@@ -42,25 +46,108 @@
                 <div class="cell-shop-info">
                   <span class="text">去过{{item.consumeNums}}次</span>
                   <span class="text">{{item.tradingArea}}</span>
-                  <span class="text">距您{{item.distance}}米</span>
+                  <span class="text">距您{{item.distance | formatDistanceCN}}</span>
                 </div>
               </div>
             </div>
-            <div class="cell-tag">
-              <div class="tag-info"></div>
+            <div class="tag-info clearfix">
+              <span class="tag-cell" v-show="item.userLevel">VIP{{item.userLevel}}</span>
+              <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
+              <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
+              <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
+              <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
+              <span class="tag-cell">套餐</span>
             </div>
-            <div class="cell-footer-btn" @click="showDiscounts(index)">查看优惠</div>
+            <div class="cell-footer-btn" @click.stop="showDiscounts(index)">查看优惠</div>
           </div>
           <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': !item.reverse}]">
-            <div class="cell-footer-btn" @click="showDiscounts(index)">回到正面</div>
+            <div class="icon-egg" v-show="item.zoneCount > 0"></div>
+            <div class="cell-content">
+              <div class="cell-shop-name">{{item.shopName}}</div>
+              <div class="height-10"></div>
+              <div class="cell-item" v-if="item.userLevel">
+                <div class="label">VIP{{item.userLevel}}</div>
+                <div class="desc">会员权益</div>
+              </div>
+              <div class="cell-item" v-if="item.pensionRate">
+                <div class="label">返金</div>
+                <div class="desc">消费返{{item.pensionRate * 100}}%保障金</div>
+              </div>
+              <div class="cell-item" v-if="(typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10) || typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">
+                <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
+                <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
+                <div class="desc"></div>
+              </div>
+              <div class="cell-item" v-if="typeof(item.cashCoupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
+                <div class="label">套餐</div>
+                <div class="desc">{{item.coupon.couponName || ''}}</div>
+              </div>
+            </div>
+            <div class="cell-footer-btn" @click.stop="showDiscounts(index)">回到正面</div>
           </div>
         </div>
       </div>
-      <div class="recomment-list-title">没有更多收藏店铺，已为您推荐</div>
-      <div class="recommend-list"></div>
+      <div class="recomment-list-title" v-show="showRecommendList">没有更多收藏店铺，已为您推荐</div>
+      <div class="common-list recommend-list">
+        <div :class="['common-cell', {'reverse': item.reverse}]" v-for="(item, index) in recommendList" :key="'recommend' + index" @click.stop="toShopDetail(item.shopId)">
+          <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
+            <div class="icon-egg" v-show="item.zoneCount > 0"></div>
+            <!-- <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div> -->
+            <div class="cell-header">
+              <div class="cell-logo">
+                <img class="cell-logo-img" :src="item.mainImgUrl" />
+              </div>
+              <div class="cell-content">
+                <div class="cell-shop-name">{{item.shopName}}</div>
+                <div class="cell-shop-info">
+                  <span class="text">去过{{item.consumeNums}}次</span>
+                  <span class="text">{{item.tradingArea}}</span>
+                  <span class="text">距您{{item.distance | formatDistanceCN}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="tag-info clearfix">
+              <span class="tag-cell" v-show="item.userLevel">VIP{{item.userLevel}}</span>
+              <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
+              <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
+              <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
+              <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
+              <span class="tag-cell">套餐</span>
+            </div>
+            <div class="cell-footer-btn" @click.stop="showDiscounts2(index)">查看优惠</div>
+          </div>
+          <div :class="['reverse-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': !item.reverse}]">
+            <div class="icon-egg" v-show="item.zoneCount > 0"></div>
+            <div class="cell-content">
+              <div class="cell-shop-name">{{item.shopName}}</div>
+              <div class="height-10"></div>
+              <div class="cell-item" v-if="item.userLevel">
+                <div class="label">VIP{{item.userLevel}}</div>
+                <div class="desc">会员权益</div>
+              </div>
+              <div class="cell-item" v-if="item.pensionRate">
+                <div class="label">返金</div>
+                <div class="desc">消费返{{item.pensionRate * 100}}%保障金</div>
+              </div>
+              <div class="cell-item" v-if="(typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10) || typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">
+                <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
+                <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
+                <div class="desc"></div>
+              </div>
+              <div class="cell-item" v-if="typeof(item.cashCoupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
+                <div class="label">套餐</div>
+                <div class="desc">{{item.coupon.couponName || ''}}</div>
+              </div>
+            </div>
+            <div class="cell-footer-btn" @click.stop="showDiscounts2(index)">回到正面</div>
+          </div>
+        </div>
+        <div class="no-more" v-show="allLoaded">没有更多了</div>
+      </div>
     </div>
-    <!-- <map-demo></map-demo> -->
-    <!-- <my-map></my-map> -->
+  </div>
+  <!-- <map-demo></map-demo> -->
+  <!-- <my-map></my-map> -->
   </div>
 </template>
 <script type="text/javascript">
@@ -69,6 +156,7 @@ import mapDemo from '@/components/mapDemo.vue'
 import map from '@/components/map.vue'
 import { mapGetters } from 'vuex'
 import api from '../fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
@@ -79,8 +167,14 @@ export default {
       selectedKindId: '',
       showAll: false,
       collectionList: [],
+      showRecommendList: false,
       recommendList: [],
       firstLoad: true,
+      pageRowForRec: 5,
+      pageNumForRec: 1,
+      // range: 20000,
+      allLoaded: false,
+      shopMainType: 1, // 显示的大类
     }
   },
   components: {
@@ -139,7 +233,7 @@ export default {
       this.$router.push('/collection/search');
     },
     getAddress() {
-      // api.common.getAddress({ lon: this.longitude, lat: this.latitude }).then((res) => {
+      // api.common.getAddress({ lon: this.longitu de, lat: this.latitude }).then((res) => {
       //   console.log(res);
       //   // TODO 地址设置
       // }).catch((err) => {
@@ -154,11 +248,20 @@ export default {
       this.showAll = false;
       this.selectedKindId = '';
     },
+    compare(x, y) { //比较函数
+      if (x.sort < y.sort) {
+        return -1;
+      } else if (x.sort > y.sort) {
+        return 1;
+      } else {
+        return 0;
+      }
+    },
     getKinds() {
       api.collection.qryShopTypeList({ id: null }).then((res) => {
-        let obj = { name: '全部', id: '' };
+        let obj = { name: '全部', id: '', sort: 0 };
         res.data.unshift(obj);
-        this.kinds = res.data;
+        this.kinds = res.data.sort(this.compare);
       }).catch((err) => {
         console.log(err);
       }).then(() => {
@@ -166,8 +269,19 @@ export default {
       });
     },
     changeKind(id) {
+      this.collectionList = [];
+      this.recommendList = [];
+      if (!id) {
+        this.shopMainType = 1;
+      } else {
+        this.shopMainType = id;
+      }
       this.selectedKindId = id;
       this.showAll = false;
+      this.pageNumForRec = 1;
+      this.$nextTick(() => {
+        this.getShops();
+      });
     },
     showAllKinds() {
       this.showAll = true;
@@ -181,22 +295,26 @@ export default {
         this.loadMore();
       }
     },
-    loadMore() {
-      console.log('loadMore');
-    },
     // 常去收藏店铺
     getShops() {
       api.collection.qryMyCollect({
         pageNum: 1,
         pageRow: 10000,
-        // shopLon: this.longitude.toString(),
-        // shopLat: this.latitude.toString(),
-        shopLon: '120.082565',
-        shopLat: '30.200684',
-        range: '100000',
-        // shopMainTypes: '1',
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+        // shopLon: '120.082565',
+        // shopLat: '30.200684',
+        range: '10000',
+        shopMainType: this.shopMainType.toString(),
         keyWords: this.keyWords || '',
       }).then((res) => {
+        if (!res.hasOwnProperty('data') || res.data.length <= 10) {
+          this.showRecommendList = true;
+          this.getRecommendList();
+        }
+        if (!res.hasOwnProperty('data')) {
+          return;
+        }
         res.data.forEach((obj) => {
           obj.reverse = false;
         });
@@ -220,7 +338,58 @@ export default {
         }
         this.$set(this.collectionList, index, item);
       });
-    }
+    },
+    showDiscounts2(index) {
+      this.$nextTick(() => {
+        // console.log(index);
+        let item = this.recommendList[index];
+        // console.log(item);
+        if (item.reverse) {
+          item.reverse = false;
+        } else {
+          item.reverse = true;
+        }
+        this.$set(this.recommendList, index, item);
+      });
+    },
+    getRecommendList() {
+      api.collection.hotShop({
+        pageNum: this.pageNumForRec,
+        pageRow: this.pageRowForRec,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+        range: '20000',
+        isHot: '-1',
+      }).then((res) => {
+        // todo 测试数据
+        if (!res.hasOwnProperty('data') || res.data.length == 0) {
+          _.alert('没有更多了');
+          this.allLoaded = true;
+          return;
+        }
+        res.data.forEach((obj) => {
+          obj.reverse = false;
+        });
+        this.recommendList = this.pageNumForRec == 1 ? res.data : this.recommendList.concat(res.data);
+      }).catch((err) => {});
+    },
+    loadMore() {
+      if (this.allLoaded) {
+        return;
+      }
+      this.pageNumForRec++;
+      this.$nextTick(() => {
+        this.getRecommendList();
+      });
+    },
+    toShopDetail(shopId) {
+      this.$router.push({ 
+        path: '/collection/shopDetail',
+        query: {
+          shopId,
+        }
+      });
+    },
   }
 }
 
@@ -232,6 +401,18 @@ export default {
   height: 100%;
   overflow: scroll;
   box-sizing: border-box;
+}
+
+.no-more {
+  margin: 30px auto;
+  width: 372px;
+  height: 41.6px;
+  font-family: PingFangSC-Regular;
+  font-size: 32px;
+  color: #818B8F;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 41.6px;
 }
 
 .header {
@@ -444,6 +625,13 @@ export default {
   }
 }
 
+.activity-list {
+  width: 100%;
+  height: 100%; // overflow: scroll;
+  padding-top: 286px;
+  box-sizing: border-box;
+}
+
 .shop-list {
   width: 100%;
   height: 100%; // overflow: scroll;
@@ -458,6 +646,9 @@ export default {
   }
   .common-list {
     width: 100%;
+    &.recommend-list {
+      margin-top: 30px;
+    }
     .common-cell {
       margin: 0 auto 30px auto;
       border-radius: 35px;
@@ -495,6 +686,17 @@ export default {
         background-repeat: no-repeat;
         transition: all ease 1s;
         -webkit-transition: all ease 1s;
+        .icon-egg {
+          position: absolute;
+          width: 95px;
+          height: 105px;
+          top: 0;
+          left: 0;
+          z-index: 11;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          background-image: url('../assets/images/img_eggtag.png');
+        }
         &.hidden {
           // display: none;
           opacity: 0;
@@ -524,7 +726,10 @@ export default {
           right: 30px;
           background-size: 100% 100%;
           background-repeat: no-repeat;
-          background-image: url('../assets/images/ic_like.png');
+          background-image: url('../assets/images/ic_like_grey.png');
+          &.collect-tag {
+            background-image: url('../assets/images/ic_like.png');
+          }
         }
         .cell-header {
           width: 100%;
@@ -573,10 +778,28 @@ export default {
             }
           }
         }
-        .cell-tag {
+        .tag-info {
           margin-top: 20px;
           width: 100%;
           height: 40px;
+          overflow: hidden;
+          .tag-cell {
+            display: inline-block;
+            float: left;
+            margin-right: 10px;
+            height: 40px;
+            box-sizing: border-box;
+            border: 1px solid #FFFFFF;
+            /*no*/
+            border-radius: 25px;
+            line-height: 24px;
+            font-family: PingFangSC-Regular;
+            font-size: 24px;
+            padding-top: 6px;
+            padding-left: 15px;
+            padding-right: 15px;
+            color: #FFFFFF;
+          }
         }
         .cell-footer-btn {
           display: inline-block;
@@ -609,6 +832,67 @@ export default {
       .reverse-side {
         transform: rotateY(180deg);
         -webkit-transform: rotateY(180deg);
+        background-image: url('../assets/images/bg_background.png') !important;
+        .cell-content {
+          width: 100%;
+          height: 100%;
+          padding-top: 30px;
+          padding-left: 30px;
+          padding-right: 30px;
+          box-sizing: border-box;
+          .cell-shop-name {
+            width: 540px;
+            height: 46.8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 0 auto;
+            white-space: nowrap;
+            text-align: center;
+            font-family: PingFangSC-Semibold;
+            font-size: 36px;
+            color: #FFFFFF;
+            line-height: 46.8px;
+          }
+          .height-10 {
+            height: 10px;
+          }
+          .cell-item {
+            width: 100%;
+            height: 40px;
+            position: relative;
+            padding-left: 90px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            .label {
+              display: inline-block;
+              position: absolute;
+              box-sizing: border-box;
+              top: 0;
+              left: 0;
+              width: 80px;
+              height: 40px;
+              font-family: PingFangSC-Regular;
+              font-size: 24px;
+              line-height: 38px;
+              text-align: center;
+              color: #FFFFFF;
+              border: 1px solid #fff;
+              /*no*/
+              border-radius: 25px;
+            }
+            .desc {
+              display: inline-block;
+              font-family: PingFangSC-Regular;
+              font-size: 28px;
+              color: #C4CACD;
+              letter-spacing: 0;
+              line-height: 40px;
+            }
+          }
+        }
         .cell-footer-btn {
           display: inline-block;
           position: absolute;

@@ -66,13 +66,13 @@ export default {
         let item = res.data[0];
         // this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
         this.accountSafeGuard = !!item.amount ? item.amount : 0;
-      });
+      }).catch((err) => {});
     },
     getAccountCredits() {
       api.user.getAccountCredits().then((res) => {
         let item = res.data[0];
         this.accountCredits = item.amount || 0;
-      });
+      }).catch((err) => {});
     }
   }
 }

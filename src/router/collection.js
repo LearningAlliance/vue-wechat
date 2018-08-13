@@ -6,6 +6,7 @@ import PayTheBill from '../pages/collection/PayTheBill'
 import Branch from '../pages/collection/Branch'
 import UseCoupons from '../pages/collection/UseCoupons'
 import MapSearch from '../pages/collection/MapSearch'
+import ShopDetail from '../pages/collection/ShopDetail'
 
 export default [{
 	path: '/collection',
@@ -66,4 +67,11 @@ export default [{
 		getLocation: true,
 	},
 	component: MapSearch,
+}, {
+	path: '/collection/shopDetail',
+	name: 'shopDetail',
+	meta: {
+		title: '收藏',
+	},
+	component: ShopDetail,
 }, ]

@@ -95,3 +95,18 @@ export const formatDistance = (distance) => {
         return `${(distance / 1000).toFixed(1)}km`;
     }
 }
+
+// 格式化距离-中文
+export const formatDistanceCN = (distance) => {
+    if (distance == null || distance == undefined) {
+        return '';
+    }
+    if (distance < 0) {
+        return '';
+    }
+    if (distance < 1000) {
+        return `${distance}米`;
+    } else {
+        return `${(distance / 1000).toFixed(1)}千米`;
+    }
+}

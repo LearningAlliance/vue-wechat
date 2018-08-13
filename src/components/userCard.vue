@@ -70,13 +70,13 @@ export default {
       api.user.getAccountSafeGuard().then((res) => {
         let item = res.data[0];
         this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
-      });
+      }).catch((err) => {});
     },
     getAccountCredits(){
       api.user.getAccountCredits().then((res) => {
         let item = res.data[0];
         this.accountCredits = item.amount || 0;
-      });
+      }).catch((err) => {});
     }
   }
 }

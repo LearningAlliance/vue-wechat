@@ -49,32 +49,37 @@ axios.interceptors.response.use((res) => {
 		return res;
 	}
 	if (res.data.resultCode == 9985) {
-		MessageBox.confirm('【测试用】当前token已过期，是否重新获取?').then(action => {
+		MessageBox.confirm('当前token已过期，是否重新获取?').then(action => {
 			if (action) {
-				// 测试用获取token
-				post('/userServer/business/UserInfoAction', {
-					action: 'qryToken',
-					data: JSON.stringify({
-						user: 13333333333
-					}),
-				}, {
-					body: {
-						withToken: false,
-						withUid: false,
-					}
-				}).then((res) => {
-					// console.log('getToken', res);
-					let {
-						token,
-						uid
-					} = res.data;
-					localStorage.setItem('token', token);
-					localStorage.setItem('uid', uid);
-					location.reload();
-				}).cathc((err) => {
-					reject(err);
-					// location.reload();
-				})
+				if (process.env.NODE_ENV == "development") {
+					// 测试用获取token
+					post('/userServer/business/UserInfoAction', {
+						action: 'qryToken',
+						data: JSON.stringify({
+							user: 13333333333
+						}),
+					}, {
+						body: {
+							withToken: false,
+							withUid: false,
+						}
+					}).then((res) => {
+						// console.log('getToken', res);
+						let {
+							token,
+							uid
+						} = res.data;
+						localStorage.setItem('token', token);
+						localStorage.setItem('uid', uid);
+						location.reload();
+					}).cathc((err) => {
+						reject(err);
+						// location.reload();
+					})
+				} else {
+					let oldUrl = encodeURIComponent(location.href.split('?')[0]);
+					location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+				}
 			}
 		}).catch((err) => {
 

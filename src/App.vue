@@ -50,6 +50,19 @@ export default {
       if (!!code) {
         api.common.getOpenIdByCode({ code, }).then((res) => {
           console.log(res);
+          let { userWecharId } = res.data[0]; //openid
+          if(!userWecharId){
+            return;
+          }
+          api.common.wxLogin({ userWecharId, }).then((res) => {
+            console.log('getToken:', res);
+            let token = res.data[0].token;
+            let userid = res.data[0].userId;
+            localStorage.setItem('token', token);
+            localStorage.setItem('uid', userid);
+          }).catch((err) => {
+            console.log(err);
+          })
         }).catch((err) => {
           console.log(err);
         });
@@ -91,7 +104,7 @@ export default {
     // 通过高德api获取地址信息
     getLocationByAMap() {
       var self = this;
-      if(!!self.longitude && !!self.latitude){
+      if (!!self.longitude && !!self.latitude) {
         return;
       }
       lazyAMapApiLoaderInstance.load().then(() => {
@@ -113,14 +126,16 @@ export default {
         AMap.event.addListener(geolocation, 'error', onError)
 
         function onComplete(data) {
+          console.log('定位完成', data);
           // data是具体的定位信息
-          self.setFormattedAddress(data.formattedAddress);
+          self.setFormattedAddress(data.formattedAddress || '未定位');
           // lng、lat
           self.setLatitude(data.position.lat);
           self.setLongitude(data.position.lng);
         }
 
         function onError(err) {
+          console.log('定位失败', err);
           // 定位出错
           self.setFormattedAddress('定位失败');
           _.alert('定位出错，可刷新页面进行重新定位');
@@ -204,7 +219,7 @@ export default {
           wx.getLocation({
             type: 'gcj02',
             success: function(res) {
-              _.alert(JSON.stringify(res));
+              // _.alert(JSON.stringify(res));
               self.setLatitude(res.latitude);
               self.setLongitude(res.longitude);
               self.getAddress(res.longitude, res.latitude);

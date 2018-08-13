@@ -15,6 +15,17 @@ export const getOpenIdByCode = (params) => post('/userServer/business/UserInfoAc
 	}
 });
 
+// 微信支付宝自动登录接口， 获取token 和uid
+export const wxLogin = (params) => post('/userServer/business/UserInfoAction', {
+	action: 'wxLogin',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		withToken: false,
+		withUid: false,
+	}
+})
+
 // 根据openId获取token
 // 参数userWecharId
 export const getTokenByOpenId = (params) => post('/userServer/business/UserInfoAction', {
