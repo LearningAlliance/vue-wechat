@@ -166,7 +166,8 @@ export default [{
 	path: '/mine/pensionList',
 	name: 'pensionList',
 	meta: {
-		title: '养老金账户明细'
+		title: '个人中心',
+		subTitle: '养老金账户明细'
 	},
 	component: PensionList,
 }, {

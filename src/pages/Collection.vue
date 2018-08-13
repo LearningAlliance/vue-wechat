@@ -103,8 +103,8 @@ export default {
   },
   created() {
     // TODO 测试数据
-    localStorage.setItem('token', '9314c6f9-11be-40fa-be0f-580d7f9baf36');
-    localStorage.setItem('uid', '1');
+    // localStorage.setItem('token', '9314c6f9-11be-40fa-be0f-580d7f9baf36');
+    // localStorage.setItem('uid', '1');
     // Indicator.open();
     this.$store.dispatch('setLoadingState', true);
     // console.log(this.$route);
