@@ -107,6 +107,32 @@ export const formatDistanceCN = (distance) => {
     if (distance < 1000) {
         return `${distance}米`;
     } else {
-        return `${(distance / 1000).toFixed(1)}千米`;
+        return `${(distance / 1000).toFixed(1)}公里`;
+    }
+}
+
+// 格式化价格
+export const formatPrice = (price) => {
+    if (typeof price != 'number') {
+        return '';
+    }
+    let p = price / 100;
+    if (String(p).indexOf('.') > -1) {
+        return p.toFixed(2) + '元';
+    } else {
+        return p + '元';
+    }
+}
+
+// 格式化价格-不带单位
+export const formatPriceWithoutUnit = (price) => {
+    if (typeof price != 'number') {
+        return '';
+    }
+    let p = price / 100;
+    if (String(p).indexOf('.') > -1) {
+        return p.toFixed(2);
+    } else {
+        return p;
     }
 }

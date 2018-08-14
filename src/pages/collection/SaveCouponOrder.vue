@@ -1,7 +1,6 @@
-<!-- 店铺详情 -->
 <template>
 	<div class="page">
-		店铺详情
+		创建购买套餐订单
 	</div>
 </template>
 

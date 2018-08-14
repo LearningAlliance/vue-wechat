@@ -29,7 +29,48 @@
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
     <div class="activity-list" v-show="tabOn == 'tab2'">
-      这里是有活动列表
+      <div class="common-list">
+        <div class="common-cell" v-for="(item, index) in collectionListForAct" :key="'collectionListForAct' + index">
+          <div :class="['common-box', {'no-border': collectionListForAct.length - 1 == index}]">
+            <div class="box-left">
+              <img class="coupon-img" :src="item.couponImg" />
+            </div>
+            <div class="box-right">
+              <div class="shop-name">{{item.merShop[0].shopName || ''}}</div>
+              <div class="coupon-name">{{item.couponName}}</div>
+              <div class="other-info">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="price">
+                <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
+                <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
+                <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
+              </div>
+              <div class="buy-btn" @click.stop="toBuy(item.couponId)">购买</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recomment-list-title" v-show="showRecommendListForAct">没有更多收藏店铺，已为您推荐</div>
+      <div class="common-list">
+        <div class="common-cell" v-for="(item, index) in recommendListForAct" :key="'recommendListForAct' + index">
+          <div :class="['common-box', {'no-border': recommendListForAct.length - 1 == index}]">
+            <div class="box-left">
+              <img class="coupon-img" :src="item.couponImg" />
+            </div>
+            <div class="box-right">
+              <div class="shop-name">{{item.merShop[0].shopName || ''}}</div>
+              <div class="coupon-name">{{item.couponName}}</div>
+              <div class="other-info">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="price">
+                <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
+                <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
+                <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
+              </div>
+              <div class="buy-btn" @click.stop="toBuy(item.couponId)">购买</div>
+            </div>
+          </div>
+        </div>
+        <div class="no-more" v-show="allLoadedForAct">没有更多了</div>
+      </div>
     </div>
     <div class="shop-list" v-show="tabOn == 'tab1'">
       <div class="common-list collecttion-list">
@@ -51,7 +92,7 @@
               </div>
             </div>
             <div class="tag-info clearfix">
-              <span class="tag-cell" v-show="item.userLevel">VIP{{item.userLevel}}</span>
+              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName.toUpperCase()}}</span>
               <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
@@ -65,9 +106,9 @@
             <div class="cell-content">
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
-              <div class="cell-item" v-if="item.userLevel">
-                <div class="label">VIP{{item.userLevel}}</div>
-                <div class="desc">会员权益</div>
+              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
+                <div class="label">{{item.merLevelConfig.levelName.toUpperCase()}}</div>
+                <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
               <div class="cell-item" v-if="item.pensionRate">
                 <div class="label">返金</div>
@@ -78,7 +119,7 @@
                 <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
                 <div class="desc"></div>
               </div>
-              <div class="cell-item" v-if="typeof(item.cashCoupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
+              <div class="cell-item" v-if="typeof(item.coupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
                 <div class="label">套餐</div>
                 <div class="desc">{{item.coupon.couponName || ''}}</div>
               </div>
@@ -107,7 +148,7 @@
               </div>
             </div>
             <div class="tag-info clearfix">
-              <span class="tag-cell" v-show="item.userLevel">VIP{{item.userLevel}}</span>
+              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName.toUpperCase()}}</span>
               <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
@@ -121,9 +162,9 @@
             <div class="cell-content">
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
-              <div class="cell-item" v-if="item.userLevel">
-                <div class="label">VIP{{item.userLevel}}</div>
-                <div class="desc">会员权益</div>
+              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
+                <div class="label">{{item.merLevelConfig.levelName.toUpperCase()}}</div>
+                <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
               <div class="cell-item" v-if="item.pensionRate">
                 <div class="label">返金</div>
@@ -134,7 +175,7 @@
                 <span class="label" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
                 <div class="desc"></div>
               </div>
-              <div class="cell-item" v-if="typeof(item.cashCoupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
+              <div class="cell-item" v-if="typeof(item.coupon) == 'object' && item.coupon.hasOwnProperty('couponName')">
                 <div class="label">套餐</div>
                 <div class="desc">{{item.coupon.couponName || ''}}</div>
               </div>
@@ -155,7 +196,7 @@ import { Indicator } from 'mint-ui';
 import mapDemo from '@/components/mapDemo.vue'
 import map from '@/components/map.vue'
 import { mapGetters } from 'vuex'
-import api from '../fetch/api.js'
+import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
   data() {
@@ -170,11 +211,17 @@ export default {
       showRecommendList: false,
       recommendList: [],
       firstLoad: true,
-      pageRowForRec: 5,
-      pageNumForRec: 1,
+      pageRowForRec: 5, // 常去部分的
+      pageNumForRec: 1, // 常去部分的
+      pageRowFroAct: 5, // 有活动部分的
+      pageNumForAct: 1, // 有活动部分的
       // range: 20000,
       allLoaded: false,
+      allLoadedForAct: false,
       shopMainType: 1, // 显示的大类
+      collectionListForAct: [],
+      recommendListForAct: [],
+      showRecommendListForAct: false,
     }
   },
   components: {
@@ -210,6 +257,7 @@ export default {
     if (!!this.longitude && !!this.latitude) {
       // this.$store.dispatch('setLoadingState', false);
       this.getShops();
+      this.getActivities();
     }
   },
   watch: {
@@ -247,6 +295,13 @@ export default {
       this.tabOn = num;
       this.showAll = false;
       this.selectedKindId = '';
+      this.pageNumForAct = 1;
+      this.pageNumForRec = 1;
+      if (num == 'tab1') {
+        this.getShops();
+      } else if (num == 'tab2') {
+        this.getActivities();
+      }
     },
     compare(x, y) { //比较函数
       if (x.sort < y.sort) {
@@ -278,10 +333,18 @@ export default {
       }
       this.selectedKindId = id;
       this.showAll = false;
-      this.pageNumForRec = 1;
-      this.$nextTick(() => {
-        this.getShops();
-      });
+      if (this.tabOn == 'tab1') {
+        this.pageNumForRec = 1;
+        this.$nextTick(() => {
+          this.getShops();
+        });
+      } else if (this.tabOn == 'tab2') {
+        this.pageNumForAct = 1;
+        this.$nextTick(() => {
+          this.getActivities();
+        });
+      }
+
     },
     showAllKinds() {
       this.showAll = true;
@@ -292,7 +355,11 @@ export default {
     handleScroll() {
       // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
       if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
-        this.loadMore();
+        if (this.tabOn == 'tab1') {
+          this.loadMore();
+        } else if (this.tabOn == 'tab2') {
+          this.loadMoreForAct();
+        }
       }
     },
     // 常去收藏店铺
@@ -325,6 +392,43 @@ export default {
             this.firstLoad = false;
           }, 1000);
         });
+      }).catch((err) => {});
+    },
+    // 有活动部分
+    getActivities() {
+      api.collection.qryMerCouponActivity({
+        pageNum: 1,
+        pageRow: 10000,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+      }).then((res) => {
+        // console.log(res);
+        // if (!res.hasOwnProperty('data') || res.data.length <= 10) {
+        //   this.showRecommendListForAct = true;
+        //   this.getActivitiesRec();
+        // }
+        if (!res.hasOwnProperty('data')) {
+          this.getActivitiesRec();
+          return;
+        }
+        this.collectionListForAct = res.data;
+        this.getActivitiesRec();
+      }).catch((err) => {});
+    },
+    // 有活动部分-推荐
+    getActivitiesRec() {
+      this.showRecommendListForAct = true;
+      api.collection.qryMerCouponHot({
+        pageNum: this.pageNumForAct,
+        pageRow: this.pageRowFroAct,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+        range: '20000',
+      }).then((res) => {
+        if (res.data.length < this.pageRowFroAct) {
+          this.allLoadedForAct = true;
+        }
+        this.recommendListForAct = this.pageNumForAct == 1 ? res.data : this.recommendListForAct.concat(res.data);
       }).catch((err) => {});
     },
     showDiscounts(index) {
@@ -370,11 +474,14 @@ export default {
         res.data.forEach((obj) => {
           obj.reverse = false;
         });
+        if (res.data.length < this.pageRowForRec) {
+          this.allLoaded = true;
+        }
         this.recommendList = this.pageNumForRec == 1 ? res.data : this.recommendList.concat(res.data);
       }).catch((err) => {});
     },
     loadMore() {
-      if (this.allLoaded) {
+      if (this.allLoaded || this.recommendList.length == 0) {
         return;
       }
       this.pageNumForRec++;
@@ -382,14 +489,31 @@ export default {
         this.getRecommendList();
       });
     },
+    loadMoreForAct() {
+      if (this.allLoadedForAct || this.recommendListForAct.length == 0) {
+        return;
+      }
+      this.pageNumForAct++;
+      this.$nextTick(() => {
+        this.getActivitiesRec();
+      });
+    },
     toShopDetail(shopId) {
-      this.$router.push({ 
+      this.$router.push({
         path: '/collection/shopDetail',
         query: {
           shopId,
         }
       });
     },
+    toBuy(couponId) {
+      this.$router.push({
+        path: '/collection/couponDetail',
+        query: {
+          couponId,
+        }
+      });
+    }
   }
 }
 
@@ -404,8 +528,10 @@ export default {
 }
 
 .no-more {
-  margin: 30px auto;
-  width: 372px;
+  margin: 0 auto;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  width: 100%;
   height: 41.6px;
   font-family: PingFangSC-Regular;
   font-size: 32px;
@@ -413,6 +539,7 @@ export default {
   letter-spacing: 0;
   text-align: center;
   line-height: 41.6px;
+  background: #F8F8FC;
 }
 
 .header {
@@ -630,6 +757,135 @@ export default {
   height: 100%; // overflow: scroll;
   padding-top: 286px;
   box-sizing: border-box;
+  .recomment-list-title {
+    margin-top: 50px;
+    margin-bottom: 30px;
+    font-family: PingFangSC-Regular;
+    font-size: 32px;
+    color: #2E3141;
+    text-align: center;
+    line-height: 41.6px;
+  }
+  .common-list {
+    width: 100%;
+    background: #FFF;
+    .common-cell {
+      margin: 0 auto;
+      width: 750px;
+      height: 260px;
+      padding: 30px;
+      box-sizing: border-box;
+      .common-box {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        &::after {
+          content: '';
+          width: 690px;
+          height: 0px;
+          border-top: 1px solid #C4CACD;
+          /*no*/
+          position: absolute;
+          bottom: -30px;
+          left: 0;
+        }
+        &.no-border::after {
+          border: none;
+        }
+        .box-left {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 200px;
+          height: 200px;
+          .coupon-img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .box-right {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          padding-left: 231px;
+          .shop-name {
+            font-family: PingFangSC-Semibold;
+            font-size: 32px;
+            color: #2E3141;
+            line-height: 41.6px;
+          }
+          .coupon-name {
+            margin-top: 20.8px;
+            opacity: 0.8;
+            font-family: PingFangSC-Regular;
+            font-size: 24px;
+            color: #2E3141;
+            line-height: 31.2px;
+          }
+          .other-info {
+            margin-top: 10.8px;
+            opacity: 0.8;
+            font-family: PingFangSC-Regular;
+            font-size: 24px;
+            color: #2E3141;
+            line-height: 31.2px;
+          }
+          .price {
+            margin-top: 30.8px;
+            width: 100%;
+            height: 36.4px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-family: PingFangSC-Semibold;
+            font-size: 32px;
+            color: #F05720;
+            letter-spacing: 0;
+            line-height: 36.4px;
+            .buy-price {}
+            .coupon-price {
+              font-family: PingFangSC-Regular;
+              font-size: 28px;
+              color: #2E3141;
+              letter-spacing: 0;
+              line-height: 36.4px;
+              text-decoration: line-through;
+            }
+            .discount {
+              display: inline-block;
+              height: 36.4px;
+              font-family: PingFangSC-Regular;
+              font-size: 22px;
+              color: #FFFFFF;
+              letter-spacing: -0.53px;
+              text-align: center;
+              line-height: 36.4px;
+              background: #F05720;
+              padding-left: 5px;
+              padding-right: 5px;
+            }
+          }
+          .buy-btn {
+            display: block;
+            position: absolute;
+            width: 140px;
+            height: 50px;
+            box-sizing: border-box;
+            bottom: 0;
+            right: 0;
+            border: 3px solid #F05720;
+            border-radius: 34px;
+            font-family: PingFangSC-Semibold;
+            font-size: 28px;
+            color: #F05720;
+            letter-spacing: 0;
+            text-align: center;
+            line-height: 44px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .shop-list {
@@ -646,6 +902,9 @@ export default {
   }
   .common-list {
     width: 100%;
+    .no-more {
+      padding-top: 0;
+    }
     &.recommend-list {
       margin-top: 30px;
     }

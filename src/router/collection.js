@@ -7,6 +7,8 @@ import Branch from '../pages/collection/Branch'
 import UseCoupons from '../pages/collection/UseCoupons'
 import MapSearch from '../pages/collection/MapSearch'
 import ShopDetail from '../pages/collection/ShopDetail'
+import CouponDetail from '../pages/collection/CouponDetail'
+import SaveCouponOrder from '../pages/collection/SaveCouponOrder'
 
 export default [{
 	path: '/collection',
@@ -47,6 +49,9 @@ export default [{
 	meta: {
 		title: '套餐',
 		subTitle: '分店',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+		getLocation: true,
 	},
 	component: Branch,
 }, {
@@ -72,6 +77,28 @@ export default [{
 	name: 'shopDetail',
 	meta: {
 		title: '收藏',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+		getLocation: true,
 	},
 	component: ShopDetail,
+}, {
+	path: '/collection/couponDetail',
+	name: 'couponDetail',
+	meta: {
+		title: '套餐',
+		subTitle: '优惠套餐',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+		getLocation: true,
+	},
+	component: CouponDetail,
+}, {
+	path: '/collection/saveCouponOrder',
+	name: 'saveCouponOrder',
+	meta: {
+		title: '套餐',
+		subTitle: '提交订单',
+	},
+	component: SaveCouponOrder,
 }, ]

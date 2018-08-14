@@ -106,6 +106,9 @@ export default {
       	this.list1.splice(this.list1.indexOf(keyWords), 1);
       }
       this.list1.unshift(keyWords);
+      if(this.list1.length > 10){
+        this.list1.splice(10);
+      }
       localStorage.setItem('searchHistory', JSON.stringify(this.list1));
       this.$router.replace({
         path: '/collection',

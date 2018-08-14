@@ -19,31 +19,60 @@
   </div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
-    	list: [],
+      list: [],
     }
   },
-  created() {
-    this.getShopByCoupon();
+  mounted() {
+    let { couponId } = this.$route.query;
+    this.couponId = couponId;
+    if (!!this.longitude && !!this.latitude) {
+      this.$nextTick(() => {
+        this.getShopByCoupon();
+      });
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'longitude',
+      'latitude',
+    ]),
+  },
+  watch: {
+    longitude(val, oldVal) {
+      if (!!val && !!this.latitude) {
+        // Indicator.close();
+        // this.$store.dispatch('setLoadingState', false);
+        this.getShopByCoupon();
+      }
+    },
+    latitude(val, oldVal) {
+      if (!!val && !!this.longitude) {
+        // Indicator.close();
+        // this.$store.dispatch('setLoadingState', false);
+        this.getShopByCoupon();
+      }
+    },
   },
   methods: {
     getShopByCoupon() {
       api.trade.getShopByCoupon({
-        couponId: '1',
-        shopLon: '120.082565',
-        shopLat: '30.200684',
+        couponId: this.couponId,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
       }).then((res) => {
         this.list = res.data;
       }).catch((err) => {
 
       });
     },
-    makePhone(tel){
-    	window.location.href = `tel:${tel}`;
+    makePhone(tel) {
+      window.location.href = `tel:${tel}`;
     },
   }
 }
@@ -74,13 +103,14 @@ export default {
     box-sizing: border-box;
     padding: 30px;
     position: relative;
-    .line-bottom{
-    	position: absolute;
-    	bottom: 0;
-    	left: 30px;
-    	width: 690px;
-    	height: 1px;/*no*/
-    	background: #E2E2E2;
+    .line-bottom {
+      position: absolute;
+      bottom: 0;
+      left: 30px;
+      width: 690px;
+      height: 1px;
+      /*no*/
+      background: #E2E2E2;
     }
     .cell {
       width: 589px;
@@ -96,8 +126,7 @@ export default {
       }
       .shopName {
         display: inline-block;
-        float: left;
-        // width: 450px;
+        float: left; // width: 450px;
         max-width: 450px;
         font-family: PingFangSC-Medium;
         font-size: 32px;
@@ -130,23 +159,24 @@ export default {
         overflow: hidden;
       }
     }
-    .line{
-    	position: absolute;
-    	width: 1px; /*no*/
-    	height: 50px;
-    	background: #E2E2E2;
-    	top: 54px;
-    	right: 100px;
+    .line {
+      position: absolute;
+      width: 1px;
+      /*no*/
+      height: 50px;
+      background: #E2E2E2;
+      top: 54px;
+      right: 100px;
     }
-    .tel{
-    	position: absolute;
-    	top: 59px;
-    	right: 30px;
-    	width: 40px;
-    	height: 40px;
-    	background-size: 100% 100%;
-    	background-repeat: no-repeat;
-    	background-image: url('../../assets/images/ic_store_phone.png');
+    .tel {
+      position: absolute;
+      top: 59px;
+      right: 30px;
+      width: 40px;
+      height: 40px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_store_phone.png');
     }
   }
 }

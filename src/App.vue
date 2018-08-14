@@ -49,13 +49,13 @@ export default {
       let code = _.getRequest('code');
       if (!!code) {
         api.common.getOpenIdByCode({ code, }).then((res) => {
-          console.log(res);
+          // console.log(res);
           let { userWecharId } = res.data[0]; //openid
           if(!userWecharId){
             return;
           }
           api.common.wxLogin({ userWecharId, }).then((res) => {
-            console.log('getToken:', res);
+            // console.log('getToken:', res);
             let token = res.data[0].token;
             let userid = res.data[0].userId;
             localStorage.setItem('token', token);
@@ -126,7 +126,7 @@ export default {
         AMap.event.addListener(geolocation, 'error', onError)
 
         function onComplete(data) {
-          console.log('定位完成', data);
+          // console.log('定位完成', data);
           // data是具体的定位信息
           self.setFormattedAddress(data.formattedAddress || '未定位');
           // lng、lat
@@ -135,7 +135,7 @@ export default {
         }
 
         function onError(err) {
-          console.log('定位失败', err);
+          // console.log('定位失败', err);
           // 定位出错
           self.setFormattedAddress('定位失败');
           _.alert('定位出错，可刷新页面进行重新定位');
@@ -151,7 +151,7 @@ export default {
           extensions: "all"
         });
         geocoder.getAddress([longitude, latitude], function(status, result) {
-          console.log('getAddress:', status, result);
+          // console.log('getAddress:', status, result);
           if (status === 'complete' && result.info === 'OK') {
             self.address = result.regeocode.formattedAddress;
             self.setFormattedAddress(result.regeocode.formattedAddress);
@@ -238,7 +238,7 @@ export default {
         }
       });
       wx.error(function(res) {
-        console.log('wx.error:' + res.errMsg);
+        // console.log('wx.error:' + res.errMsg);
         if (getLocation) {
           self.getLocationByAMap();
         }
