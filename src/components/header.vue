@@ -34,7 +34,8 @@ export default {
   },
   methods: {
     goBack() {
-      this.$router.history.go(-1);
+      // this.$router.history.go(-1);
+      window.history.back();
     },
     getMap() {
       alert('开发中')

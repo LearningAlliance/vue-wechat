@@ -3,13 +3,13 @@
     <div class="tab clearfix">
       <div class="tab-item">
         <router-link to="/collection">
-         <div class="tab-icon"><img :src="routeName == 'collection' ? require('@/assets/images/ic_navfavorite.png') : require('@/assets/images/ic_navfavorite_grey.png')" alt=""></div>
+          <div class="tab-icon"><img :src="routeName == 'collection' ? require('@/assets/images/ic_navfavorite.png') : require('@/assets/images/ic_navfavorite_grey.png')" alt=""></div>
           <div class="tab-text">收藏</div>
         </router-link>
       </div>
       <div class="tab-item">
         <router-link to="/discovery">
-         <div class="tab-icon"><img :src="routeName == 'discovery' ? require('@/assets/images/ic_navdiscovery.png') : require('@/assets/images/ic_navdiscovery_grey.png')" alt=""></div>
+          <div class="tab-icon"><img :src="routeName == 'discovery' ? require('@/assets/images/ic_navdiscovery.png') : require('@/assets/images/ic_navdiscovery_grey.png')" alt=""></div>
           <div class="tab-text">发现</div>
         </router-link>
       </div>
@@ -50,13 +50,17 @@ export default {
 </script>
 <style scoped lang="scss">
 .tabar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  background: #fff;
   .tab {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    display: block;
     width: 100%;
-    height: 100px;
+    height: 100%;
     line-height: 100px;
     background: #fff;
     &:after {
@@ -79,25 +83,25 @@ export default {
         vertical-align: middle;
         font-size: 14px;
         color: rgb(77, 85, 93);
-        &:hover{
-        	text-decoration: none;
+        &:hover {
+          text-decoration: none;
         }
-        &:active{
-        	text-decoration: none;
+        &:active {
+          text-decoration: none;
         }
-        &:link{
-        	text-decoration: none;
+        &:link {
+          text-decoration: none;
         }
-        &:visited{
-        	text-decoration: none;
+        &:visited {
+          text-decoration: none;
         }
         .tab-icon {
           width: 50px;
           height: 50px;
           margin: 0 auto;
           img {
-          	display: block;
-          	height: 100%;
+            display: block;
+            height: 100%;
             width: 100%;
           }
         }

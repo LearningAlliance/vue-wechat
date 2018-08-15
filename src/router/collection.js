@@ -19,6 +19,7 @@ export default [{
 		wxConfig: true,
 		jsApiList: ['getLocation'],
 		getLocation: true,
+		keepAlive: true,
 	},
 	component: Collection
 }, {

@@ -49,5 +49,19 @@ export default new Router({
       meta: {},
       component: NotFound
     }
-  ]
+  ],
+  scrollBehavior(to, from, savedPosition) {
+    console.log(to.meta.keepAlive, from.meta.keepAlive);
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      if (from.meta.keepAlive) {
+        from.meta.savedPosition = document.body.scrollTop;
+      }
+      return {
+        x: 0,
+        y: to.meta.savedPosition || 0,
+      }
+    }
+  }
 })

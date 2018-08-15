@@ -122,7 +122,7 @@ export default {
 .section {
   margin-top: 20px;
   width: 100%;
-  margin-bottom: 120px; // height: 1800px;
+  // margin-bottom: 120px; // height: 1800px;
   // border: 1px solid red;
   box-sizing: border-box;
   background: #FFFFFF;

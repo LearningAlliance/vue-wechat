@@ -6,10 +6,16 @@
     <v-header :title="title" :menu-display="menuDisplay" :back-display="backDisplay" :map-display="mapDisplay" :header-display="headerDisplay" :right-text="rightText" :fun-name="funName"></v-header>
     <div class="content" :class="{tabar: tabar, topbar: headerDisplay}">
       <transition name="slide-left">
-        <router-view v-wechat-title="$route.meta.title"></router-view>
+        <!-- 暂时只缓存收藏首页 -->
+        <keep-alive>
+          <router-view v-wechat-title="$route.meta.title" v-if="keepAlive"></router-view>
+        </keep-alive>
+      </transition>
+      <transition name="slide-left">
+        <router-view v-wechat-title="$route.meta.title" v-if="!keepAlive"></router-view>
       </transition>
     </div>
-    <v-tabar></v-tabar>
+    <v-tabar></v-tabar> 
     <v-sidebar></v-sidebar>
   </div>
 </template>
@@ -51,7 +57,7 @@ export default {
         api.common.getOpenIdByCode({ code, }).then((res) => {
           // console.log(res);
           let { userWecharId } = res.data[0]; //openid
-          if(!userWecharId){
+          if (!userWecharId) {
             return;
           }
           api.common.wxLogin({ userWecharId, }).then((res) => {
@@ -272,6 +278,9 @@ export default {
       } = this.$route.meta;
       return !!subTitle;
     },
+    keepAlive() {
+      return !!this.$route.meta.keepAlive;
+    },
     menuDisplay() {
       return false;
       let {
@@ -360,12 +369,12 @@ a.active {
   height: 100%;
   background: #F8F8FC;
   .content {
-    height: 100%;
+    height: 100%; //为了能够保存keepalive的组件位置 而去掉
     min-height: 100%;
     box-sizing: border-box;
     background: #F8F8FC;
     &.tabar {
-      margin-bottom: 120px;
+      padding-bottom: 120px;
     }
     &.topbar {
       padding-top: 100px;
