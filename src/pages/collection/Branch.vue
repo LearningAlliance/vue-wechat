@@ -72,7 +72,7 @@ export default {
       });
     },
     makePhone(tel) {
-      window.location.href = `tel:${tel}`;
+      location.href = `tel:${tel}`;
     },
   }
 }

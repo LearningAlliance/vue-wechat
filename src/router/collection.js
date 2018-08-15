@@ -78,7 +78,7 @@ export default [{
 	meta: {
 		title: '收藏',
 		wxConfig: true,
-		jsApiList: ['getLocation'],
+		jsApiList: ['getLocation', 'openLocation'],
 		getLocation: true,
 	},
 	component: ShopDetail,

@@ -36,29 +36,24 @@ export default {
       'latitude',
       'formattedAddress',
     ]),
+    getLocationOver() {
+      return !!this.longitude && !!this.latitude;
+    }
   },
-  created(){
+  created() {
     // Indicator.open();
     this.$store.dispatch('setLoadingState', true);
   },
   watch: {
-    longitude(val, oldVal) {
-      if(!!val && !!this.latitude){
-        // Indicator.close();
-        this.$store.dispatch('setLoadingState', false);
-        this.getShops();
-      }
-    },
-    latitude(val, oldVal) {
-      if(!!val && !!this.longitude){
-        // Indicator.close();
+    getLocationOver(val, oldVal) {
+      if (val) {
         this.$store.dispatch('setLoadingState', false);
         this.getShops();
       }
     },
   },
-  mounted(){
-    if(!!this.longitude && !!this.latitude){
+  mounted() {
+    if (!!this.longitude && !!this.latitude) {
       this.$store.dispatch('setLoadingState', false);
       this.getShops();
     }

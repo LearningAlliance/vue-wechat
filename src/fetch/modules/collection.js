@@ -49,3 +49,9 @@ export const saveCouponOrder = (params) => post('/userServer/business/OrderBaseI
 	action: 'merCouponDetail',
 	data: JSON.stringify(params),
 });
+
+// 获取店铺信息接口
+export const merShop = (params) => post('/userServer/business/MerShopAction', {
+	action: 'merShop',
+	data: JSON.stringify(params),
+});

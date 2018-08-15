@@ -59,10 +59,10 @@
       <div class="sub-desc">
         <ul>
           <li>{{couponInfo.limitDesc}}</li>
-          <!--       		<li>如酒水果汁饮料等问题，请致电商家咨询，以商家反馈为准</li>
-      		<li>如部分菜品因时令或者其他不可抗的因素导致无法提供，店内将会用等价的菜品来替换，具体事宜请与店内协商</li>
-      		<li>提供免费WiFi</li>
-      		<li>停车位收费标准：详情咨询商家</li> -->
+          <!--          <li>如酒水果汁饮料等问题，请致电商家咨询，以商家反馈为准</li>
+          <li>如部分菜品因时令或者其他不可抗的因素导致无法提供，店内将会用等价的菜品来替换，具体事宜请与店内协商</li>
+          <li>提供免费WiFi</li>
+          <li>停车位收费标准：详情咨询商家</li> -->
         </ul>
       </div>
     </div>
@@ -123,19 +123,13 @@ export default {
       'longitude',
       'latitude',
     ]),
+    getLocationOver() {
+      return !!this.longitude && !!this.latitude;
+    }
   },
   watch: {
-    longitude(val, oldVal) {
-      if (!!val && !!this.latitude) {
-        // Indicator.close();
-        // this.$store.dispatch('setLoadingState', false);
-        this.getShopByCoupon();
-      }
-    },
-    latitude(val, oldVal) {
-      if (!!val && !!this.longitude) {
-        // Indicator.close();
-        // this.$store.dispatch('setLoadingState', false);
+    getLocationOver(val, oldVal) {
+      if (val) {
         this.getShopByCoupon();
       }
     },
@@ -171,14 +165,14 @@ export default {
         }
       });
     },
-    toBuy(){
-    	this.$router.push({
-    		path: '/collection/saveCouponOrder',
-    		query: {
-    			shopId: this.couponInfo.shopId,
-    			couponId: this.couponId,
-    		}
-    	})
+    toBuy() {
+      this.$router.push({
+        path: '/collection/saveCouponOrder',
+        query: {
+          shopId: this.couponInfo.shopId,
+          couponId: this.couponId,
+        }
+      })
     }
   }
 }
@@ -204,17 +198,17 @@ export default {
   .cell {
     display: inline-block;
     float: left;
-      .price-2 {
-      	text-decoration: line-through;
-      	display: inline-block;
-      	height: 88px;
-        font-family: PingFangSC-Regular;
-        font-size: 36px;
-        color: #C4CACD;
-        letter-spacing: 0;
-        text-align: center;
-        line-height: 88px;
-              .currency {
+    .price-2 {
+      text-decoration: line-through;
+      display: inline-block;
+      height: 88px;
+      font-family: PingFangSC-Regular;
+      font-size: 36px;
+      color: #C4CACD;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 88px;
+      .currency {
         font-size: 28px;
       }
     }

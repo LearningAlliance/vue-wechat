@@ -234,44 +234,25 @@ export default {
       'latitude',
       'formattedAddress', // 详细地址
     ]),
-    hasLocation() {
-      let flag = !!this.longitude && !!this.latitude;
-      if (flag) {
-        this.getAddress();
-      }
-      return flag;
+    getLocationOver() {
+      return !!this.longitude && !!this.latitude;
     }
   },
   created() {
-    // TODO 测试数据
-    // localStorage.setItem('token', '9314c6f9-11be-40fa-be0f-580d7f9baf36');
-    // localStorage.setItem('uid', '1');
-    // Indicator.open();
     this.$store.dispatch('setLoadingState', true);
-    // console.log(this.$route);
     let { keyWords } = this.$route.query;
     this.keyWords = keyWords || '';
     this.getKinds();
   },
   mounted() {
     if (!!this.longitude && !!this.latitude) {
-      // this.$store.dispatch('setLoadingState', false);
       this.getShops();
       this.getActivities();
     }
   },
   watch: {
-    longitude(val, oldVal) {
-      if (!!val && !!this.latitude) {
-        // Indicator.close();
-        // this.$store.dispatch('setLoadingState', false);
-        this.getShops();
-      }
-    },
-    latitude(val, oldVal) {
-      if (!!val && !!this.longitude) {
-        // Indicator.close();
-        // this.$store.dispatch('setLoadingState', false);
+    getLocationOver(val, oldVal) {
+      if (val) {
         this.getShops();
       }
     },
@@ -279,14 +260,6 @@ export default {
   methods: {
     toSearch() {
       this.$router.push('/collection/search');
-    },
-    getAddress() {
-      // api.common.getAddress({ lon: this.longitu de, lat: this.latitude }).then((res) => {
-      //   console.log(res);
-      //   // TODO 地址设置
-      // }).catch((err) => {
-      //   console.log(err);
-      // });
     },
     toMapSearch() {
       this.$router.push('/collection/mapSearch');
