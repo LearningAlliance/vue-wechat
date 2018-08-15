@@ -28,7 +28,7 @@
       <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 4">{{item.name}}</div>
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
-    <div class="activity-list" v-show="tabOn == 'tab2'">
+    <div class="activity-list" v-show="tabOn == 'tab2'" ref="tab2List">
       <div class="common-list">
         <div class="common-cell" v-for="(item, index) in collectionListForAct" :key="'collectionListForAct' + index">
           <div :class="['common-box', {'no-border': collectionListForAct.length - 1 == index}]">
@@ -72,7 +72,7 @@
         <div class="no-more" v-show="allLoadedForAct">没有更多了</div>
       </div>
     </div>
-    <div class="shop-list" v-show="tabOn == 'tab1'">
+    <div class="shop-list" v-show="tabOn == 'tab1'" ref="tab1List">
       <div class="common-list collecttion-list">
         <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList" :key="'collection' + index" @click.stop="toShopDetail(item.shopId)">
           <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
@@ -224,6 +224,25 @@ export default {
       showRecommendListForAct: false,
     }
   },
+  // deactivated() {
+  //   // 离开页面时
+  //   let scroll = 0;
+  //   if (this.tabOn == 'tab1') {
+  //     scroll = this.$refs.tab1List.scrollTop;
+  //   } else if (this.tabOn == 'tab2') {
+  //     scroll = this.$refs.tab2List.scrollTop;
+  //   }
+  //   sessionStorage.setItem('scroll', scroll);
+  // },
+  // activated() {
+    // // 再次进入到缓存的页面时 需要keep-live
+    // let scroll = sessionStorage.getItem('scroll');
+    // if (this.tabOn == 'tab1') {
+    //   this.$refs.tab1List.scrollTop = parseInt(scroll);
+    // } else if (this.tabOn == 'tab2') {
+    //   this.$refs.tab2List.scrollTop = parseInt(scroll);
+    // }
+  // },
   components: {
     'map-demo': mapDemo,
     'my-map': map,
@@ -326,6 +345,7 @@ export default {
       this.showAll = false;
     },
     handleScroll() {
+      console.log(this.$refs.tab1List.scrollTop, this.$refs.tab1List.offsetHeight, this.$refs.tab1List.scrollHeight, this.$refs.tab1List.offsetTop);
       // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
       if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
         if (this.tabOn == 'tab1') {
@@ -726,8 +746,8 @@ export default {
 }
 
 .activity-list {
-  width: 100%;
-  height: 100%; // overflow: scroll;
+  width: 100%; // height: 100%; // overflow: scroll;
+  min-height: 100%;
   padding-top: 286px;
   box-sizing: border-box;
   .recomment-list-title {
@@ -862,8 +882,8 @@ export default {
 }
 
 .shop-list {
-  width: 100%;
-  height: 100%; // overflow: scroll;
+  width: 100%; // height: 100%; // overflow: scroll;
+  min-height: 100%;
   padding-top: 286px;
   box-sizing: border-box;
   .recomment-list-title {
