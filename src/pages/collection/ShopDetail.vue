@@ -54,6 +54,73 @@
       <div class="line"></div>
       <i class="icon-tel" @click="makePhone(shopInfo.shopTel)"></i>
     </div>
+    <!-- TODO 缺少数据 -->
+    <div class="section-4">
+      <i class="icon-buy"></i>
+      <div class="section-content">
+        <div class="cell-header clearfix">
+          <div class="title">买单</div>
+          <div class="desc">返10%养老保障金</div>
+        </div>
+        <div class="cell-info">
+          <div class="desc no-top">满100元立减5元 (周一至周五)</div>
+          <div class="desc">满100元送小猪佩奇 (周一至周五)</div>
+        </div>
+      </div>
+      <div class="btn" @click="payTheBill">买单</div>
+    </div>
+    <div class="section-4" v-if="eggNum > 0">
+      <i class="icon-egg"></i>
+      <div class="section-content">
+        <div class="cell-header clearfix">
+          <div class="title">本店有彩蛋<span class="orange">{{eggNum}}</span>个 </div>
+        </div>
+        <div class="cell-info">
+          <div class="desc no-top">在该店内有效范围内开启</div>
+        </div>
+      </div>
+      <div class="btn">开蛋</div>
+      <div class="btn-desc">打开有惊喜</div>
+    </div>
+    <div class="vip-card" @click="toShopVipInfo" v-if="!!vipInfo.merLevelConfig.levelName">
+      <div class="header">
+        <div class="level">{{(vipInfo.merLevelConfig.levelName || '').toUpperCase()}}</div>
+        <div class="shop-name">{{shopInfo.shopName}}</div>
+      </div>
+      <div class="cell-1">
+        <div class="title">当前VIP权益</div>
+        <div class="desc">{{vipInfo.merLevelConfig.levelDesc}}</div>
+      </div>
+      <div class="cell-2">
+        <div class="title">{{(vipInfo.merLevelConfig.upgradeAmount || 0) | formatPrice}}元后升级可享</div>
+        <div class="desc">{{vipInfo.nextmerLevelConfig.levelDesc}}</div>
+      </div>
+    </div>
+    <div class="section-5" v-show="couponList.length > 0">
+      <div class="header clearfix">
+        <i class="icon-coupon"></i>
+        <div class="title">优惠</div>
+        <div class="desc">返{{shopInfo.pensionRate * 100}}%养老保障金</div>
+      </div>
+      <div class="blank"></div>
+      <div class="list">
+        <div :class="['cell', {'no-border': couponList.length - 1 == index}]" v-for="(item, index) in couponList" :key="'coupon' + index">
+          <div class="coupon-img">
+            <img :src="item.couponImg" />
+          </div>
+          <div class="cell-content">
+            <div class="cell-shop-name">{{shopInfo.shopName}}</div>
+            <div class="price">
+              <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
+              <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
+              <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
+            </div>
+            <div class="buy-btn" @click="buyCoupon(item.couponId)">购买</div>
+            <div class="buy-num">{{item.couponNum - item.surplusNum}}人买过</div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -66,7 +133,13 @@ export default {
       shopInfo: {
         collectCoupon: {}
       },
+      eggNum: 0, // 彩蛋数量
       stars: ['off', 'off', 'off', 'off', 'off'], // 评分列表
+      vipInfo: {
+        merLevelConfig: "",
+        nextmerLevelConfig: "",
+      },
+      couponList: [],
     }
   },
   computed: {
@@ -91,8 +164,13 @@ export default {
     if (!!this.longitude && !!this.latitude) {
       this.getShopDetail();
     }
+    // 彩蛋数量 商家详情里有返回了
+    // this.qrySysZoneCount();
+    this.qryMerLevel();
+    this.qryShopCoupon();
   },
   methods: {
+    // 查询商家详情
     getShopDetail() {
       api.collection.merShop({
         shopId: this.shopId,
@@ -103,10 +181,45 @@ export default {
         //   couponPrice: 200,
         //   couponLimit: 2000,
         // }
-        // res.data[0].collectCoupon = obj;
+        // res.data[0].collectCoupon = obj; 
         this.shopInfo = res.data[0];
         let score = res.data[0].score;
+        this.eggNum = res.data[0].zoneCount;
         this.stars = this.setStars(score);
+      }).catch((err) => {});
+    },
+    // 商家彩蛋数量
+    qrySysZoneCount() {
+      api.collection.qrySysZoneCount({
+        shopId: this.shopId,
+        type: '2',
+      }).then((res) => {
+        let num = 0;
+        let list = res.data;
+        list.forEach((obj) => {
+          if (obj.hasOwnProperty('type') && obj.type == '2') {
+            num = obj.num;
+          }
+        })
+        this.eggNum = num;
+      }).catch((err) => {});
+    },
+    // 商铺会员等级信息
+    qryMerLevel() {
+      api.collection.qryMerLevel({
+        shopId: this.shopId,
+      }).then((res) => {
+        this.vipInfo = res.data[0];
+      }).catch((err) => {});
+    },
+    // 根据类型查询店铺优惠劵列表
+    qryShopCoupon() {
+      api.collection.qryShopCoupon({
+        shopId: this.shopId,
+        couponType: '3',
+      }).then((res) => {
+        this.couponList = res.data;
+        console.log(res);
       }).catch((err) => {});
     },
     openLocation() {
@@ -154,6 +267,28 @@ export default {
     makePhone(tel) {
       window.location.href = `tel:${tel}`;
     },
+    toShopVipInfo() {
+      this.$router.push({
+        path: '/collection/shopVipInfo',
+        query: {
+          shopId: this.shopId,
+        },
+      });
+    },
+    buyCoupon(couponId) {
+      this.$router.push({
+        path: '/collection/couponDetail',
+        query: {
+          couponId,
+        }
+      });
+    },
+    payTheBill() {
+      console.log('TODO 买单');
+      this.$router.push({
+        path: '/collection/payTheBill',
+      });
+    },
   },
 }
 
@@ -165,6 +300,335 @@ export default {
   min-height: 100%;
   box-sizing: border-box;
   background: #F8F8FC;
+}
+
+.section-5 {
+  margin-top: 20px;
+  width: 100%;
+  background: #FFF;
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-top: 35px;
+  padding-right: 30px;
+  .list {
+    width: 100%;
+    background: #FFF;
+    .cell {
+      width: 100%;
+      height: 160px;
+      box-sizing: border-box;
+      padding-top: 30px;
+      padding-left: 120px;
+      padding-right: 160px;
+      position: relative;
+      border-bottom: 1px solid #E2E2E2;
+      /*no*/
+      .buy-btn {
+        position: absolute;
+        top: 30px;
+        right: 0;
+        width: 140px;
+        height: 50px;
+        box-sizing: border-box;
+        border: 3px solid #F05720;
+        border-radius: 34px;
+        font-family: PingFangSC-Semibold;
+        font-size: 28px;
+        color: #F05720;
+        letter-spacing: 0;
+        text-align: center;
+        line-height: 44px;
+      }
+      .buy-num {
+        position: absolute;
+        top: 96px;
+        right: 0;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #818B8F;
+        letter-spacing: 0;
+        text-align: right;
+        line-height: 31.2px;
+      }
+      &.no-border {
+        border: none;
+      }
+      .coupon-img {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .cell-content {
+        width: 100%;
+        .cell-shop-name {
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-family: PingFangSC-Regular;
+          font-size: 32px;
+          color: #2E3141;
+          letter-spacing: 0;
+          line-height: 41.6px;
+        }
+        .price {
+          margin-top: 19.4px;
+          width: 100%;
+          height: 36.4px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-family: PingFangSC-Semibold;
+          font-size: 32px;
+          color: #F05720;
+          letter-spacing: 0;
+          line-height: 36.4px;
+          .buy-price {}
+          .coupon-price {
+            font-family: PingFangSC-Regular;
+            font-size: 28px;
+            color: #2E3141;
+            letter-spacing: 0;
+            line-height: 36.4px;
+            text-decoration: line-through;
+          }
+          .discount {
+            display: inline-block;
+            height: 36.4px;
+            font-family: PingFangSC-Regular;
+            font-size: 22px;
+            color: #FFFFFF;
+            letter-spacing: -0.53px;
+            text-align: center;
+            line-height: 36.4px;
+            background: #F05720;
+            padding-left: 5px;
+            padding-right: 5px;
+          }
+        }
+      }
+    }
+  }
+  .blank {
+    width: 100%;
+    height: 19px;
+    background: #FFF;
+  }
+  .header {
+    width: 100%;
+    padding-left: 60px;
+    height: 40px;
+    box-sizing: border-box;
+    position: relative;
+    .icon-coupon {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_store_cheap.png');
+    }
+    .title {
+      display: inline-block;
+      float: left;
+
+      font-family: PingFangSC-Medium;
+      font-size: 32px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 40px;
+    }
+    .desc {
+      display: inline-block;
+      float: left;
+      margin-left: 10px;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #F05720;
+      letter-spacing: 0;
+      line-height: 40px;
+    }
+  }
+}
+
+.vip-card {
+  margin: 30px auto 10px auto;
+  width: 690px;
+  height: 320px;
+  box-sizing: border-box;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url('../../assets/images/icon_store_vip_bg.png');
+  .header {
+    width: 100%;
+    height: 47px;
+    position: relative;
+    .level {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 47px;
+      font-family: PingFangSC-Semibold;
+      font-size: 36px;
+      color: #ECD9B7;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 47px;
+    }
+    .shop-name {
+      width: 100%;
+      height: 47px;
+      box-sizing: border-box;
+      padding-left: 100px;
+      font-family: PingFangSC-Regular;
+      font-size: 32px;
+      color: #ECD9B7;
+      letter-spacing: 0;
+      text-align: right;
+      line-height: 47px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .cell-1 {
+    margin-top: 30px;
+  }
+  .cell-2 {
+    margin-top: 20.8px;
+  }
+  .title {
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #ECD9B7;
+    letter-spacing: 0;
+    line-height: 36.4px;
+  }
+  .desc {
+    margin-top: 10px;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #AEA189;
+    letter-spacing: 0;
+    line-height: 31.2px;
+  }
+}
+
+.section-4 {
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+  background: #FFF;
+  margin-top: 20px;
+  position: relative;
+  .btn-desc {
+    position: absolute;
+    width: 140px;
+    height: 31.2px;
+    right: 30px;
+    top: 108px;
+    font-family: PingFangSC-Regular;
+    font-size: 24px;
+    color: #818B8F;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 31.2px;
+  }
+  .btn {
+    width: 140px;
+    height: 68px;
+    background: #F05720;
+    border-radius: 34px;
+    font-family: PingFangSC-Semibold;
+    font-size: 32px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 68px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
+  .icon-buy {
+    position: absolute;
+    top: 34px;
+    left: 30px;
+    width: 40px;
+    height: 40px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/images/ic_store_buy.png');
+  }
+  .icon-egg {
+    position: absolute;
+    top: 34px;
+    left: 30px;
+    width: 40px;
+    height: 40px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/images/ic_store_egg.png');
+  }
+  .section-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 60px;
+    padding-right: 170px;
+    .cell-header {
+      width: 100%;
+      height: 41.6px;
+      .title {
+        float: left;
+        display: inline-block;
+        font-family: PingFangSC-Medium;
+        font-size: 32px;
+        color: #2E3141;
+        letter-spacing: 0;
+        line-height: 41.6px;
+        .orange {
+          color: #F05720;
+        }
+      }
+      .desc {
+        margin-left: 10px;
+        float: left;
+        display: inline-block;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #F05720;
+        letter-spacing: 0;
+        line-height: 41.6px;
+      }
+    }
+    .cell-info {
+      width: 100%;
+      margin-top: 22.4px;
+      .desc {
+        margin-top: 10.8px;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #818B8F;
+        letter-spacing: 0;
+        line-height: 31.2px;
+        &.no-top {
+          margin-top: 0;
+        }
+      }
+    }
+  }
 }
 
 .section-3 {

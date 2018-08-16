@@ -71,15 +71,15 @@
     </div>
     <div class="section-6" v-show="list.length > 0">
       <div class="box" v-for="(item, index) in list">
-        <div class="cell">
+        <div class="cell" @click="toShopDetail(item.shopId)">
           <p class="shopName clearfix">{{item.shopName}}</p>
           <span class="distance">{{item.distance | formatDistance}}</span>
         </div>
-        <div class="cell cell-2">
+        <div class="cell cell-2" @click="toShopDetail(item.shopId)">
           <p class="address">{{item.shopAddress}}</p>
         </div>
         <div class="line"></div>
-        <div class="tel" @click="makePhone(item.shopTel)"></div>
+        <div class="tel" @click.stop="makePhone(item.shopTel)"></div>
         <div class="line-bottom"></div>
       </div>
     </div>
@@ -147,6 +147,14 @@ export default {
 
       });
     },
+    toShopDetail(shopId){
+      this.$router.push({
+        path: '/collection/shopDetail',
+        query: {
+          shopId,
+        },
+      });
+    },
     getDetail(couponId) {
       api.collection.merCouponDetail({
         couponId,
@@ -173,7 +181,7 @@ export default {
           couponId: this.couponId,
         }
       })
-    }
+    },
   }
 }
 

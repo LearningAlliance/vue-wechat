@@ -9,6 +9,7 @@ import MapSearch from '../pages/collection/MapSearch'
 import ShopDetail from '../pages/collection/ShopDetail'
 import CouponDetail from '../pages/collection/CouponDetail'
 import SaveCouponOrder from '../pages/collection/SaveCouponOrder'
+import ShopVipInfo from '../pages/collection/ShopVipInfo'
 
 export default [{
 	path: '/collection',
@@ -102,4 +103,11 @@ export default [{
 		subTitle: '提交订单',
 	},
 	component: SaveCouponOrder,
+}, {
+	path: '/collection/shopVipInfo',
+	name: 'shopVipInfo',
+	meta: {
+		title: 'VIP'
+	},
+	component: ShopVipInfo,
 }, ]

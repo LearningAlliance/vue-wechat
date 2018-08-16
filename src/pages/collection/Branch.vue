@@ -4,7 +4,7 @@
     <div class="blank"></div>
     <div class="section">
       <div class="box" v-for="(item, index) in list">
-        <div class="cell">
+        <div class="cell" @click="toShopDetail(item.shopId)">
           <p class="shopName clearfix">{{item.shopName}}</p>
           <span class="distance">{{item.distance | formatDistance}}</span>
         </div>
@@ -12,7 +12,7 @@
           <p class="address">{{item.shopAddress}}</p>
         </div>
         <div class="line"></div>
-        <div class="tel" @click="makePhone(item.shopTel)"></div>
+        <div class="tel" @click.stop="makePhone(item.shopTel)"></div>
         <div class="line-bottom" v-show="list.length - 1 != index"></div>
       </div>
     </div>
@@ -73,6 +73,14 @@ export default {
     },
     makePhone(tel) {
       location.href = `tel:${tel}`;
+    },
+    toShopDetail(shopId) {
+      this.$router.push({
+        path: '/collection/shopDetail',
+        query: {
+          shopId,
+        },
+      });
     },
   }
 }

@@ -51,7 +51,6 @@ export default new Router({
     }
   ],
   scrollBehavior(to, from, savedPosition) {
-    console.log(to.meta.keepAlive, from.meta.keepAlive);
     if (savedPosition) {
       return savedPosition;
     } else {

@@ -55,3 +55,21 @@ export const merShop = (params) => post('/userServer/business/MerShopAction', {
 	action: 'merShop',
 	data: JSON.stringify(params),
 });
+
+// 查询商家彩蛋数量
+export const qrySysZoneCount = (params) => post('/userServer/business/SysZoneAction', {
+	action: 'qrySysZoneCount',
+	data: JSON.stringify(params),
+});
+
+// 商铺会员等级信息
+export const qryMerLevel = (params) => post('/userServer/business/MerShopAction', {
+	action: 'qryMerLevel',
+	data: JSON.stringify(params),
+});
+
+// 根据类型查询店铺优惠劵列表
+export const qryShopCoupon = (params) => post('/userServer/business/MerCouponAction', {
+	action: 'qryShopCoupon',
+	data: JSON.stringify(params),
+});
