@@ -374,7 +374,7 @@ a.active {
     box-sizing: border-box;
     background: #F8F8FC;
     &.tabar {
-      padding-bottom: 120px;
+      padding-bottom: 100px;
     }
     &.topbar {
       padding-top: 100px;

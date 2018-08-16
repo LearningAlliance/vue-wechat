@@ -63,5 +63,5 @@ export default new Router({
         y: to.meta.savedPosition || 0,
       }
     }
-  }
+  },
 })
