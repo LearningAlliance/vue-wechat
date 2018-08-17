@@ -7,6 +7,7 @@
       <span class="top-bar-desc">已特别关注</span>
       <i class="icon-attention"></i>
     </div>
+    <div class="height-100"></div>
     <div class="section-1">
       <div class="cell">
         <div class="cell-left">
@@ -18,7 +19,7 @@
             <span class="score">综合{{shopInfo.score}}分</span>
           </div>
         </div>
-        <div class="collect-btn">收藏该店</div>
+        <div class="collect-btn" @click="collectShop">收藏该店</div>
       </div>
       <div class="other-info clearfix">
         <div class="avg-consume" v-show="!!shopInfo.avgConsume">人均消费 {{shopInfo.avgConsume}}元</div>
@@ -79,7 +80,7 @@
           <div class="desc no-top">在该店内有效范围内开启</div>
         </div>
       </div>
-      <div class="btn">开蛋</div>
+      <div class="btn" @click="openEgg">开蛋</div>
       <div class="btn-desc">打开有惊喜</div>
     </div>
     <div class="vip-card" @click="toShopVipInfo" v-if="!!vipInfo.merLevelConfig.levelName">
@@ -121,6 +122,45 @@
         </div>
       </div>
     </div>
+    <div class="section-6" v-if="commentList.length > 0">
+      <div class="section-6-title">评论</div>
+      <div class="comment-list" v-for="(item, index) in commentList" :key="'comment' + index">
+        <!-- <div :class="['cell', {'no-border': commentList.length - 1 == index}]"> -->
+        <div class="cell">
+          <div class="avatar">
+            <img src="" />
+          </div>
+          <div class="header">
+            <div class="user-nick">{{item.userNick}}</div>
+            <div class="avg-consume">消费{{item.avgConsume | formatPrice}}</div>
+          </div>
+          <div class="create-date">{{item.createDate}}</div>
+          <div class="comment-content">{{item.commentContent}}</div>
+          <div class="comment-imgs clearfix" v-if="item.commentImgsList.length > 0">
+            <div :class="['img', {'no-right': index2 % 3 == 2}]" v-for="(item2, index2) in item.commentImgsList" :key="'comment' + index + '_img' + index2" v-if="index2 < 3">
+              <img :src="item2" />
+            </div>
+          </div>
+          <div class="reply-box clearfix">
+            <div class="reply-count">{{item.replyCount}}</div>
+            <i class="icon-reply"></i>
+          </div>
+        </div>
+      </div>
+      <div class="comment-more" @click="toCommentList">
+        <div class="more-text">查看全部({{commentCount}})</div>
+      </div>
+    </div>
+    <div class="section-7"></div>
+    <div class="footer clearfix">
+      <div class="center-line"></div>
+      <div class="footer-left" @click="toShare">
+        <div class="footer-btn share">分享推荐</div>
+      </div>
+      <div class="footer-right" @click="putEgg">
+        <div class="footer-btn put-egg">放置彩蛋</div>
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -140,6 +180,8 @@ export default {
         nextmerLevelConfig: "",
       },
       couponList: [],
+      commentList: [],
+      commentCount: 0, // 店铺评论总数
     }
   },
   computed: {
@@ -168,6 +210,7 @@ export default {
     // this.qrySysZoneCount();
     this.qryMerLevel();
     this.qryShopCoupon();
+    this.qryShopComments();
   },
   methods: {
     // 查询商家详情
@@ -219,7 +262,29 @@ export default {
         couponType: '3',
       }).then((res) => {
         this.couponList = res.data;
-        console.log(res);
+      }).catch((err) => {});
+    },
+    // 店铺评论和回复列表
+    qryShopComments() {
+      api.collection.qryShopComments({
+        pageNum: 1,
+        pageRow: 10,
+        shopId: this.shopId,
+        parentCommentId: -1,
+      }).then((res) => {
+        let list = res.data[0];
+        this.commentCount = list.commentCount;
+        if (list.commentCount > 0) {
+       	  let comment = list.comment;
+          comment.forEach((obj) => {
+            if (!!obj.commentImgs) {
+              obj.commentImgsList = obj.commentImgs.split(',');
+            } else {
+              obj.commentImgsList = [];
+            }
+          })
+          this.commentList = comment;
+        }
       }).catch((err) => {});
     },
     openLocation() {
@@ -289,6 +354,21 @@ export default {
         path: '/collection/payTheBill',
       });
     },
+    toShare(){
+    	_.alert('分享推荐');
+    },
+    putEgg(){
+    	_.alert('放置菜单');
+    },
+    toCommentList(){
+    	_.alert('跳转到评论列表')
+    },
+    openEgg(){
+    	_.alert('开蛋');
+    },
+    collectShop(){
+    	_.alert('收藏该店');
+    },
   },
 }
 
@@ -300,6 +380,243 @@ export default {
   min-height: 100%;
   box-sizing: border-box;
   background: #F8F8FC;
+}
+
+.footer {
+  position: fixed;
+  z-index: 99;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: #FFF;
+  border-top: 1px solid #F8F8FC;
+  /*no*/
+  .center-line {
+    position: absolute;
+    width: 2px;
+    height: 50px;
+    background: #C4CACD;
+    top: 50%;
+    left: 50%;
+    margin-top: -25px;
+    margin-left: -1px;
+  }
+  .footer-left,
+  .footer-right {
+    width: 50%;
+    height: 100%;
+    float: left;
+    display: inline-block;
+    text-align: center;
+    .footer-btn {
+      position: relative;
+      margin: 0 auto;
+      display: inline-block;
+      font-family: PingFangSC-Regular;
+      font-size: 32px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 120px;
+      text-align: center;
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        top: 35px;
+        left: -70px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        position: absolute;
+        top: 30px;
+        right: -60px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      &.share::before {
+        background-image: url('../../assets/images/ic_store_share.png');
+      }
+      &.share::after {
+        background-image: url('../../assets/images/img_youli.png');
+      }
+      &.put-egg::before {
+        background-image: url('../../assets/images/ic_store_setegg.png');
+      }
+      &.put-egg::after {
+        background-image: url('../../assets/images/img_cool.png');
+      }
+    }
+  }
+}
+
+.section-7 {
+  width: 100%;
+  height: 140px;
+}
+
+.section-6 {
+  width: 100%;
+  padding: 30px 30px 0 30px;
+  box-sizing: border-box;
+  margin-top: 20px;
+  background: #fff;
+  .comment-more {
+    width: 100%;
+    text-align: center;
+    .more-text {
+      display: inline-block;
+      margin: 0 auto;
+      position: relative;
+      height: 88px;
+      font-family: PingFangSC-Regular;
+      font-size: 32px;
+      color: #2E3141;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 88px;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        top: 19px;
+        right: -50px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/images/ic_back_right@2x.png');
+      }
+    }
+  }
+  .section-6-title {
+    font-family: PingFangSC-Medium;
+    font-size: 32px;
+    color: #2E3141;
+    letter-spacing: 0;
+    line-height: 41.6px;
+  }
+  .cell {
+    margin-top: 30px;
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: 100px;
+    padding-bottom: 30px;
+    position: relative;
+    border-bottom: 1px solid #E2E2E2;
+    /*no*/
+    .reply-box {
+      width: 100%;
+      margin-top: 30px;
+      height: 40px;
+      .reply-count {
+        display: inline-block;
+        float: right;
+        height: 40px;
+        font-family: PingFangSC-Regular;
+        font-size: 28px;
+        color: #2E3141;
+        letter-spacing: 0;
+        text-align: right;
+        line-height: 40px;
+        margin-left: 12px;
+      }
+      .icon-reply {
+        display: inline-block;
+        float: right;
+        width: 40px;
+        height: 40px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/images/icon_reply_count.png');
+      }
+    }
+    &.no-border {
+      border: none;
+    }
+    .comment-imgs {
+      margin-top: 30px;
+      .img {
+        display: inline-block;
+        margin-right: 25px;
+        float: left;
+        width: 180px;
+        height: 180px;
+        &.no-right {
+          margin-right: 0;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .comment-content {
+      margin-top: 21px;
+      width: 100%;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #2E3141;
+      letter-spacing: 0;
+      text-align: justify;
+      line-height: 36px;
+    }
+    .avatar {
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .create-date {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #818B8F;
+      letter-spacing: 0;
+      text-align: right;
+      line-height: 31.2px;
+    }
+    .header {
+      width: 100%;
+      box-sizing: border-box;
+      padding-right: 140px;
+      .user-nick {
+        font-family: PingFangSC-Regular;
+        font-size: 32px;
+        color: #2E3141;
+        letter-spacing: 0;
+        line-height: 41.6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .avg-consume {
+        margin-top: 7.4px;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        color: #818B8F;
+        letter-spacing: 0;
+        line-height: 31.2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
 }
 
 .section-5 {
@@ -853,6 +1170,12 @@ export default {
   }
 }
 
+.height-100{
+	width: 100%;
+	height: 100px;
+	background: #FFF;
+}
+
 .top-bar {
   width: 100%;
   height: 100px;
@@ -860,7 +1183,10 @@ export default {
   box-sizing: border-box;
   padding: 25px 20px 25px 31px;
   display: block;
-  position: relative;
+  position: fixed;
+  z-index: 99;
+  top: 0;
+  left: 0;
   .icon {
     display: inline-block;
     float: left;

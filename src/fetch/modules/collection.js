@@ -73,3 +73,9 @@ export const qryShopCoupon = (params) => post('/userServer/business/MerCouponAct
 	action: 'qryShopCoupon',
 	data: JSON.stringify(params),
 });
+
+//店铺评论和回复列表
+export const qryShopComments = (params) => post('/userServer/business/ShopCommentAction', {
+	action: 'qryShopComments',
+	data: JSON.stringify(params),
+});
