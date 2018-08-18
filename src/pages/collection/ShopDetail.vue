@@ -181,7 +181,7 @@ export default {
       },
       couponList: [],
       commentList: [],
-      commentCount: 0, // 店铺评论总数
+      commentCount: 0, //  店铺评论总数
     }
   },
   computed: {
