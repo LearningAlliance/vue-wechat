@@ -930,8 +930,8 @@ export default {
       &.reverse {
         transition: all ease 1s;
         -webkit-transition: all ease 1s;
-        transform: perspective(400px) rotateY(180deg);
-        -webkit-transform: perspective(400px) rotateY(180deg);
+        transform: perspective(0px) rotateY(180deg);
+        -webkit-transform: perspective(0px) rotateY(180deg);
       }
       .reverse-side,
       .front-side {
