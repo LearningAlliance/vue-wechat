@@ -124,7 +124,7 @@
     </div>
     <div class="section-6" v-if="commentList.length > 0">
       <div class="section-6-title">评论</div>
-      <div class="comment-list" v-for="(item, index) in commentList" :key="'comment' + index">
+      <div class="comment-list" v-for="(item, index) in commentList" :key="'comment' + index" @click="toCommentDetail(item.commentId)">
         <!-- <div :class="['cell', {'no-border': commentList.length - 1 == index}]"> -->
         <div class="cell">
           <div class="avatar">
@@ -132,11 +132,11 @@
           </div>
           <div class="header">
             <div class="user-nick">{{item.userNick}}</div>
-            <div class="avg-consume">消费{{item.avgConsume | formatPrice}}</div>
+            <div class="avg-consume">消费{{item.avgConsume}}元</div>
           </div>
           <div class="create-date">{{item.createDate}}</div>
           <div class="comment-content">{{item.commentContent}}</div>
-          <div class="comment-imgs clearfix" v-if="item.commentImgsList.length > 0">
+          <div class="comment-imgs clearfix" v-if="item.hasOwnProperty('commentImgsList') && item.commentImgsList.length > 0">
             <div :class="['img', {'no-right': index2 % 3 == 2}]" v-for="(item2, index2) in item.commentImgsList" :key="'comment' + index + '_img' + index2" v-if="index2 < 3">
               <img :src="item2" />
             </div>
@@ -273,9 +273,9 @@ export default {
         parentCommentId: -1,
       }).then((res) => {
         let list = res.data[0];
-        this.commentCount = list.commentCount;
+        this.commentCount = list.commentCount || 0;
         if (list.commentCount > 0) {
-       	  let comment = list.comment;
+          let comment = list.comment;
           comment.forEach((obj) => {
             if (!!obj.commentImgs) {
               obj.commentImgsList = obj.commentImgs.split(',');
@@ -354,20 +354,34 @@ export default {
         path: '/collection/payTheBill',
       });
     },
-    toShare(){
-    	_.alert('分享推荐');
+    toShare() {
+      _.alert('分享推荐');
     },
-    putEgg(){
-    	_.alert('放置菜单');
+    putEgg() {
+      _.alert('放置菜单');
     },
-    toCommentList(){
-    	_.alert('跳转到评论列表')
+    toCommentList() {
+      this.$router.push({
+        path: '/collection/commentList',
+        query: {
+          shopId: this.shopId,
+        },
+      });
     },
-    openEgg(){
-    	_.alert('开蛋');
+    openEgg() {
+      _.alert('开蛋');
     },
-    collectShop(){
-    	_.alert('收藏该店');
+    collectShop() {
+      _.alert('收藏该店');
+    },
+    toCommentDetail(commentId){
+      this.$router.push({
+        path: '/collection/commentDetail',
+        query: {
+          shopId: this.shopId,
+          commentId,
+        }
+      })
     },
   },
 }
@@ -574,6 +588,8 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
+      border-radius: 80px;
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
@@ -1170,10 +1186,10 @@ export default {
   }
 }
 
-.height-100{
-	width: 100%;
-	height: 100px;
-	background: #FFF;
+.height-100 {
+  width: 100%;
+  height: 100px;
+  background: #FFF;
 }
 
 .top-bar {

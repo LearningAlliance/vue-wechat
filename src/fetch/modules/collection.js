@@ -79,3 +79,9 @@ export const qryShopComments = (params) => post('/userServer/business/ShopCommen
 	action: 'qryShopComments',
 	data: JSON.stringify(params),
 });
+
+// 店铺的查询评论详情（不带token）
+export const qryShopCommentById = (params) => post('/userServer/business/ShopCommentAction', {
+	action: 'qryShopCommentById',
+	data: JSON.stringify(params),
+});

@@ -10,6 +10,8 @@ import ShopDetail from '../pages/collection/ShopDetail'
 import CouponDetail from '../pages/collection/CouponDetail'
 import SaveCouponOrder from '../pages/collection/SaveCouponOrder'
 import ShopVipInfo from '../pages/collection/ShopVipInfo'
+import CommentList from '../pages/collection/CommentList'
+import CommentDetail from '../pages/collection/CommentDetail'
 
 export default [{
 	path: '/collection',
@@ -82,6 +84,7 @@ export default [{
 		wxConfig: true,
 		jsApiList: ['getLocation', 'openLocation'],
 		getLocation: true,
+		keepAlive: true,
 	},
 	component: ShopDetail,
 }, {
@@ -110,4 +113,20 @@ export default [{
 		title: 'VIP'
 	},
 	component: ShopVipInfo,
+}, {
+	path: '/collection/commentList',
+	name: 'commentList',
+	meta: {
+		title: '评价',
+		subTitle: '评价',
+	},
+	component: CommentList,
+}, {
+	path: '/collection/commentDetail',
+	name: 'commentDetail',
+	meta: {
+		title: '评价详情',
+		subTitle: '评价详情',
+	},
+	component: CommentDetail,
 }, ]
