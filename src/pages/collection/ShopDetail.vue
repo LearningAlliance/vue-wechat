@@ -128,7 +128,7 @@
         <!-- <div :class="['cell', {'no-border': commentList.length - 1 == index}]"> -->
         <div class="cell">
           <div class="avatar">
-            <img src="" />
+            <img :src="item.userHead || require('../../assets/images/icon_user_default.png')" />
           </div>
           <div class="header">
             <div class="user-nick">{{item.userNick}}</div>

@@ -12,6 +12,7 @@ import SaveCouponOrder from '../pages/collection/SaveCouponOrder'
 import ShopVipInfo from '../pages/collection/ShopVipInfo'
 import CommentList from '../pages/collection/CommentList'
 import CommentDetail from '../pages/collection/CommentDetail'
+import Comment from '../pages/collection/Comment'
 
 export default [{
 	path: '/collection',
@@ -129,4 +130,12 @@ export default [{
 		subTitle: '评价详情',
 	},
 	component: CommentDetail,
+}, {
+	path: '/collection/comment',
+	name: 'comment',
+	meta: {
+		title: '评价',
+		subTitle: '评论',
+	},
+	component: Comment,
 }, ]

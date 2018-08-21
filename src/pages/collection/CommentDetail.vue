@@ -5,13 +5,13 @@
         <!-- <div :class="['cell', {'no-border': commentList.length - 1 == index}]"> -->
         <div class="cell">
           <div class="avatar">
-            <img src="" />
+            <img :src="item.userHead || require('../../assets/images/icon_user_default.png')" />
           </div>
           <div class="header">
             <div class="user-nick">{{item.userNick}}</div>
             <div class="avg-consume">消费{{item.avgConsume}}元</div>
           </div>
-          <div class="create-date">{{item.createDate}}</div>
+          <div class="create-date">{{item.createDate.slice(0, 10)}}</div>
           <div class="comment-content">{{item.commentContent}}</div>
           <div class="comment-imgs clearfix" v-if="item.hasOwnProperty('commentImgsList') && item.commentImgsList.length > 0">
             <div :class="['img', {'no-right': index2 % 3 == 2}]" v-for="(item2, index2) in item.commentImgsList" :key="'comment' + index + '_img' + index2" v-if="index2 < 3">
@@ -26,13 +26,23 @@
       </div>
       <div class="sub-title">评价 <span class="text-num">({{commentCount}})</span></div>
     </div>
-    <div class="section" style="height: 200%;">
-      <div class="cell">11</div>
+    <div class="section">
+      <div class="cell" v-for="(item, index) in subCommnentList" :key="'subCommnent' + index">
+        <div class="create-time">{{item.createDate.slice(0, 10)}}</div>
+        <div class="avatar">
+          <img :src="item.userHead || require('../../assets/images/icon_user_default.png')" />
+        </div>
+        <div class="header">{{item.userNick}}</div>
+        <div class="comment-content">{{item.commentContent}}</div>
+        <div class="line-box" v-if="subCommnentList.length - 1 != index">
+          <div class="line"></div>
+        </div>
+      </div>
     </div>
     <div class="no-more" v-show="allLoaded">没有更多了</div>
     <div class="blank"></div>
     <div class="footer">
-      <div class="btn">评论</div>
+      <div class="btn" @click="toComment">评论</div>
     </div>
   </div>
 </template>
@@ -83,11 +93,11 @@ export default {
         }
       }).then((res) => {
         let list = res.data[0];
-        this.commentCount = list.commentCount || 0; 
+        this.commentCount = list.commentCount || 0;
         if (list.commentCount > 0 && list.hasOwnProperty('comment')) {
           let comment = list.comment;
-          this.allLoaded(comment.length > 0);
-          this.subCommnentList = this.searchCondition.pageNum == 1 ? comment : this.subCommnentList.concat(comment);
+          this.allLoaded = comment.length < this.searchCondition.pageRow;
+          this.subCommnentList = (this.searchCondition.pageNum == 1 ? comment : this.subCommnentList.concat(comment));
         } else {
           this.allLoaded = true;
         }
@@ -99,10 +109,21 @@ export default {
       }
     },
     loadMore() {
+      if (this.allLoaded) {
+        return;
+      }
       this.searchCondition.pageNum = parseInt(this.searchCondition.pageNum) + 1;
       this.$nextTick(() => {
-      	this.qryShopComments();
+        this.qryShopComments();
       });
+    },
+    toComment(){
+    	this.$router.push({
+    		path: '/collection/comment',
+    		query: {
+    			commentId: this.commentId,
+    		},
+    	});
     },
   },
 }
@@ -124,18 +145,74 @@ export default {
   padding-left: 30px;
   padding-right: 30px;
   .cell {
+    position: relative;
     width: 100%;
+    min-height: 140px;
     box-sizing: border-box;
     padding-top: 30px;
     padding-bottom: 30px;
     padding-left: 100px;
+    .line-box {
+      position: absolute;
+      bottom: 1px;
+      /*no*/
+      right: 0;
+      width: 100%;
+      height: 0;
+      box-sizing: border-box;
+      padding-left: 100px;
+      .line {
+        border-bottom: 1px solid #E2E2E2;
+        /*no*/
+      }
+    }
+    .comment-content {
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 31.2px;
+    }
+    .create-time {
+      position: absolute;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #818B8F;
+      letter-spacing: 0;
+      text-align: right;
+      line-height: 31.2px;
+      top: 30px;
+      right: 0;
+    }
+    .header {
+      width: 100%;
+      height: 37px;
+      box-sizing: border-box;
+      padding-right: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .avatar {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 30px;
+      left: 0;
+      border-radius: 80px;
+      overflow: hidden;
+      img{
+      	display: block;
+      	width: 100%;
+      	height: 100%;
+      }
+    }
   }
 }
 
 .blank {
   width: 100%;
   height: 120px;
-  background: #FFF;
 }
 
 .no-more {
