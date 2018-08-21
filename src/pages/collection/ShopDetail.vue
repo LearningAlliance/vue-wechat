@@ -101,7 +101,7 @@
       <div class="header clearfix">
         <i class="icon-coupon"></i>
         <div class="title">优惠</div>
-        <div class="desc">返{{shopInfo.pensionRate * 100}}%养老保障金</div>
+        <div class="desc" v-if="!!shopInfo.pensionRate">返{{shopInfo.pensionRate * 100}}%养老保障金</div>
       </div>
       <div class="blank"></div>
       <div class="list">
