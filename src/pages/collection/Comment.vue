@@ -4,20 +4,48 @@
       <textarea placeholder="想说的就写下来吧～ @某某" class="remark" rows="6" maxlength="140" v-model="remark"></textarea>
     </div>
     <div class="num-box">{{num}}/140</div>
-    <div class="btn">发布</div>
+    <div :class="['btn', {'can-submit': num > 0}]" @click="comment">发布</div>
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
       remark: '',
+      commentId: null,
     }
+  },
+  mounted(){
+    let {commentId} = this.$route.query;
+    this.commentId = commentId;
   },
   computed: {
     num() {
       return this.remark.length;
     }
+  },
+  methods: {
+    comment(){
+      if(this.num <= 0){
+        _.alert('请写下您的评论~');
+        return;
+      }else if(this.num >140){
+        _.alert('最多可以输入140字，请检查');
+        return;
+      }
+      this.doComment();
+    },
+    doComment(){
+      api.collection.saveShopComment({
+        id: this.commentId,
+        remark: this.remark,
+      }).then((res) => {
+        _.alert('发布评论成功~');
+        history.go(-1);
+      }).catch((err) => {});
+    },
   }
 }
 
@@ -68,9 +96,12 @@ export default {
   text-align: center;
   line-height: 88px;
   font-family: PingFangSC-Semibold;
-font-size: 36px;
-color: #FFFFFF;
-letter-spacing: 0;
+  font-size: 36px;
+  color: #FFFFFF;
+  letter-spacing: 0;
+  &.can-submit {
+    background: #F05720;
+  }
 }
 
 </style>

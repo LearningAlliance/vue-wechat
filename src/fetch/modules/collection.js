@@ -85,3 +85,9 @@ export const qryShopCommentById = (params) => post('/userServer/business/ShopCom
 	action: 'qryShopCommentById',
 	data: JSON.stringify(params),
 });
+
+// 保存评论
+export const saveShopComment = (params) => post('/userServer/business/ShopCommentAction', {
+	action: 'saveShopComment',
+	data: JSON.stringify(params),
+});
