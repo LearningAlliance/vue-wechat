@@ -63,7 +63,7 @@
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
-                <span class="discount">{{(item.buyPrice/item.c ouponPrice * 10).toFixed(1)}}折扣</span>
+                <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
               </div>
               <div class="buy-btn" @click.stop="toBuy(item.couponId)">购买</div>
             </div>
