@@ -69,7 +69,7 @@ export default {
     getAccountSafeGuard(){
       api.user.getAccountSafeGuard().then((res) => {
         let item = res.data[0];
-        this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
+        this.accountSafeGuard = item.amount || 0;
       }).catch((err) => {});
     },
     getAccountCredits(){
