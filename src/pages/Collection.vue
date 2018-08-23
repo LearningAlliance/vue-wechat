@@ -63,7 +63,7 @@
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
-                <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
+                <span class="discount">{{(item.buyPrice/item.c ouponPrice * 10).toFixed(1)}}折扣</span>
               </div>
               <div class="buy-btn" @click.stop="toBuy(item.couponId)">购买</div>
             </div>
@@ -80,7 +80,7 @@
             <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div>
             <div class="cell-header">
               <div class="cell-logo">
-                <img class="cell-logo-img" :src="item.shopLogo" />
+                <img class="cell-logo-img" :src="item.shopLogo || require('../assets/images/icon_shop_default.png')" />
               </div>
               <div class="cell-content">
                 <div class="cell-shop-name">{{item.shopName}}</div>
@@ -136,7 +136,7 @@
             <!-- <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div> -->
             <div class="cell-header">
               <div class="cell-logo">
-                <img class="cell-logo-img" :src="item.mainImgUrl" />
+                <img class="cell-logo-img" :src="item.mainImgUrl || require('../assets/images/icon_shop_default.png')" />
               </div>
               <div class="cell-content">
                 <div class="cell-shop-name">{{item.shopName}}</div>
