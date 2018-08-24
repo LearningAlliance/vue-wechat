@@ -11,7 +11,9 @@
       </div>
       <div class="cell clearfix">
         <div class="cell-left">数量</div>
-        <div class="cell-right">{{num}}</div>
+        <div class="cell-right clearfix">
+          <i class="icon-num icon-plus" @click="plus"></i><span class="num-text">{{num}}</span><i class="icon-num icon-minus" @click="minus"></i>
+        </div>
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -24,13 +26,16 @@
     <div class="section margin-top-20">
       <div class="cell">
         <div class="cell-left">VIP折扣</div>
-        <div class="cell-right"></div>
+        <div class="cell-right orange">{{totalDiscount | formatPrice}}</div>
       </div>
     </div>
     <div class="section margin-top-20">
       <div class="cell">
         <div class="cell-left">手机号码</div>
-        <div class="cell-right"></div>
+        <!-- <div class="cell-right">{{userInfo.userPhone}}</div> -->
+        <div class="cell-right">
+          <input type="tel" class="input" v-model="userInfo.userPhone" maxlength="11" />
+        </div>
       </div>
     </div>
   </div>
@@ -38,16 +43,31 @@
 <script type="text/javascript">
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
       couponInfo: {},
-      num: 1,
+      num: 0,
     }
   },
+  created() {
+    api.user.getUserInfo().then((res) => {
+      let userInfo = res.data[0];
+      this.$store.dispatch('setUserInfo', userInfo);
+    }).catch((err) => {
+      console.log(err);
+    });
+  },
   computed: {
-    couponTotalPrice() {
+    ...mapGetters([
+      'userInfo',
+    ]),
+    couponTotalPrice() { // 原价的总和
       return this.num * this.couponInfo.couponPrice;
+    },
+    totalDiscount() {
+      return (this.couponInfo.buyPrice - this.couponInfo.couponPrice) * this.num;
     }
   },
   mounted() {
@@ -61,8 +81,28 @@ export default {
         couponId,
       }).then((res) => {
         this.couponInfo = res.data[0];
+        if(this.couponInfo.surplusNum == 0){
+          this.num = 0;
+          _.alert('已售完');
+        }else{
+          this.num = 1;
+        }
       }).catch((err) => {});
     },
+    plus(){
+      if(this.num < this.couponInfo.surplusNum){
+        this.num++;
+      }else{
+        _.alert('没有更多了~');
+      }
+    },
+    minus(){
+      if(this.num >= 1){
+        this.num --;
+      }else {
+        _.alert('不能再更少了~');
+      }
+    }
   }
 }
 
@@ -123,6 +163,34 @@ export default {
       color: #2E3141;
       letter-spacing: 0;
       text-align: right;
+      .num-text {
+        display: inline-block;
+        float: right;
+        margin-left: 28px;
+        margin-right: 28px;
+      }
+      .icon-num {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        float: right;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        &.icon-minus {
+          background-image: url('../../assets/images/ic_minus.png');
+        }
+        &.icon-plus {
+          background-image: url('../../assets/images/ic_plus.png');
+        }
+      }
+      .input {
+        width: 100%;
+        height: 100%;
+        border: none;
+        font-size: 32px;
+        line-height: 50px;
+        text-align: right;
+      }
       &.orange {
         color: #F05720;
       }
