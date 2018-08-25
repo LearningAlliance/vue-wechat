@@ -38,6 +38,11 @@
         </div>
       </div>
     </div>
+    <div class="footer clearfix">
+      <div class="footer-label">合计</div>
+      <div class="footer-price">{{totalFee | formatPrice}}</div>
+      <div class="footer-btn" @click="pay">去支付</div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -49,6 +54,7 @@ export default {
     return {
       couponInfo: {},
       num: 0,
+      merId: null,
     }
   },
   created() {
@@ -68,11 +74,15 @@ export default {
     },
     totalDiscount() {
       return (this.couponInfo.buyPrice - this.couponInfo.couponPrice) * this.num;
-    }
+    },
+    totalFee(){
+    	return (this.couponInfo.buyPrice * this.num);
+    },
   },
   mounted() {
-    let { couponId } = this.$route.query;
+    let { couponId, merId } = this.$route.query;
     this.couponId = couponId;
+    this.merId = merId;
     this.getDetail(couponId);
   },
   methods: {
@@ -81,28 +91,42 @@ export default {
         couponId,
       }).then((res) => {
         this.couponInfo = res.data[0];
-        if(this.couponInfo.surplusNum == 0){
+        if (this.couponInfo.surplusNum == 0) {
           this.num = 0;
           _.alert('已售完');
-        }else{
+        } else {
           this.num = 1;
         }
       }).catch((err) => {});
     },
-    plus(){
-      if(this.num < this.couponInfo.surplusNum){
+    plus() {
+      if (this.num < this.couponInfo.surplusNum) {
         this.num++;
-      }else{
+      } else {
         _.alert('没有更多了~');
       }
     },
-    minus(){
-      if(this.num >= 1){
-        this.num --;
-      }else {
+    minus() {
+      if (this.num >= 1) {
+        this.num--;
+      } else {
         _.alert('不能再更少了~');
       }
-    }
+    },
+    pay(){
+    	if(this.num == 0){
+    		_.alert('数量不能为0');
+    		return;
+    	}
+    	api.collection.saveCouponOrder({
+    		buyNums: this.num,
+    		merId: this.merId,
+    		couponId: this.couponId,
+    	}).then((res) => {
+    		console.log(res);
+    		_.alert('购买成功， todo 支付逻辑');
+    	}).catch((err) => {});
+    },
   }
 }
 
@@ -195,6 +219,52 @@ export default {
         color: #F05720;
       }
     }
+  }
+}
+
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  background: #FFF;
+  .footer-label {
+    display: inline-block;
+    float: left;
+    font-family: PingFangSC-Medium;
+    font-size: 32px;
+    color: #818B8F;
+    margin-left: 30px;
+    letter-spacing: 0;
+    line-height: 120px;
+  }
+  .footer-price {
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    font-family: PingFangSC-Medium;
+    font-size: 48px;
+    color: #00001D;
+    letter-spacing: 0;
+    line-height: 120px;
+  }
+  .footer-btn {
+    display: inline-block;
+    float: right;
+    margin-top: 16px;
+    margin-right: 30px;
+    width: 270px;
+    height: 88px;
+    background: #F05720;
+    border-radius: 44px;
+    font-family: PingFangSC-Semibold;
+    font-size: 36px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 88px;
   }
 }
 

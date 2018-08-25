@@ -177,7 +177,7 @@ export default {
       this.$router.push({
         path: '/collection/saveCouponOrder',
         query: {
-          shopId: this.couponInfo.shopId,
+          merId: this.couponInfo.merId,
           couponId: this.couponId,
         }
       })

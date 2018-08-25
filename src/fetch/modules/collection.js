@@ -44,12 +44,6 @@ export const merCouponDetail = (params) => post('/userServer/business/MerCouponA
 	}
 });
 
-// 创建购买套餐订单
-export const saveCouponOrder = (params) => post('/userServer/business/OrderBaseInfoAction', {
-	action: 'merCouponDetail',
-	data: JSON.stringify(params),
-});
-
 // 获取店铺信息接口
 export const merShop = (params) => post('/userServer/business/MerShopAction', {
 	action: 'merShop',
@@ -89,5 +83,11 @@ export const qryShopCommentById = (params) => post('/userServer/business/ShopCom
 // 保存评论
 export const saveShopComment = (params) => post('/userServer/business/ShopCommentAction', {
 	action: 'saveShopComment',
+	data: JSON.stringify(params),
+});
+
+// 创建购买套餐订单
+export const saveCouponOrder = (params) => post('/userServer/business/OrderBaseInfoAction', {
+	action: 'saveCouponOrder',
 	data: JSON.stringify(params),
 });

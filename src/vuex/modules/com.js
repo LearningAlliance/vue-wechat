@@ -20,10 +20,10 @@ const state = {
     // longitude: 116.397428, // 经度
 
     // 杭州测试
-    // latitude: 30.31974,
-    // longitude: 120.1421,
-    latitude: null,
-    longitude: null,
+    latitude: 30.31974,
+    longitude: 120.1421,
+    // latitude: null,
+    // longitude: null,
     formattedAddress: null, // 用户详细地址
 }
 
