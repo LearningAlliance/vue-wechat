@@ -4,8 +4,8 @@
     <div class="top-bar clearfix">
       <i class="icon icon-back" @click="toBack"></i>
       <i class="icon icon-home" @click="toHome"></i>
-      <span class="top-bar-desc">已特别关注</span>
-      <i class="icon-attention"></i>
+      <span class="top-bar-desc">{{collectInfo.isFollow == '-1' ? '已特别关注' : '未特别关注'}}</span>
+      <i :class="['icon-attention', {'no': collectInfo.isFollow != '-1'}]"></i>
     </div>
     <div class="height-100"></div>
     <div class="section-1">
@@ -182,6 +182,7 @@ export default {
       couponList: [],
       commentList: [],
       commentCount: 0, //  店铺评论总数
+      collectInfo: {}, // 店铺收藏信息
     }
   },
   computed: {
@@ -211,6 +212,7 @@ export default {
     this.qryMerLevel();
     this.qryShopCoupon();
     this.qryShopComments();
+    this.qryUserCollect();
   },
   methods: {
     // 查询商家详情
@@ -285,6 +287,14 @@ export default {
           })
           this.commentList = comment;
         }
+      }).catch((err) => {});
+    },
+    // 根据用户id和店铺id查询收藏信息
+    qryUserCollect() {
+      api.collection.qryUserCollect({
+        shopId: this.shopId
+      }).then((res) => {
+        this.collectInfo = res.data[0];
       }).catch((err) => {});
     },
     openLocation() {
@@ -374,7 +384,7 @@ export default {
     collectShop() {
       _.alert('收藏该店');
     },
-    toCommentDetail(commentId){
+    toCommentDetail(commentId) {
       this.$router.push({
         path: '/collection/commentDetail',
         query: {
@@ -1224,15 +1234,23 @@ export default {
     }
   }
   .icon-attention {
-    background-size: 100% 100%;
+    // background-size: 100% 100%;
     background-repeat: no-repeat;
+    background-position: center center;
     display: inline-block;
     position: absolute;
-    width: 100px;
-    height: 100px;
-    top: 0;
-    right: 0;
+    width: 50px;
+    height: 50px;
+    top: 25px;
+    right: 20px;
+    background-color: #F8F8FC;
+    border-radius: 100px;
+    overflow: hidden;
     background-image: url('../../assets/images/ic_like.png');
+    &.no{
+      background-image: url('../../assets/images/ic_like_grey.png');
+
+    }
   }
   .top-bar-desc {
     height: 100%;

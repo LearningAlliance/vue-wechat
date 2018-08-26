@@ -91,3 +91,9 @@ export const saveCouponOrder = (params) => post('/userServer/business/OrderBaseI
 	action: 'saveCouponOrder',
 	data: JSON.stringify(params),
 });
+
+// 根据用户id和店铺id查询收藏信息
+export const qryUserCollect = (params) => post('/userServer/business/UserCollectAction', {
+	action: 'qryUserCollect',
+	data: JSON.stringify(params),
+});
