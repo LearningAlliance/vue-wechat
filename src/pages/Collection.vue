@@ -375,7 +375,7 @@ export default {
         shopLat: this.latitude.toString(),
         // shopLon: '120.082565',
         // shopLat: '30.200684',
-        range: '10000',
+        range: '20000',
         shopMainType: this.shopMainType.toString(),
         keyWords: this.keyWords || '',
       }).then((res) => {
@@ -427,7 +427,7 @@ export default {
         pageRow: this.pageRowFroAct,
         shopLon: this.longitude.toString(),
         shopLat: this.latitude.toString(),
-        range: '20000',
+        range: '100000',
       }).then((res) => {
         if (res.data.length < this.pageRowFroAct) {
           this.allLoadedForAct = true;

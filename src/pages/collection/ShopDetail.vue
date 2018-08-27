@@ -4,8 +4,10 @@
     <div class="top-bar clearfix">
       <i class="icon icon-back" @click="toBack"></i>
       <i class="icon icon-home" @click="toHome"></i>
-      <span class="top-bar-desc">{{collectInfo.isFollow == '-1' ? '已特别关注' : '未特别关注'}}</span>
-      <i :class="['icon-attention', {'no': collectInfo.isFollow != '-1'}]"></i>
+      <!--       <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
+      <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1')}]" @click="userFollow(collectInfo.isFollow)"></i> -->
+      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('state') && collectInfo.state == 1 ? '已特别关注' : '未特别关注'}}</span>
+      <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('state') && collectInfo.state == 1)}]"></i>
     </div>
     <div class="height-100"></div>
     <div class="section-1">
@@ -19,7 +21,7 @@
             <span class="score">综合{{shopInfo.score}}分</span>
           </div>
         </div>
-        <div class="collect-btn" @click="collectShop">收藏该店</div>
+        <div class="collect-btn" @click="collectShop(collectInfo.state)">{{collectInfo.hasOwnProperty('state') && collectInfo.state == 1 ? '取消收藏' : '收藏店铺'}}</div>
       </div>
       <div class="other-info clearfix">
         <div class="avg-consume" v-show="!!shopInfo.avgConsume">人均消费 {{shopInfo.avgConsume}}元</div>
@@ -167,9 +169,13 @@
 import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import {
+  MessageBox,
+} from 'mint-ui';
 export default {
   data() {
     return {
+      shopId: null,
       shopInfo: {
         collectCoupon: {}
       },
@@ -381,8 +387,36 @@ export default {
     openEgg() {
       _.alert('开蛋');
     },
-    collectShop() {
-      _.alert('收藏该店');
+    collectShop(status) {
+      MessageBox.confirm('是否收藏/取消收藏店铺').then(action => {
+        if (action) {
+          let follow = null;
+          if (status == 0 || status == undefined) {
+            follow = 1
+          } else if (status == 1) {
+            follow = 0;
+          } else {
+            follow = 1;
+          }
+          let collectInfo = this.collectInfo;
+
+          if (follow == 1) {
+            api.collection.toUserCollect({
+              shopId: this.shopId,
+            }).then((res) => {
+              this.$set(collectInfo, 'state', follow);
+            }).catch((err) => {});
+          } else if (follow == 0) {
+            api.collection.unUserCollect({
+              shopId: this.shopId,
+            }).then((res) => {
+              this.$set(collectInfo, 'state', follow);
+            }).catch((err) => {});
+          }
+        }
+      }).catch((err) => {
+
+      });
     },
     toCommentDetail(commentId) {
       this.$router.push({
@@ -393,6 +427,30 @@ export default {
         }
       })
     },
+    userFollow(status) {
+      MessageBox.confirm('是否关注/取消关注店铺').then(action => {
+        if (action) {
+          let follow = null;
+          if (status == 0 || status == undefined) {
+            follow = 1
+          } else if (status == 1) {
+            follow = 0;
+          } else {
+            follow = 1;
+          }
+          let collectInfo = this.collectInfo;
+
+          api.collection.userFollow({
+            shopId: this.shopId,
+            isFollow: follow,
+          }).then((res) => {
+            this.$set(collectInfo, 'isFollow', follow);
+          }).catch((err) => {});
+        }
+      }).catch((err) => {
+
+      });
+    }
   },
 }
 
@@ -1247,9 +1305,8 @@ export default {
     border-radius: 100px;
     overflow: hidden;
     background-image: url('../../assets/images/ic_like.png');
-    &.no{
+    &.no {
       background-image: url('../../assets/images/ic_like_grey.png');
-
     }
   }
   .top-bar-desc {

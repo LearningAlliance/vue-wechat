@@ -97,3 +97,21 @@ export const qryUserCollect = (params) => post('/userServer/business/UserCollect
 	action: 'qryUserCollect',
 	data: JSON.stringify(params),
 });
+
+// 关注和取消关注
+export const userFollow = (params) => post('/userServer/business/UserCollectAction', {
+	action: 'userFollow',
+	data: JSON.stringify(params),
+});
+
+// 收藏店铺
+export const toUserCollect = (params) => post('/userServer/business/UserCollectAction', {
+	action: 'toUserCollect',
+	data: JSON.stringify(params),
+});
+
+// 取消收藏店铺
+export const unUserCollect = (params) => post('/userServer/business/UserCollectAction', {
+	action: 'unUserCollect',
+	data: JSON.stringify(params),
+});
