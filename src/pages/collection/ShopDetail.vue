@@ -1,10 +1,22 @@
 <!-- 店铺详情 -->
 <template>
   <div class="page">
+    <div class="modal" v-show="showModal" @click.stop="hideModal"></div>
+    <div class="info-box with-shadow" v-show="showModal">
+      <div class="info-box-cancel" @click.stop="hideModal"></div>
+      <div class="info-header">是否收藏该店？</div>
+      <div class="info-content">首次收藏该店将获得500元代金券</div>
+      <div class="info-extra">
+        <div :class="['extra-text', {'select-yes': subscribe, 'select-no': !subscribe}]" @click.stop="toggleSubscribe">订阅该店个性化优惠信息</div>
+      </div>
+      <div class="info-footer">
+        <div class="info-btn" @click.stop="doCollect">确定收藏</div>
+      </div>
+    </div>
     <div class="top-bar clearfix">
       <i class="icon icon-back" @click="toBack"></i>
       <i class="icon icon-home" @click="toHome"></i>
-      <!--       <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
+      <!--             <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1')}]" @click="userFollow(collectInfo.isFollow)"></i> -->
       <span class="top-bar-desc">{{collectInfo.hasOwnProperty('state') && collectInfo.state == 1 ? '已特别关注' : '未特别关注'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('state') && collectInfo.state == 1)}]"></i>
@@ -189,6 +201,8 @@ export default {
       commentList: [],
       commentCount: 0, //  店铺评论总数
       collectInfo: {}, // 店铺收藏信息
+      showModal: false, // 显示收藏的遮罩
+      subscribe: false, // 是否订阅
     }
   },
   computed: {
@@ -374,49 +388,52 @@ export default {
       _.alert('分享推荐');
     },
     putEgg() {
-      _.alert('放置菜单');
-    },
-    toCommentList() {
       this.$router.push({
-        path: '/collection/commentList',
+        path: '/collection/shopEggList',
         query: {
           shopId: this.shopId,
         },
       });
     },
+    toCommentList() {
+      _.alert('放置彩蛋')
+    },
     openEgg() {
-      _.alert('开蛋');
+      this.$router.push({
+        path: '/collection/shopEggList',
+        query: {
+          shopId: this.shopId,
+        },
+      });
     },
     collectShop(status) {
-      MessageBox.confirm('是否收藏/取消收藏店铺').then(action => {
-        if (action) {
-          let follow = null;
-          if (status == 0 || status == undefined) {
-            follow = 1
-          } else if (status == 1) {
-            follow = 0;
-          } else {
-            follow = 1;
-          }
-          let collectInfo = this.collectInfo;
+      let follow = null;
+      if (status == 0 || status == undefined) {
+        follow = 1
+      } else if (status == 1) {
+        follow = 0;
+      } else {
+        follow = 1;
+      }
 
-          if (follow == 1) {
-            api.collection.toUserCollect({
-              shopId: this.shopId,
-            }).then((res) => {
-              this.$set(collectInfo, 'state', follow);
-            }).catch((err) => {});
-          } else if (follow == 0) {
+      if (follow == 1) { // 收藏
+        this.showModal = true;
+      } else if (follow == 0) {
+        // 取消收藏
+        MessageBox.confirm('是否取消收藏店铺').then(action => {
+          if (action) {
             api.collection.unUserCollect({
               shopId: this.shopId,
             }).then((res) => {
-              this.$set(collectInfo, 'state', follow);
-            }).catch((err) => {});
+              this.$set(this.collectInfo, 'state', 0);
+            }).catch((err) => {
+              this.$set(this.collectInfo, 'state', 0)
+            });
           }
-        }
-      }).catch((err) => {
+        }).catch((err) => {
 
-      });
+        });
+      }
     },
     toCommentDetail(commentId) {
       this.$router.push({
@@ -444,12 +461,58 @@ export default {
             shopId: this.shopId,
             isFollow: follow,
           }).then((res) => {
-            this.$set(collectInfo, 'isFollow', follow);
+            this.$set(this.collectInfo, 'isFollow', follow);
           }).catch((err) => {});
         }
       }).catch((err) => {
 
       });
+    },
+    hideModal() {
+      console.log('hideModal');
+      this.showModal = false;
+    },
+    toggleSubscribe() {
+      this.subscribe = !this.subscribe;
+    },
+    doCollect() {
+      if (!this.subscribe) {
+        _.alert('请先订阅完成收藏');
+        return;
+      }
+      this.doCollectShop(this.collectInfo.state);
+    },
+    doCollectShop(status) {
+      let follow = null;
+      if (status == 0 || status == undefined) {
+        follow = 1
+      } else if (status == 1) {
+        follow = 0;
+      } else {
+        follow = 1;
+      }
+      let collectInfo = this.collectInfo;
+      api.collection.toUserCollect({
+        shopId: this.shopId,
+      }).then((res) => {
+        this.$set(collectInfo, 'state', follow);
+        console.log('toUserCollect', res);
+        api.collection.userFollow({
+          shopId: this.shopId,
+          isFollow: follow,
+        }).then((res) => {
+          this.showModal = false;
+          this.$set(this.collectInfo, 'isFollow', follow);
+
+          // api.collection.userFollow({
+          //   shopId: this.shopId,
+          //   isFollow: 1,
+          // }).then((res) => {
+          //   console.log('userFollow', res);
+          // }).catch((err) => {});
+
+        }).catch((err) => {});
+      }).catch((err) => {});
     }
   },
 }
@@ -462,6 +525,94 @@ export default {
   min-height: 100%;
   box-sizing: border-box;
   background: #F8F8FC;
+}
+
+.modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 998;
+}
+
+.info-box {
+  position: fixed;
+  width: 690px;
+  height: 320px;
+  top: 50%;
+  left: 50%;
+  margin-top: -160px;
+  margin-left: -345px;
+  background: #FFF;
+  border-radius: 25px;
+  box-sizing: border-box;
+  padding: 40px 20px;
+  color: #000;
+  text-align: center;
+  z-index: 999;
+  .info-box-cancel {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 20px;
+    right: 20px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-image: url('../../assets/images/ic_cancel.png');
+  }
+  .info-header {
+    font-size: 40px;
+    text-align: center;
+  }
+  .info-content {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 32px;
+    text-align: center;
+  }
+  .info-extra {
+    font-size: 30px;
+    height: 40px;
+    line-height: 40px;
+    color: #818B8F;
+    text-align: center;
+    .extra-text {
+      position: relative;
+      display: inline-block;
+      text-indent: 50px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+      }
+      &.select-yes::before {
+        background-image: url('../../assets/images/icon_select_yes.png');
+      }
+      &.select-no::before {
+        background-image: url('../../assets/images/icon_select_no.png');
+      }
+    }
+  }
+  .info-footer {
+    margin-top: 20px;
+    .info-btn {
+      display: inline-block;
+      padding: 12px 25px;
+      height: 40px;
+      line-height: 40px;
+      font-size: 32px;
+      border-radius: 34px;
+      border: 1px solid #C4CACD;
+      /*no*/
+    }
+  }
 }
 
 .footer {

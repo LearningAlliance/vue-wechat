@@ -115,3 +115,9 @@ export const unUserCollect = (params) => post('/userServer/business/UserCollectA
 	action: 'unUserCollect',
 	data: JSON.stringify(params),
 });
+
+// 查询商家彩蛋列表
+export const qrySysZoneList = (params) => post('/userServer/business/SysZoneAction', {
+	action: 'qrySysZoneList',
+	data: JSON.stringify(params),
+});

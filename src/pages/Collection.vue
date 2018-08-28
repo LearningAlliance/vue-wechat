@@ -29,16 +29,16 @@
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
     <div class="activity-list" v-show="tabOn == 'tab2'" ref="tab2List" @scroll="handleScroll">
-      <div class="common-list">
+      <div class="common-list clearfix">
         <div class="common-cell" v-for="(item, index) in collectionListForAct" :key="'collectionListForAct' + index">
           <div :class="['common-box', {'no-border': collectionListForAct.length - 1 == index}]">
             <div class="box-left">
               <img class="coupon-img" :src="item.couponImg" />
             </div>
             <div class="box-right">
-              <div class="shop-name">{{item.merShop[0].shopName || ''}}</div>
+              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].shopName || ''}}</div>
               <div class="coupon-name">{{item.couponName}}</div>
-              <div class="other-info">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
@@ -57,9 +57,9 @@
               <img class="coupon-img" :src="item.couponImg" />
             </div>
             <div class="box-right">
-              <div class="shop-name">{{item.merShop[0].shopName || ''}}</div>
+              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].shopName || ''}}</div>
               <div class="coupon-name">{{item.couponName}}</div>
-              <div class="other-info">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
@@ -189,7 +189,6 @@
   </div>
   <!-- <map-demo></map-demo> -->
   <!-- <my-map></my-map> -->
-  </div>
 </template>
 <script type="text/javascript">
 import { Indicator } from 'mint-ui';
@@ -775,11 +774,12 @@ export default {
     background: #FFF;
     .common-cell {
       margin: 0 auto;
-      width: 750px;
+      width: 100%;
       height: 260px;
       padding: 30px;
       box-sizing: border-box;
       .common-box {
+        float: left;
         width: 100%;
         height: 100%;
         position: relative;
@@ -794,7 +794,7 @@ export default {
           left: 0;
         }
         &.no-border::after {
-          border: none;
+          border: none; 
         }
         .box-left {
           position: absolute;

@@ -7,7 +7,7 @@ import {
 	MessageBox,
 	Indicator,
 } from 'mint-ui';
-
+import noToastCode from './noToastCode.js'
 import * as _ from '../util/tool'
 
 // axios 配置
@@ -85,7 +85,12 @@ axios.interceptors.response.use((res) => {
 
 		});
 	} else {
-		_.toast(res.data.resultMsg, 'fail');
+		// resultCode 2011 2014
+		let code = res.data.resultCode || -1;
+		code = Number(code);
+		if (!(noToastCode.indexOf(code) > -1)) {
+			_.toast(res.data.resultMsg, 'fail');
+		}
 	}
 	// TODO 此处可做其他判断，
 	// 暂时 只对 resultCode不为0的 弹出错误信息
