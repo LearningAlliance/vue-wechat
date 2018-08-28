@@ -14,6 +14,7 @@ import CommentList from '../pages/collection/CommentList'
 import CommentDetail from '../pages/collection/CommentDetail'
 import Comment from '../pages/collection/Comment'
 import ShopEggList from '../pages/collection/ShopEggList'
+import EggDetail from '../pages/collection/EggDetail'
 
 export default [{
 	path: '/collection',
@@ -147,4 +148,12 @@ export default [{
 		subTitle: '彩蛋'
 	},
 	component: ShopEggList,
+}, {
+	path: '/collection/eggDetail',
+	name: 'eggDetail',
+	meta: {
+		title: '彩蛋',
+		subTitle: '彩蛋'
+	},
+	component: EggDetail,
 }, ]

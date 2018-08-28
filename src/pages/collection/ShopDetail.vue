@@ -396,7 +396,12 @@ export default {
       });
     },
     toCommentList() {
-      _.alert('放置彩蛋')
+      this.$router.push({
+        path: '/collection/commentList',
+        query: {
+          shopId: this.shopId,
+        },
+      });
     },
     openEgg() {
       this.$router.push({
