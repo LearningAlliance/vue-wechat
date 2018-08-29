@@ -145,12 +145,16 @@ export default [{
 	name: 'shopEggList',
 	meta: {
 		title: '彩蛋',
-		subTitle: '彩蛋'
+		subTitle: '彩蛋',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+		getLocation: true,
+		keepAlive: true,
 	},
 	component: ShopEggList,
 }, {
 	path: '/collection/eggDetail',
-	name: 'eggDetail',
+	name: 'shopEggDetail',
 	meta: {
 		title: '彩蛋',
 		subTitle: '彩蛋'

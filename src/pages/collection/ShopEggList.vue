@@ -7,12 +7,12 @@
       <div :class="['kind-cell no-margin-right', {'active': kindActived == 3}]" @click="changeKind(3)">用户</div>
     </div> -->
     <div class="kind clearfix">
-      <div v-for="(item, index) in kinds" :key="'kind' + index" :class="['kind-cell', {'active': kindActived == index, 'no-margin-right': kinds.length - 1 == index}]" @click="changeKind(index)">{{`${item.label}(${item.num})`}}</div>
+      <div v-for="(item, index) in kinds" v-show="item.num != 0 || index == 0" :key="'kind' + index" :class="['kind-cell', {'active': kindActived == index, 'no-margin-right': kinds.length - 1 == index}]" @click="changeKind(index)">{{`${item.label}(${item.num})`}}</div>
     </div>
     <!-- <div class="list" @scroll="handleScroll"> -->
     <div class="list">
-      <div class="cell with-shadow" v-for="(item, index) in list" :key="'list' + index" @click.stop="toEggDetail(item.id)">
-        <div class="open-btn" v-if="item.state == 1" @click.stop="openEgg(item.id)">打开</div>
+      <div class="cell with-shadow" v-for="(item, index) in list" :key="'list' + index" @click.stop="openEgg(item.id, item.openType, item.state)">
+        <div class="open-btn" v-if="item.state == 1">打开</div>
         <div class="open-time" v-if="item.state == 0">
           <div class="open-time-text">{{item.eff}}</div>
           <div class="open-time-desc">后可打开</div>
@@ -30,9 +30,12 @@
       </div>
       <div class="no-more">没有更多了</div>
     </div>
+    <validate-egg :egg-id="eggId" :on-success="validateSuccess" :on-close="closeValidateEgg" :visible="showValidateEgg"></validate-egg>
   </div>
 </template>
 <script type="text/javascript">
+import { mapGetters } from 'vuex'
+import validateEgg from '@/components/validateEgg';
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
@@ -62,7 +65,18 @@ export default {
         pageRow: 10000000,
       },
       list: [],
+      showValidateEgg: false,
+      eggId: null,
     }
+  },
+  components: {
+    'validate-egg': validateEgg,
+  },
+  computed: {
+    ...mapGetters([
+      'longitude',
+      'latitude',
+    ]),
   },
   mounted() {
     let { shopId } = this.$route.query;
@@ -107,6 +121,9 @@ export default {
       }
     }
   },
+  deactivated() { // leave page
+    this.qrySysZoneList();
+  },
   methods: {
     changeKind(index) {
       this.kindActived = index;
@@ -150,17 +167,49 @@ export default {
         this.kinds[0].num = count;
       }).catch((err) => {});
     },
-    openEgg(id){
-      _.alert('打开彩蛋id:' + id);
+    openEgg(id, openType, state) {
+      if (state == 2) {
+        _.alert('已领空');
+        return;
+      }
+      if (openType == 2) { // 需要口令验证后跳转
+        this.eggId = id;
+        this.showValidateEgg = true;
+      } else {
+        // 直接打开彩蛋后跳转
+        this.openSysZone(id);
+      }
     },
-    toEggDetail(id){
+    toEggDetail(id) {
       this.$router.push({
         path: '/collection/eggDetail',
         query: {
           id,
+          shopId: this.shopId,
+          success: true,
         },
       });
     },
+    validateSuccess(eggId) { // 验证成功
+      this.showValidateEgg = false;
+      this.qrySysZoneList();
+      this.toEggDetail(eggId);
+    },
+    closeValidateEgg() { // 关闭遮罩
+      this.showValidateEgg = false;
+    },
+    openSysZone(eggId) { // 打开
+      api.collection.openSysZone({
+        lat: this.latitude,
+        lon: this.longitude,
+        // pw: this.value,
+        zoneId: eggId,
+      }).then((res) => {
+        let id = res.data.id;
+        this.qrySysZoneList();
+        this.toEggDetail(id);
+      }).catch((err) => {});
+    }
   },
 }
 

@@ -121,3 +121,9 @@ export const qrySysZoneList = (params) => post('/userServer/business/SysZoneActi
 	action: 'qrySysZoneList',
 	data: JSON.stringify(params),
 });
+
+// 开彩蛋（兼验证口令）
+export const openSysZone = (params) => post('/userServer/business/SysZoneAction', {
+	action: 'openSysZone',
+	data: JSON.stringify(params),
+});
