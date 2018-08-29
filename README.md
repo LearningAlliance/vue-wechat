@@ -89,10 +89,10 @@ location / {
 ```
 
 # 发布到其他服务器可参考
-https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90
+[guide](https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90)
 
 # vue修改微信中的title
-https://www.npmjs.com/package/vue-wechat-title
+[guide](https://www.npmjs.com/package/vue-wechat-title)
 
 # 页面路径
 > * /   模拟登录页面
