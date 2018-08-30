@@ -3,13 +3,6 @@
   <div class="footer" v-if="visible">
     <div class="btn-group clearfix">
       <div class="btn-left" @click="back">继续开彩蛋</div>
-      <!-- reType -->
-      <!--       
-      绿色套餐	1
-      粉色代金券  3
-      蓝色碎片  2
-      红色红包  4
-       -->
       <div class="btn-right" @click="goShopDetail">返回商家</div>
     </div>
   </div>
@@ -46,10 +39,11 @@ export default {
 </script>
 <style scoped lang="scss">
 .footer {
-  margin-top: 120px;
-  margin-bottom: 30px;
+  padding-top: 120px;
+  padding-bottom: 120px;
   width: 100%;
   height: 68px;
+  background: #FFF;
   .btn-group {
     margin: 0 auto;
     width: 474px;
