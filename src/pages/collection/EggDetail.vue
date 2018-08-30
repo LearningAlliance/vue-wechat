@@ -167,7 +167,8 @@ export default {
 }
 
 .top-img {
-  width: 100%;
+  margin: 0 auto;
+  width: 750px;
   height: 408px;
   background-size: 100% 100%;
   background-repeat: no-repeat;

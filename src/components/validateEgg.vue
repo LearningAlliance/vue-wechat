@@ -82,7 +82,6 @@ export default {
         this.errMsg = '';
         this.value = '';
         this.onSuccess(res.data.id);
-        console.log(res.data.id);
       }).catch((err) => {
         this.errMsg = err.data.resultMsg;
       });
