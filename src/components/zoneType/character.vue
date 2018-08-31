@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="remark">{{remark}}</div>
-    <div class="">图片TODO</div>
+    <!-- <div class="">图片TODO</div> -->
   </div>
 </template>
 <script type="text/javascript">

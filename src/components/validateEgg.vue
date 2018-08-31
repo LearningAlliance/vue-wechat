@@ -6,13 +6,14 @@
       <input ref="input" class="input-code" @keyup="handleInput($event)" v-model="value" id="code" name="code" type="tel" :maxlength="number" autocorrect="off" autocomplete="off" autocapitalize="off">
       <div class="header">请输入口令</div>
       <div class="desc">请输入6位正确的数字</div>
-      <div @click="focusInput">
+      <!-- <label for="code" @click="focusInput"> -->
+      <label for="code">
         <div class="code-box">
           <div :class="['code-cell', {'no-margin-right': number - 1 == index}]" v-for="(item, index) in number" :key="'code' + index">
             {{value[index] || '&nbsp;'}}
           </div>
         </div>
-      </div>
+      </label>
       <div class="err">{{errMsg}}</div>
       <div class="btn-box">
         <div class="btn" @click.stop="submit">确定</div>
@@ -53,6 +54,13 @@ export default {
       'latitude',
     ]),
   },
+  // mounted(){
+  //   this.$nextTick(() => {
+  //     setTimeout(() => {
+  //        this.focusInput();
+  //      }, 1000);
+  //   });
+  // },
   methods: {
     submit() {
       this.openSysZone();
@@ -192,8 +200,8 @@ export default {
   position: absolute;
   left: -9999px;
   top: -99999px;
-  width: 0;
-  height: 0;
+  width: 100px;
+  height: 20px;
   opacity: 0;
   overflow: visible;
   z-index: -1;

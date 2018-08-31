@@ -104,9 +104,9 @@ export default {
         id: this.id,
       }).then((res) => {
         this.info = res.data;
-        // 测试 todo
-        this.info.reType = 1;
-        this.info.zoneType = 2;
+        // // 测试 todo
+        // this.info.reType = 1;
+        // this.info.zoneType = 2;
       }).catch((err) => {});
     },
   }

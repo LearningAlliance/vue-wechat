@@ -327,6 +327,7 @@ export default {
       } else {
         this.shopMainType = id;
       }
+      this.selectedKindId = id;
       this.showAll = false;
       if (this.tabOn == 'tab1') {
         this.pageNumForRec = 1;

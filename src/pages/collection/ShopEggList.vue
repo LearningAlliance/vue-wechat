@@ -11,7 +11,7 @@
     </div>
     <!-- <div class="list" @scroll="handleScroll"> -->
     <div class="list">
-      <div class="cell with-shadow" v-for="(item, index) in list" :key="'list' + index" @click.stop="openEgg(item.id, item.openType, item.state)">
+      <div class="cell with-shadow" v-for="(item, index) in list" :key="'list' + index" @click.stop="openEgg(item.id, item.openType, item.state, item.num)">
         <div class="open-btn" v-if="item.state == 1">打开</div>
         <div class="open-time" v-if="item.state == 0">
           <div class="open-time-text">{{item.eff}}</div>
@@ -173,8 +173,8 @@ export default {
         this.list = list;
       }).catch((err) => {});
     },
-    openEgg(id, openType, state) {
-      if (state == 2) {
+    openEgg(id, openType, state, num) {
+      if (state == 2 || num == 0) {
         _.alert('已领空');
         return;
       }
