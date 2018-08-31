@@ -33,6 +33,19 @@ npm run build --report
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
+# vue修改微信中的title
+[vue-wechat-title](https://www.npmjs.com/package/vue-wechat-title)
+
+# 项目中二维码生成
+[qrcodejs](https://github.com/davidshimjs/qrcodejs)
+
+# 页面路径
+> * /   模拟登录页面
+> * /collection   收藏
+> * /discovery    发现
+> * /earning	  赚赚
+> * /mine         我的
+
 # 搭建测试服务器
 ``` bash
 # npm 地址
@@ -90,13 +103,3 @@ location / {
 
 # 发布到其他服务器可参考
 [Vue Router](https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90)
-
-# vue修改微信中的title
-[vue-wechat-title](https://www.npmjs.com/package/vue-wechat-title)
-
-# 页面路径
-> * /   模拟登录页面
-> * /collection   收藏
-> * /discovery    发现
-> * /earning	  赚赚
-> * /mine         我的

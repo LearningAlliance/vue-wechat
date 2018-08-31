@@ -3,7 +3,7 @@
     <div class="combo-title">获得核销套餐</div>
     <div class="combo-name">{{info.name}}</div>
     <div class="code-box">
-      <img class="code" :src="'' || require('@/assets/images/img_qrcode_grey.png')" />
+      <div id="qrcode" class="code" ref="qrcode"></div>
     </div>
     <div class="desc-box">
       <div class="cell clearfix">
@@ -18,6 +18,7 @@
   </div>
 </template>
 <script type="text/javascript">
+import QRCode from 'qrcodejs2'
 export default {
   props: {
     info: {
@@ -26,9 +27,37 @@ export default {
       default: {},
     }
   },
+  components: {
+
+  },
+  mounted() {
+    this.qrCode();
+  },
   data() {
-    return {}
-  }
+    return {
+      // downloadButton: false,
+      // config: {
+      //   value: 'https://baidu.com',
+      //   imagePath: require('@/assets/images/img_qrcode_grey.png'),
+      //   filter: 'color'
+      // },
+      qrcode: null,
+    }
+  },
+  methods: {
+    qrCode() {
+      let {clientWidth, clientHeight} = this.$refs.qrcode;
+      let {couponId, userId} = this.info;
+      this.qrcode = new QRCode(this.$refs.qrcode, {
+        text: `http://cs-shop.juanzisc.com/merServer/index.html#/verificationConfirm?couponId=${couponId}&userId=${userId}`,
+        width: clientWidth,
+        height: clientHeight,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  },
 }
 
 </script>
@@ -88,18 +117,18 @@ export default {
     color: #2E3141;
     letter-spacing: 0;
     position: relative;
-    &.margin-top{
-    	margin-top: 24px;
+    &.margin-top {
+      margin-top: 24px;
     }
     .cell-left {
-    	position: absolute;
-    	top: 0;
-    	left: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
     .cell-right {
-    	width: 100%;
-    	padding-left: 40%;
-    	box-sizing: border-box;
+      width: 100%;
+      padding-left: 40%;
+      box-sizing: border-box;
     }
   }
 }

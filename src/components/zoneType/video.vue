@@ -1,6 +1,7 @@
 <template>
   <div class="page">
-    视频
+    <div class="video with-shadow">
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -21,4 +22,12 @@ export default {
   width: 100%;
   margin-top: 40px;
 }
+
+.video {
+  margin: 0 auto;
+  width: 630px;
+  height: 340px; // background: rgba(0,0,0,0.50);
+  border-radius: 20px;
+}
+
 </style>

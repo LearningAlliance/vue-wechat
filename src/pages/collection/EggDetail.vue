@@ -13,6 +13,10 @@
         <div class="combo-title">核销套餐</div>
         <div class="combo-name">{{info.name}}</div>
       </div>
+      <div class="top-right" v-if="info.reType == 2">
+        <div class="chip-title">夺宝碎片1个</div>
+        <div class="chip-name">{{info.name}}</div>
+      </div>
       <div class="top-right" v-if="info.reType == 3">
         <div class="amount"><span class="currency">￥</span><span class="price">{{info.price || 0}}</span></div>
         <div class="limit">{{info.name}}(满{{info.amount}}可用)</div>
@@ -101,6 +105,7 @@ export default {
       }).then((res) => {
         this.info = res.data;
         // 测试 todo
+        this.info.reType = 1;
         this.info.zoneType = 2;
       }).catch((err) => {});
     },
@@ -181,6 +186,23 @@ export default {
     box-sizing: border-box;
     padding-left: 403px;
     padding-right: 30px;
+    .chip-title {
+      font-family: PingFangSC-Semibold;
+      font-size: 32px;
+      color: #FEBC02;
+      letter-spacing: 0;
+      text-align: left;
+      line-height: 41.6px;
+    }
+    .chip-name {
+      margin-top: 22px;
+      font-family: PingFangSC-Regular;
+      font-size: 24px;
+      color: #FFFFFF;
+      letter-spacing: 0;
+      text-align: left;
+      line-height: 31.2px;
+    }
     .combo-title {
       font-family: PingFangSC-Semibold;
       font-size: 32px;
