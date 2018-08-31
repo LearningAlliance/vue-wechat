@@ -33,10 +33,11 @@ npm run build --report
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-# vue修改微信中的title
+# 参考
+## vue修改微信中的title
 [vue-wechat-title](https://www.npmjs.com/package/vue-wechat-title)
 
-# 项目中二维码生成
+## 项目中二维码生成
 [qrcodejs](https://github.com/davidshimjs/qrcodejs)
 
 # 页面路径
