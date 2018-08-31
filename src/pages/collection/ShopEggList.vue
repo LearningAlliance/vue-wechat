@@ -143,28 +143,34 @@ export default {
     //   console.log('loadMore');
     // },
     qrySysZoneList() {
+      api.collection.qrySysZoneCount({
+        shopId: this.shopId,
+      }).then((res) => {
+        let list = res.data;
+        let count = 0;
+        // if (this.kinds[this.kindActived].type != 0) {
+        //   return;
+        // }
+        list.forEach((obj) => {
+          if (obj.type == 1) {
+            this.kinds[3].num = obj.num;
+          } else if (obj.type == 2) {
+            this.kinds[2].num = obj.num;
+          } else if (obj.type == 3) {
+            this.kinds[1].num = obj.num;
+          }
+          count += obj.num;
+        });
+        this.kinds[0].num = count;
+      }).catch((err) => {});
+
       api.collection.qrySysZoneList({
         shopId: this.shopId,
         ...this.current,
         type: this.kinds[this.kindActived].type,
       }).then((res) => {
         let list = res.data;
-        let count = 0;
         this.list = list;
-        if (this.kinds[this.kindActived].type != 0) {
-          return;
-        }
-        list.forEach((obj) => {
-          if (obj.objType == 1) {
-            this.kinds[3].num = obj.num;
-          } else if (obj.objType == 2) {
-            this.kinds[2].num = obj.num;
-          } else if (obj.objType == 3) {
-            this.kinds[1].num = obj.num;
-          }
-          count += obj.num;
-        });
-        this.kinds[0].num = count;
       }).catch((err) => {});
     },
     openEgg(id, openType, state) {

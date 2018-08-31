@@ -6,13 +6,13 @@
       <input ref="input" class="input-code" @keyup="handleInput($event)" v-model="value" id="code" name="code" type="tel" :maxlength="number" autocorrect="off" autocomplete="off" autocapitalize="off">
       <div class="header">请输入口令</div>
       <div class="desc">请输入6位正确的数字</div>
-      <label for="code">
+      <div @click="focusInput">
         <div class="code-box">
           <div :class="['code-cell', {'no-margin-right': number - 1 == index}]" v-for="(item, index) in number" :key="'code' + index">
             {{value[index] || '&nbsp;'}}
           </div>
         </div>
-      </label>
+      </div>
       <div class="err">{{errMsg}}</div>
       <div class="btn-box">
         <div class="btn" @click.stop="submit">确定</div>
@@ -56,6 +56,9 @@ export default {
   methods: {
     submit() {
       this.openSysZone();
+    },
+    focusInput(){
+      this.$refs.input.focus();
     },
     hideKeyboard() {
       // 输入完成隐藏键盘

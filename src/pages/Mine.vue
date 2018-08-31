@@ -2,6 +2,7 @@
   <div class="page">
     <user-card></user-card>
     <user-group :cell-lists="cellLists1"></user-group>
+    <div class="blank"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -52,6 +53,16 @@ export default {
 
 </script>
 <style scoped lang="scss">
+.page{
+  width: 100%;
+  height: 100%;
+  background: #F8F8FC;
+  min-height: 100%;
+}
 
+.blank{
+  width: 100%;
+  height: 120px;
+}
 
 </style>

@@ -4,7 +4,7 @@
     <banner></banner>
     <div class="box">
       <div class="inner-box clearfix">
-        <div class="box-left">
+        <div class="box-left" @click="toFindShop">
           <img src="../assets/images/img_findstore.png" />
         </div>
         <div class="box-right" @click="toMall">
@@ -82,9 +82,12 @@ export default {
       }],
     }
   },
+  components: {
+    'banner': banner,
+  },
   created() {
-  	this.defaultList = this.defaultList.concat(this.defaultList);
-  	this.list = this.defaultList;
+    this.defaultList = this.defaultList.concat(this.defaultList);
+    this.list = this.defaultList;
   },
   methods: {
     toMall() {
@@ -92,24 +95,24 @@ export default {
     },
     handleScroll() {
       // console.log(this.$el.scrollTop, this.$el.offsetHeight, this.$el.scrollHeight);
-      if(this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight){
-      	this.loadMore();
+      if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
+        this.loadMore();
       }
     },
-    loadMore(){
-    	if(this.pageNum == 3){
-    		this.hasMore = false;
-    		// _.alertButtom('没有更多了~');
-    		return;
-    	}
-    	// 测试实际上应该调用接口
-    	this.list = this.list.concat(this.defaultList);
-    	this.pageNum++;
+    loadMore() {
+      if (this.pageNum == 3) {
+        this.hasMore = false;
+        // _.alertButtom('没有更多了~');
+        return;
+      }
+      // 测试实际上应该调用接口
+      this.list = this.list.concat(this.defaultList);
+      this.pageNum++;
     },
+    toFindShop() {
+      this.$router.push('/discovery/findShop');
+    }
   },
-  components: {
-    'banner': banner,
-  }
 }
 
 </script>
@@ -121,8 +124,7 @@ export default {
 
 .section {
   margin-top: 20px;
-  width: 100%;
-  // margin-bottom: 120px; // height: 1800px;
+  width: 100%; // margin-bottom: 120px; // height: 1800px;
   // border: 1px solid red;
   box-sizing: border-box;
   background: #FFFFFF;

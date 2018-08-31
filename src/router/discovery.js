@@ -5,6 +5,8 @@ import Success from '../pages/discovery/Success'
 import CreditsExchange from '../pages/discovery/CreditsExchange'
 import PensionExchange from '../pages/discovery/PensionExchange'
 import ExchangeMall from '../pages/discovery/ExchangeMall'
+import FindShop from '../pages/discovery/FindShop'
+import Search from '../pages/discovery/Search'
 
 export default [{
 	path: '/discovery',
@@ -42,4 +44,19 @@ export default [{
 		subTitle: '兑换商城',
 	},
 	component: ExchangeMall,
+}, {
+	path: '/discovery/findShop',
+	name: 'findShop',
+	meta: {
+		title: '寻找好店',
+	},
+	component: FindShop
+}, {
+	path: '/discovery/search',
+	name: 'discoverySearch',
+	meta: {
+		title: '发现',
+		keepAlive: true,
+	},
+	component: Search,
 }, ]

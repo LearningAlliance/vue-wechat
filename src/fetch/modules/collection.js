@@ -50,12 +50,6 @@ export const merShop = (params) => post('/userServer/business/MerShopAction', {
 	data: JSON.stringify(params),
 });
 
-// 查询商家彩蛋数量
-export const qrySysZoneCount = (params) => post('/userServer/business/SysZoneAction', {
-	action: 'qrySysZoneCount',
-	data: JSON.stringify(params),
-});
-
 // 商铺会员等级信息
 export const qryMerLevel = (params) => post('/userServer/business/MerShopAction', {
 	action: 'qryMerLevel',
@@ -125,5 +119,11 @@ export const qrySysZoneList = (params) => post('/userServer/business/SysZoneActi
 // 开彩蛋（兼验证口令）
 export const openSysZone = (params) => post('/userServer/business/SysZoneAction', {
 	action: 'openSysZone',
+	data: JSON.stringify(params),
+});
+
+// 查询商家彩蛋数量
+export const qrySysZoneCount = (params) => post('/userServer/business/SysZoneAction', {
+	action: 'qrySysZoneCount',
 	data: JSON.stringify(params),
 });

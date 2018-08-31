@@ -15,6 +15,7 @@
         <span class="desc">已分发158939保障金</span>
       </div>
     </div>
+    <div class="blank"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -80,6 +81,11 @@ export default {
       }
     }
   }
+}
+
+.blank{
+  width: 100%;
+  height: 120px;
 }
 
 </style>

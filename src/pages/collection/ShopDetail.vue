@@ -501,10 +501,9 @@ export default {
         shopId: this.shopId,
       }).then((res) => {
         this.$set(collectInfo, 'state', follow);
-        console.log('toUserCollect', res);
         api.collection.userFollow({
           shopId: this.shopId,
-          isFollow: follow,
+          isFollow: follow, 
         }).then((res) => {
           this.showModal = false;
           this.$set(this.collectInfo, 'isFollow', follow);

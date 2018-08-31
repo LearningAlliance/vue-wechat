@@ -75,8 +75,8 @@ export default {
     totalDiscount() {
       return (this.couponInfo.buyPrice - this.couponInfo.couponPrice) * this.num;
     },
-    totalFee(){
-    	return (this.couponInfo.buyPrice * this.num);
+    totalFee() {
+      return (this.couponInfo.buyPrice * this.num);
     },
   },
   mounted() {
@@ -113,19 +113,24 @@ export default {
         _.alert('不能再更少了~');
       }
     },
-    pay(){
-    	if(this.num == 0){
-    		_.alert('数量不能为0');
-    		return;
-    	}
-    	api.collection.saveCouponOrder({
-    		buyNums: this.num,
-    		merId: this.merId,
-    		couponId: this.couponId,
-    	}).then((res) => {
-    		console.log(res);
-    		_.alert('购买成功， todo 支付逻辑');
-    	}).catch((err) => {});
+    pay() {
+      if (this.couponInfo.surplusNum == 0) {
+        this.num = 0;
+        _.alert('已售完');
+        return;
+      }
+      if (this.num == 0) {
+        _.alert('数量不能为0');
+        return;
+      }
+      api.collection.saveCouponOrder({
+        buyNums: this.num,
+        merId: this.merId,
+        couponId: this.couponId,
+      }).then((res) => {
+        console.log(res);
+        _.alert('购买成功， todo 支付逻辑');
+      }).catch((err) => {});
     },
   }
 }

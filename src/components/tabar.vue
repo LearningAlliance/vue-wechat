@@ -79,6 +79,7 @@ export default {
       float: left;
       text-align: center;
       a {
+        width: 100%;
         display: inline-block;
         vertical-align: middle;
         font-size: 14px;

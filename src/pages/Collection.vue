@@ -22,10 +22,10 @@
       </div>
     </div>
     <div :class="['kind', {'show-all': showAll}]">
-      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index <= 3">{{item.name}}</div>
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index <= 2">{{item.name}}</div>
       <div class="kind-cell icon-down" @click="showAllKinds" v-show="!showAll">更多</div>
       <br v-show="!showAll" />
-      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 4">{{item.name}}</div>
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 3">{{item.name}}</div>
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
     <div class="activity-list" v-show="tabOn == 'tab2'" ref="tab2List" @scroll="handleScroll">
@@ -204,7 +204,7 @@ export default {
       keyWords: '',
       map: null,
       kinds: [],
-      selectedKindId: '',
+      selectedKindId: '0',
       showAll: false,
       collectionList: [],
       showRecommendList: false,
@@ -217,7 +217,7 @@ export default {
       // range: 20000,
       allLoaded: false,
       allLoadedForAct: false,
-      shopMainType: 1, // 显示的大类
+      shopMainType: 0, // 显示的大类
       collectionListForAct: [],
       recommendListForAct: [],
       showRecommendListForAct: false,
@@ -290,7 +290,7 @@ export default {
     tabClick(num) {
       this.tabOn = num;
       this.showAll = false;
-      this.selectedKindId = '';
+      this.selectedKindId = '0';
       this.pageNumForAct = 1;
       this.pageNumForRec = 1;
       if (num == 'tab1') {
@@ -310,7 +310,7 @@ export default {
     },
     getKinds() {
       api.collection.qryShopTypeList({ id: null }).then((res) => {
-        let obj = { name: '全部', id: '', sort: 0 };
+        let obj = { name: '全部', id: '0', sort: 0 };
         res.data.unshift(obj);
         this.kinds = res.data.sort(this.compare);
       }).catch((err) => {
@@ -323,11 +323,10 @@ export default {
       this.collectionList = [];
       this.recommendList = [];
       if (!id) {
-        this.shopMainType = 1;
+        this.shopMainType = 0;
       } else {
         this.shopMainType = id;
       }
-      this.selectedKindId = id;
       this.showAll = false;
       if (this.tabOn == 'tab1') {
         this.pageNumForRec = 1;

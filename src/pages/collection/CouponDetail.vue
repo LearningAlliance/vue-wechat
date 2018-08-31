@@ -6,11 +6,11 @@
     </div>
     <div class="section-1">
       <div class="coupon-name">{{couponInfo.couponName || ''}}</div>
-      <div class="coupon-desc">少个优惠套餐简介字段 couponInfo.couponDesc用于套餐内容</div>
+<!--       <div class="coupon-desc">少个优惠套餐简介字段 couponInfo.couponDesc用于套餐内容</div> -->
     </div>
-    <div class="line-box">
+<!--     <div class="line-box">
       <div class="line"></div>
-    </div>
+    </div> -->
     <div class="section-2">
       <div class="header clearfix">
         <div class="tag clearfix">
@@ -29,17 +29,13 @@
       </div>
       <div class="coupon-info">
         <div class="title">套餐内容</div>
-        <div class="info-cell">
-          <div class="info-name">新英格兰奶油蛤蜊浓汤(2份)</div>
-          <div class="info-price">¥96</div>
+        <div class="info-cell" v-if="couponInfo.couponDesc.length > 0" v-for="(item, index) in couponInfo.couponDesc">
+          <div class="info-name">{{item.name}}</div>
+          <div class="info-price">￥{{item.price}}</div>
         </div>
-        <div class="info-cell">
-          <div class="info-name">新英格兰奶油蛤蜊浓汤(2份)</div>
-          <div class="info-price">¥96</div>
-        </div>
-        <div class="info-cell">
-          <div class="info-name">新英格兰奶油蛤蜊浓汤(2份)</div>
-          <div class="info-price">¥96</div>
+        <div class="info-cell" v-if="couponInfo.couponDesc.length == 0">
+          <div class="info-name">暂无</div>
+          <!-- <div class="info-price">¥96</div> -->
         </div>
       </div>
     </div>
@@ -104,7 +100,9 @@ export default {
   data() {
     return {
       couponId: null,
-      couponInfo: {},
+      couponInfo: {
+        couponDesc: [],
+      },
       list: [],
     }
   },
@@ -147,7 +145,7 @@ export default {
 
       });
     },
-    toShopDetail(shopId){
+    toShopDetail(shopId) {
       this.$router.push({
         path: '/collection/shopDetail',
         query: {
@@ -159,7 +157,16 @@ export default {
       api.collection.merCouponDetail({
         couponId,
       }).then((res) => {
-        this.couponInfo = res.data[0];
+        let obj = res.data[0];
+        try{
+          // obj.couponDesc = '[{"name": "xx","price": "68"},{"name": "xx","price": "80"},{"name": "xx","price": "90"}]';
+          if(obj.couponDesc.length > 0){
+            obj.couponDesc = JSON.parse(obj.couponDesc);
+          }
+        }catch(e){
+          obj.couponDesc = [];
+        }
+        this.couponInfo = obj;
       }).catch((err) => {});
     },
     makePhone(tel) {
@@ -174,6 +181,11 @@ export default {
       });
     },
     toBuy() {
+      if (this.couponInfo.surplusNum == 0) {
+        this.num = 0;
+        _.alert('已售完');
+        return;
+      }
       this.$router.push({
         path: '/collection/saveCouponOrder',
         query: {
@@ -429,6 +441,7 @@ ul {
   width: 100%;
   box-sizing: border-box;
   padding: 30px;
+  padding-bottom: 0;
   background: #FFF;
   .coupon-name {
     font-family: PingFangSC-Medium;
