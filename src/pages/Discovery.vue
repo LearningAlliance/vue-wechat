@@ -1,7 +1,7 @@
 <template>
   <div class="page" @scroll="handleScroll()">
     <div class="blank"></div>
-    <banner></banner>
+    <banner :type="1"></banner>
     <div class="box">
       <div class="inner-box clearfix">
         <div class="box-left" @click="toFindShop">

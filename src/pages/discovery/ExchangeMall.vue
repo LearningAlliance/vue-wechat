@@ -1,7 +1,7 @@
 <!-- 发现-兑换商城 -->
 <template>
   <div class="page">
-    <banner></banner>
+    <banner :type="2"></banner>
     <div class="big-box">
       <div class="box">
         <div class="box-left">

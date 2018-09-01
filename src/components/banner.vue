@@ -4,40 +4,40 @@
       <img class="banner-img with-shadow" :src="item.img" />
     </div>
     <div class="banner only-one" v-else @click="toUrl(list[0].url)">
-    	<img class="banner-img with-shadow" :src="list[0].img" />
+      <img class="banner-img with-shadow" :src="list[0].img" />
     </div>
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
+  props: {
+    type: {
+      required: true,
+      default: 1, // 类型1首页2发现
+    },
+  },
   data() {
     return {
-      list: [
-      {
-        "desc": "水上乐园",
-        "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533207455626&di=6f6cb1d383718c6b29b8f087ca2a5453&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fback_pic%2F00%2F04%2F27%2F49%2F80bb0f440cd934b893bbcf3e07bc096a.jpg",
-        "url": "/userServer/index.html"
-      }
-      , {
-        "desc": "水上乐园",
-        "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533207455626&di=6f6cb1d383718c6b29b8f087ca2a5453&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fback_pic%2F00%2F04%2F27%2F49%2F80bb0f440cd934b893bbcf3e07bc096a.jpg",
-        "url": "/userServer/index.html"
-      }, {
-        "desc": "水上乐园",
-        "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533207455626&di=6f6cb1d383718c6b29b8f087ca2a5453&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fback_pic%2F00%2F04%2F27%2F49%2F80bb0f440cd934b893bbcf3e07bc096a.jpg",
-        "url": "/userServer/index.html"
-      }, {
-        "desc": "水上乐园",
-        "img": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1533207455626&di=6f6cb1d383718c6b29b8f087ca2a5453&imgtype=0&src=http%3A%2F%2Fpic.90sjimg.com%2Fback_pic%2F00%2F04%2F27%2F49%2F80bb0f440cd934b893bbcf3e07bc096a.jpg",
-        "url": "/userServer/index.html"
-      }, 
-      ]
+      list: [],
     }
+  },
+  mounted() {
+    this.qryBannerList();
   },
   methods: {
     toUrl(url) {
       this.$router.push(url);
-    }
+    },
+    qryBannerList() {
+      api.discovery.qryBannerList({
+        type: this.type,
+      }).then((res) => {
+        let banner = res.data;
+        this.list = banner;
+      }).catch((err) => {});
+    },
   }
 }
 
@@ -63,8 +63,8 @@ export default {
     height: 320px;
     padding-left: 15px;
     padding-right: 15px;
-    &.only-one{
-    	margin: 0 auto;
+    &.only-one {
+      margin: 0 auto;
     }
     &.first-banner {
       width: 665px;
