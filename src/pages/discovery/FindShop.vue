@@ -10,14 +10,27 @@
         <input class="search-input" disabled="true" type="text" v-model="keyWords" />
       </div>
     </div>
+    <div class="header-filter">
+      <search-filter :search-params="searchParams"></search-filter>
+    </div>
+    <div class="shop-list">
+      商铺
+    </div>
   </div>
 </template>
 <script type="text/javascript">
+  import searchFilter from '@/components/discovery/searchFilter'
 export default {
   data() {
     return {
       keyWords: '',
+      searchParams:{
+
+      },
     }
+  },
+  components: {
+    'search-filter': searchFilter,
   },
   methods: {
     toSearch() {
@@ -37,6 +50,19 @@ export default {
   height: 100%;
   overflow: scroll;
   box-sizing: border-box;
+}
+
+.shop-list{
+  width: 100%;
+  margin-top: 188px;
+}
+
+.header-filter{
+  width: 100%;
+  height: 88px;
+  position: fixed;
+  top: 100px;
+  left: 0;
 }
 
 .header {
