@@ -2,31 +2,38 @@
   <div>
     <div class="search-box clearfix">
       <div class="search-item" v-for="(item, index) in searchKinds" :key="'searchKind' + index">
-        <div :class="['search-kind', {'on': selectSearchKindIndex == item.key}]" @click="clickSearchKind(item.key)">{{item.label}}</div>
+        <div :class="['search-kind', {'on': selectSearchKindIndex == item.key}]" @click="clickSearchKind(item.key)">{{item.label.length > 4 ? (item.label).slice(0, 4) + '...' : item.label}}</div>
       </div>
     </div>
-    <search-filter-kind v-show="showModal && selectSearchKindIndex == 'kind'" :close-modal="closeModal"></search-filter-kind>
-    <div class="modal" v-show="showModal" @click="closeModal"></div>·
+    <search-filter-kind v-show="showModal && selectSearchKindIndex == 'kind'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-kind>
+    <search-filter-sort v-show="showModal && selectSearchKindIndex == 'sort'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-sort>
+    <!-- <div class="modal" v-show="showModal" @click="closeModal"></div> -->
   </div>
 </template>
 <script type="text/javascript">
 import searchFilterKind from '@/components/discovery/searchFilterKind'
+import searchFilterSort from '@/components/discovery/searchFilterSort'
 export default {
   props: {
     searchParams: {
       default: {},
       required: true,
       type: Object,
-    }
+    },
+    refresh: {
+      type: Function,
+    },
   },
   components: {
     'search-filter-kind': searchFilterKind,
+    'search-filter-sort': searchFilterSort,
   },
   data() {
     return {
       searchKinds: [{
         label: '全部分类',
         key: 'kind',
+        subType: null,
       }, {
         label: '附近',
         key: 'nearby',
@@ -54,6 +61,19 @@ export default {
     closeModal() {
       this.showModal = false;
       this.selectSearchKindIndex = '';
+    },
+    changeSearch(index, obj) {
+      if (index == 0) {
+        // 只用于修改subType部分
+        this.searchKinds[0].label = obj.name;
+        if (obj.id == 0) {
+          this.searchKinds[0].subType = null;
+          this.refresh({subType: null});
+        } else {
+          this.searchKinds[0].subType = obj.id;
+          this.refresh({subType: obj.id});
+        } 
+      }
     },
   },
 }

@@ -3,15 +3,15 @@
     <div class="header clearfix">
       <div class="icon icon-back" @click="back()"></div>
       <div class="search-box" @click="toSearch">
-        <div class="search-placeholder clearfix" v-show="!keyWords">
+        <div class="search-placeholder clearfix" v-show="!searchParams.remark">
           <i class="icon-search"></i>
           <span class="icon-search-desc">搜索商家名、品类等关键词</span>
         </div>
-        <input class="search-input" disabled="true" type="text" v-model="keyWords" />
+        <input class="search-input" disabled="true" type="text" v-model="searchParams.remark" />
       </div>
     </div>
     <div class="header-filter">
-      <search-filter :search-params="searchParams"></search-filter>
+      <search-filter :search-params="searchParams" :refresh="refresh"></search-filter>
     </div>
     <div class="shop-list">
       商铺
@@ -19,18 +19,29 @@
   </div>
 </template>
 <script type="text/javascript">
-  import searchFilter from '@/components/discovery/searchFilter'
+import searchFilter from '@/components/discovery/searchFilter'
 export default {
   data() {
     return {
-      keyWords: '',
-      searchParams:{
-
+      searchParams: {
+        distance: 10000,
+        price: "1,2,3,4",
+        sort: "3",
+        remark: '', // keyWords
+        subType: null,
+        name: '', // 商圈名
+        type: '',
+        pageRow: 20,
+        pageNum: 1,
       },
     }
   },
   components: {
     'search-filter': searchFilter,
+  },
+  mounted() {
+    let { keyWords = '' } = this.$route.query;
+    this.searchParams.remark = keyWords;
   },
   methods: {
     toSearch() {
@@ -38,6 +49,13 @@ export default {
     },
     back() {
       history.back();
+    },
+    refresh(params) {
+      console.log({ ...this.searchParams, ...params });
+      this.getData();
+    },
+    getData(params) {
+      console.log('调用接口');
     },
   }
 }
@@ -52,12 +70,12 @@ export default {
   box-sizing: border-box;
 }
 
-.shop-list{
+.shop-list {
   width: 100%;
   margin-top: 188px;
 }
 
-.header-filter{
+.header-filter {
   width: 100%;
   height: 88px;
   position: fixed;

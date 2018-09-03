@@ -36,9 +36,9 @@
               <img class="coupon-img" :src="item.couponImg" />
             </div>
             <div class="box-right">
-              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].shopName || ''}}</div>
+              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop.shopName || ''}}</div>
               <div class="coupon-name">{{item.couponName}}</div>
-              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop.tradingArea || ''}} 距{{item.merShop.distance | formatDistance}}</div>
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>
@@ -57,9 +57,9 @@
               <img class="coupon-img" :src="item.couponImg" />
             </div>
             <div class="box-right">
-              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].shopName || ''}}</div>
+              <div class="shop-name" v-if="item.hasOwnProperty('merShop')">{{item.merShop.shopName || ''}}</div>
               <div class="coupon-name">{{item.couponName}}</div>
-              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop[0].tradingArea || ''}} 距{{item.merShop[0].distance | formatDistance}}</div>
+              <div class="other-info" v-if="item.hasOwnProperty('merShop')">{{item.merShop.tradingArea || ''}} 距{{item.merShop.distance | formatDistance}}</div>
               <div class="price">
                 <span class="buy-price">{{item.buyPrice | formatPrice}}</span>
                 <span class="coupon-price">{{item.couponPrice | formatPrice}}</span>

@@ -111,6 +111,7 @@ export default {
     getLocationByAMap() {
       var self = this;
       if (!!self.longitude && !!self.latitude) {
+        self.getAddress(self.longitude, self.latitude);
         return;
       }
       lazyAMapApiLoaderInstance.load().then(() => {
