@@ -47,8 +47,10 @@ export default {
   methods: {
     qrCode() {
       let {clientWidth, clientHeight} = this.$refs.qrcode;
-      let {couponId, userId} = this.info;
+      let {couponId, userId, couponCode} = this.info;
+      let code = couponId || couponCode || '';
       this.qrcode = new QRCode(this.$refs.qrcode, {
+        // text: `http://cs-shop.juanzisc.com/merServer/index.html#/verificationConfirm?couponCode=${code}&userId=${userId}`,
         text: `http://cs-shop.juanzisc.com/merServer/index.html#/verificationConfirm?couponId=${couponId}&userId=${userId}`,
         width: clientWidth,
         height: clientHeight,
