@@ -75,6 +75,11 @@ export default {
       this.prices.forEach((obj) => {
         obj.select = false;
       });
+      this.changeSearch(4, {
+        type: '',
+        price: '',
+      });
+      this.closeModal();
     },
     confirm() {
       var type = [],
@@ -90,8 +95,8 @@ export default {
         }
       });
       this.changeSearch(4, {
-      	type: type.join(','),
-      	price: price.join(','),
+        type: type.join(','),
+        price: price.join(','),
       });
       this.closeModal();
     },

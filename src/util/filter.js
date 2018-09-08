@@ -86,6 +86,7 @@ export const formatDistance = (distance) => {
     if (distance == null || distance == undefined) {
         return '';
     }
+    distance = Number(distance);
     if (distance < 0) {
         return '';
     }

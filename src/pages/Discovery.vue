@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       hasMore: true,
-      pageNum: 0,
+      pageNum: 1,
       pageRow: 20,
       list: [],
       // defaultList: [{
@@ -143,7 +143,7 @@ export default {
         pageRow: this.pageRow,
       }).then((res) => {
         let { data = [] } = res;
-        this.list = this.pageNum == 0 ? data : this.list.concat(data);
+        this.list = this.pageNum == 1 ? data : this.list.concat(data);
         // 测试用
         // this.list = this.defaultList;
         if (data.length < this.pageRow) {

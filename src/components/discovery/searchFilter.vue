@@ -68,7 +68,7 @@ export default {
     closeModal() {
       this.showModal = false;
       this.selectSearchKindIndex = '';
-      _.alert('筛选条件未保存');
+      // _.alert('筛选条件未保存');
     },
     changeSearch(index, obj) {
       if (index == 0) {
@@ -99,6 +99,7 @@ export default {
 
 </script>
 <style scoped lang="scss">
+
 .modal {
   position: fixed;
   background: rgba(0, 0, 0, 0.3);

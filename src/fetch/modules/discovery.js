@@ -20,3 +20,9 @@ export const getAddress = (params) => post('/userServer/business/SysGaoDeAction'
 	action: 'getAddress',
 	data: JSON.stringify(params),
 });
+
+// 
+export const qryShopList = (params) => post('/userServer/business/MerShopAction', {
+	action: 'qryShopList',
+	data: JSON.stringify(params),
+});
