@@ -43,12 +43,11 @@ axios.interceptors.response.use((res) => {
 	store.dispatch('setLoadingState', false);
 	// Indicator.close();
 	// }, 100);
-	if (res.data.resultCode == 0) {
+	if (res.data.resultCode == 0 || res.data.status == '1') {
 		// 请求成功时
 		// _.toast(res.data.msg);
 		return res;
-	}
-	if (res.data.resultCode == 9985) {
+	} else if (res.data.resultCode == 9985) {
 		MessageBox.confirm('当前token已过期，是否重新获取?').then(action => {
 			if (action) {
 				if (process.env.NODE_ENV == "development") {

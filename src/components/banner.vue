@@ -29,6 +29,7 @@ export default {
   methods: {
     toUrl(url) {
       this.$router.push(url);
+      // window.location.href = url;
     },
     qryBannerList() {
       api.discovery.qryBannerList({

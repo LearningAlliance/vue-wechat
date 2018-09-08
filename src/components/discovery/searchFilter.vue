@@ -7,12 +7,17 @@
     </div>
     <search-filter-kind v-show="showModal && selectSearchKindIndex == 'kind'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-kind>
     <search-filter-sort v-show="showModal && selectSearchKindIndex == 'sort'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-sort>
+    <search-filter-nearby v-show="showModal && selectSearchKindIndex == 'nearby'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-nearby>
+    <search-filter-more v-show="showModal && selectSearchKindIndex == 'filter'" :close-modal="closeModal" :change-search="changeSearch"></search-filter-more>
     <!-- <div class="modal" v-show="showModal" @click="closeModal"></div> -->
   </div>
 </template>
 <script type="text/javascript">
 import searchFilterKind from '@/components/discovery/searchFilterKind'
 import searchFilterSort from '@/components/discovery/searchFilterSort'
+import searchFilterNearby from '@/components/discovery/searchFilterNearby'
+import searchFilterMore from '@/components/discovery/searchFilterMore'
+import * as _ from '@/util/tool.js'
 export default {
   props: {
     searchParams: {
@@ -27,6 +32,8 @@ export default {
   components: {
     'search-filter-kind': searchFilterKind,
     'search-filter-sort': searchFilterSort,
+    'search-filter-nearby': searchFilterNearby,
+    'search-filter-more': searchFilterMore,
   },
   data() {
     return {
@@ -61,6 +68,7 @@ export default {
     closeModal() {
       this.showModal = false;
       this.selectSearchKindIndex = '';
+      _.alert('筛选条件未保存');
     },
     changeSearch(index, obj) {
       if (index == 0) {
@@ -73,6 +81,17 @@ export default {
           this.searchKinds[0].subType = obj.id;
           this.refresh({subType: obj.id});
         } 
+      }else if(index == 1){
+        // 修改附近
+        this.refresh({distance: obj.distance});
+      }else if(index == 2){
+        // 修改商圈
+      }else if(index == 3){
+        // 修改排序
+        this.refresh({sort: obj.sort});
+      }else if(index == 4){
+        // 修改type 和price
+        this.refresh({type: obj.type, price: obj.price});
       }
     },
   },

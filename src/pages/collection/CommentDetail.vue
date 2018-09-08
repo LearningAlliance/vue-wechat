@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="sub-title">评价 <span class="text-num">({{commentCount}})</span></div>
+      <div class="sub-title" v-show="commentCount">评价 <span class="text-num">({{commentCount}})</span></div>
     </div>
     <div class="section">
       <div class="cell" v-for="(item, index) in subCommnentList" :key="'subCommnent' + index">
@@ -85,6 +85,9 @@ export default {
       }).catch((err) => {});
     },
     qryShopComments() {
+      if(!this.shopId){
+        return;
+      }
       api.collection.qryShopComments({
         ...this.searchCondition,
         ...{

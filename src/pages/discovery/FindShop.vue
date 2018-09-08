@@ -52,6 +52,7 @@ export default {
     },
     refresh(params) {
       console.log({ ...this.searchParams, ...params });
+      this.searchParams = { ...this.searchParams, ...params };
       this.getData();
     },
     getData(params) {
