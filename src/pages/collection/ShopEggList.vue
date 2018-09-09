@@ -22,8 +22,9 @@
           <div class="cell-name">{{item.type | filterType}}</div>
           <div :class="['cell-obj-type', {'obj-type-1': item.objType == 1, 'obj-type-2': item.objType == 2, 'obj-type-3': item.objType == 3}]">{{item.objType | filterObjType}}</div>
         </div>
-        <div class="cell-num">
-          有效期余 <span>{{item.exp}}天</span> 数量余 <span>{{item.num}}个</span>
+        <div :class="['cell-num', {'has-name': !!item.userNike}]">
+          有效期余 <span>{{item.exp}}天</span><span v-if="item.objType == 2 || item.objType == 3"> 数量余 <span>{{item.num}}个</span></span>
+          <div class="cell-user-nick" v-if="!!item.userNike">放置人：{{item.userNike}}</div>
         </div>
         <div class="cell-line"></div>
         <div class="cell-desc">开启条件：{{item.openType | filterOpenType}}</div>
@@ -357,6 +358,26 @@ export default {
       line-height: 36.4px;
       span {
         color: #151515;
+      }
+      &.has-name {
+        box-sizing: border-box;
+        width: 100%;
+        padding-right: 50%;
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .cell-user-nick {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 48%;
+        height: 100%;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

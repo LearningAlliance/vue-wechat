@@ -388,12 +388,13 @@ export default {
       _.alert('分享推荐');
     },
     putEgg() {
-      this.$router.push({
-        path: '/collection/shopEggList',
-        query: {
-          shopId: this.shopId,
-        },
-      });
+      _.alert('放置彩蛋');
+      // this.$router.push({
+      //   path: '/collection/shopEggList',
+      //   query: {
+      //     shopId: this.shopId,
+      //   },
+      // });
     },
     toCommentList() {
       this.$router.push({

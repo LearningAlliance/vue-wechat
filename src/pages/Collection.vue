@@ -404,6 +404,7 @@ export default {
         pageRow: 10000,
         shopLon: this.longitude.toString(),
         shopLat: this.latitude.toString(),
+        shopMainType: this.shopMainType.toString(),
       }).then((res) => {
         // console.log(res);
         // if (!res.hasOwnProperty('data') || res.data.length <= 10) {
@@ -426,6 +427,7 @@ export default {
         pageRow: this.pageRowFroAct,
         shopLon: this.longitude.toString(),
         shopLat: this.latitude.toString(),
+        shopMainType: this.shopMainType.toString(),
         range: '100000',
       }).then((res) => {
         if (res.data.length < this.pageRowFroAct) {
@@ -465,6 +467,7 @@ export default {
         pageRow: this.pageRowForRec,
         shopLon: this.longitude.toString(),
         shopLat: this.latitude.toString(),
+        shopMainType: this.shopMainType.toString(),
         range: '20000',
         isHot: '-1',
       }).then((res) => {

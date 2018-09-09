@@ -2,15 +2,15 @@
   <div class="page">
     <user-card></user-card>
     <div class="list">
-      <div class="cell with-shadow">
-        <img class="image" src="../assets/images/img_jianzheyoufen.png" />
-        <span class="desc">已分发 145W 积分</span>
-      </div>
-      <div class="cell with-shadow">
+      <div class="cell with-shadow" @click="toAShare">
         <img class="image" src="../assets/images/img_quanmingfenxiang.png" />
         <span class="desc">已分发158939积分</span>
       </div>
-      <div class="cell with-shadow">
+      <div class="cell with-shadow" @click="todo">
+        <img class="image" src="../assets/images/img_jianzheyoufen.png" />
+        <span class="desc">已分发 145W 积分</span>
+      </div>
+      <div class="cell with-shadow" @click="todo">
         <img class="image" src="../assets/images/img_duobaoqibing.png" />
         <span class="desc">已分发158939保障金</span>
       </div>
@@ -21,6 +21,7 @@
 <script type="text/javascript">
 import userCard from '@/components/userCard2'
 import api from '../fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {}
@@ -32,12 +33,19 @@ export default {
     api.user.getUserInfo().then((res) => {
       let userInfo = res.data[0];
       this.$store.dispatch('setUserInfo', userInfo);
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
     });
   },
-  mounted() {
-
+  methods: {
+    todo(){
+      _.alert('敬请期待');
+    },
+    toAShare(){
+      this.$router.push({
+        path: '/earning/aShare',
+      })
+    }
   },
 }
 
@@ -83,7 +91,7 @@ export default {
   }
 }
 
-.blank{
+.blank {
   width: 100%;
   height: 120px;
 }

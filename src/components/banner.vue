@@ -28,7 +28,14 @@ export default {
   },
   methods: {
     toUrl(url) {
-      this.$router.push(url);
+      if(!url){
+        return;
+      }
+      if(url.indexOf('http') > -1){
+        window.location.href = url;
+      }else {
+        this.$router.push(url);
+      }
       // window.location.href = url;
     },
     qryBannerList() {

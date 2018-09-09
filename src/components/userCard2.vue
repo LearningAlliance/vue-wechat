@@ -4,7 +4,7 @@
     <div class="card">
       <div class="card-box">
         <div class="avatar">
-          <img v-bind:src="userInfo.userHead" />
+          <!-- <img v-bind:src="userInfo.userHead" /> -->
         </div>
         <div class="user-name">
           <span>{{userInfo.userNick}}</span>
@@ -81,7 +81,7 @@ export default {
 <style lang="scss" scoped>
 .section {
   width: 100%;
-  height: 411px;
+  height: 311px;
   background: #fff;
   .card {
     margin: 0 auto;
@@ -109,7 +109,8 @@ export default {
       }
       .avatar {
         width: 150px;
-        height: 150px;
+        // height: 150px;
+        height: 40px;
         padding-top: 30px;
         margin: 0 auto 10px auto;
         img {

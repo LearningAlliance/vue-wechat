@@ -228,7 +228,6 @@
 	完成 
 	TODO 加上支付联调
 	
-	比较忙，周末再动
 	TODO
 	店铺详情 买单描述部分需改为动态的
 	店铺详情收藏，取消收藏部分
@@ -236,7 +235,7 @@
 	套餐详情-查看图文详情部分
 
 TODO
-	搜索发现中的数据是静态的 ，需接口获取
+	搜索发现中的数据是静态的 ，需接口获取 
 	有活动页面上半部分调用接口添加类别参数
 /userServer/business/MerShopAction?action=hotShop
 /userServer/business/MerCouponAction?action=qryMerCouponHot

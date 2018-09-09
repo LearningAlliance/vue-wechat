@@ -23,9 +23,20 @@
             <!-- <i class="icon-reply"></i> -->
           </div>
         </div>
+        <div class="shop-card" v-if="!!shopId">
+          <div class="card-logo">
+            <img :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" />
+          </div>
+          <div class="card-content" @click="toShopDetail">
+            <div class="shop-name ellipsis">{{shopInfo.shopName || ''}}</div>
+            <div class="shop-area ellipsis">{{shopInfo.tradingArea || ''}}</div>
+          </div>
+          <div class="card-distance">距{{shopInfo.distance | formatDistance}}</div>
+        </div>
       </div>
-      <div class="sub-title" v-show="commentCount">评价 <span class="text-num">({{commentCount}})</span></div>
     </div>
+    <div class="my-blank"></div>
+    <div class="sub-title" v-show="commentCount">评价 <span class="text-num">({{commentCount}})</span></div>
     <div class="section">
       <div class="cell" v-for="(item, index) in subCommnentList" :key="'subCommnent' + index">
         <div class="create-time">{{item.createDate.slice(0, 10)}}</div>
@@ -41,13 +52,14 @@
     </div>
     <div class="no-more" v-show="allLoaded">没有更多了</div>
     <div class="blank"></div>
-    <div class="footer">
+    <div class="footer" v-if="!!shopId">
       <div class="btn" @click="toComment">评论</div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 import api from '@/fetch/api.js'
+import { mapGetters } from 'vuex'
 import * as _ from '@/util/tool.js'
 export default {
   data() {
@@ -61,7 +73,25 @@ export default {
       commentCount: 0,
       allLoaded: false,
       subCommnentList: [],
+      shopInfo: {},
+      shopId: null,
     }
+  },
+  computed: {
+    ...mapGetters([
+      'longitude',
+      'latitude',
+    ]),
+    getLocationOver() {
+      return !!this.longitude && !!this.latitude;
+    },
+  },
+  watch: {
+    getLocationOver(val, oldVal) {
+      if (val && !!this.shopId) {
+        this.getShopInfo();
+      }
+    },
   },
   mounted() {
     let { shopId, commentId } = this.$route.query;
@@ -85,9 +115,10 @@ export default {
       }).catch((err) => {});
     },
     qryShopComments() {
-      if(!this.shopId){
+      if (!this.shopId) {
         return;
       }
+      this.getShopInfo();
       api.collection.qryShopComments({
         ...this.searchCondition,
         ...{
@@ -106,6 +137,23 @@ export default {
         }
       }).catch((err) => {});
     },
+    getShopInfo() {
+      api.collection.merShop({
+        shopId: this.shopId,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+      }).then((res) => {
+        // let obj = {
+        //   couponPrice: 200,
+        //   couponLimit: 2000,
+        // }
+        // res.data[0].collectCoupon = obj; 
+        this.shopInfo = res.data[0];
+        let score = res.data[0].score;
+        this.eggNum = res.data[0].zoneCount;
+        this.stars = this.setStars(score);
+      }).catch((err) => {});
+    },
     handleScroll() {
       if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
         this.loadMore();
@@ -120,13 +168,23 @@ export default {
         this.qryShopComments();
       });
     },
-    toComment(){
-    	this.$router.push({
-    		path: '/collection/comment',
-    		query: {
-    			commentId: this.commentId,
-    		},
-    	});
+    toComment() {
+      this.$router.push({
+        path: '/collection/comment',
+        query: {
+          commentId: this.commentId,
+        },
+      });
+    },
+    toShopDetail(){
+      if(!!this.shopId){
+        this.$router.push({
+          path: '/collection/shopDetail',
+          query: {
+            shopId: this.shopId,
+          },
+        });
+      }
     },
   },
 }
@@ -139,6 +197,83 @@ export default {
   overflow: scroll;
   box-sizing: border-box;
   position: relative;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shop-card {
+  width: 100%;
+  height: 160px;
+  border-top: 1px solid #E2E2E2;
+  /*no*/
+  box-sizing: border-box;
+  padding-left: 130px;
+  padding-right: 30%;
+  padding-top: 30px;
+  position: relative;
+  .card-content {
+    width: 100%;
+    height: 100%;
+    .shop-name {
+      font-family: PingFangSC-Medium;
+      font-size: 32px;
+      color: #2E3141;
+      letter-spacing: 0;
+      line-height: 41.6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .shop-area {
+      margin-top: 20px;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #818B8F;
+      letter-spacing: 0;
+      line-height: 36.4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .card-distance {
+    width: 30%;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    font-family: PingFangSC-Regular;
+    font-size: 28px;
+    color: #818B8F;
+    letter-spacing: 0;
+    text-align: right;
+    line-height: 36.4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .card-logo {
+    position: absolute;
+    top: 30px;
+    left: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.my-blank {
+  width: 100%;
+  height: 20px;
+  background: #F8F8FC;
 }
 
 .section {
@@ -204,10 +339,10 @@ export default {
       left: 0;
       border-radius: 80px;
       overflow: hidden;
-      img{
-      	display: block;
-      	width: 100%;
-      	height: 100%;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
       }
     }
   }
@@ -253,14 +388,15 @@ export default {
 }
 
 .sub-title {
-  margin-top: 30px;
-  padding-left: 20px;
+  padding-top: 30px;
+  padding-left: 50px;
   font-family: PingFangSC-Medium;
   font-size: 32px;
   color: #2E3141;
   letter-spacing: 0;
   line-height: 45px;
   height: 45px;
+  background: #FFF;
   .text-num {
     font-family: PingFangSC-Regular;
     font-size: 28px;
@@ -270,11 +406,10 @@ export default {
   }
 }
 
-.comment-list {
-  border-bottom: 1px solid #E2E2E2;
-  /*no*/
-}
-
+// .comment-list {
+//   border-bottom: 1px solid #E2E2E2;
+//   /*no*/
+// }
 .section-6 {
   width: 100%;
   padding: 30px 30px 0 30px;

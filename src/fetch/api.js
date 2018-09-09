@@ -3,6 +3,7 @@ import * as trade from './modules/trade.js'
 import * as common from './modules/common.js'
 import * as collection from './modules/collection'
 import * as discovery from './modules/discovery'
+import * as earning from './modules/earning'
 
 // 调用示例， 先应用api.js 再 api.user.login
 export default {
@@ -11,4 +12,5 @@ export default {
 	common,
 	collection,
 	discovery,
+	earning,
 }

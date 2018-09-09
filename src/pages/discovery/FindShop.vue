@@ -302,6 +302,17 @@ export default {
       padding-left: 60px;
       padding-right: 130px;
       position: relative;
+      &::before{
+        content: '';
+        position: absolute;
+        top: 15px;
+        left: 0;
+        width: 34px;
+        height: 30px;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        background-image: url('../../assets/images/icon_notice.png');
+      }
       .title-content {
         font-family: PingFangSC-Regular;
         font-size: 24px;

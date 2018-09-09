@@ -17,7 +17,7 @@
       </div>
     </div>
     <div class="section">
-      <div class="card with-shadow">
+      <div class="card with-shadow" @click="toDetail">
         <div class="card-left">
           <img class="card-img" src="../../assets/images/img_changecoin_change.png" />
         </div>
@@ -72,6 +72,9 @@ export default {
     toPensionExchange() {
       this.$router.push('/discovery/pensionExchange');
     },
+    toDetail(){
+      _.alert('敬请期待');
+    }
   }
 }
 
