@@ -1,9 +1,9 @@
 <template>
-  <div class="page">
-    <div class="box">
+  <div class="page" ref="page">
+    <div ref="box" :class="['box', {'hidden': hideBox}]">
       <div class="info">
         <div class="avatar-box">
-          <img class="avatar" :src="userInfo.userHead" />
+          <img ref="avatar" class="avatar" :src="userInfo.userHead" crossOrigin="anonymous" />
         </div>
         <div class="user-name">
           好友 <span class="underline">{{userInfo.userNick}}</span> 向你推荐
@@ -13,7 +13,7 @@
         <div class="area">
           <div class="shop-info">
             <div class="shop-logo">
-              <img :src="'' || require('../../assets/images/icon_shop_default.png')" />
+              <img ref="logo" :src="shopInfo.logo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" />
             </div>
             <div class="shop-content">
               <div class="shop-name">肥宅快乐鸡西湖文化广场店</div>
@@ -36,7 +36,7 @@
             <div id="qrcode" class="code" ref="qrcode"></div>
           </div>
           <div class="code-desc">扫码收藏该店可免费领取大额代金券！</div>
-          <div class="save-btn" @click="saveCode">保存到手机</div>
+          <div class="save-btn" @click="saveCode">长按保存到手机</div>
         </div>
       </div>
     </div>
@@ -47,6 +47,7 @@ import QRCode from 'qrcodejs2'
 import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import html2canvas from 'html2canvas';
 export default {
   computed: {
     ...mapGetters([
@@ -62,6 +63,8 @@ export default {
     return {
       shopId: null,
       url: null,
+      hideBox: false,
+      shopInfo: {},
     }
   },
   methods: {
@@ -87,10 +90,95 @@ export default {
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
+      this.queue([this.avatarToBase64, this.logoToBase64, this.doHtml2Canvas])
+        .then((res) => {
+          console.log('success');
+        }).catch((e) => {
+          console.log('queue', e);
+        });
+      // this.queue([this.doHtml2Canvas])
+      //   .then((res) => {
+      //     console.log('success');
+      //   });
     },
-    saveCode(){
-    	_.alert('TODO');
+    saveCode() {
+      _.alert('TODO');
     },
+    doHtml2Canvas() {
+      var self = this;
+      html2canvas(self.$refs.page, {
+        useCORS: true,
+      }).then(function(canvas) {
+        self.hideBox = true;
+        canvas.id = 'canvas';
+        self.$refs.page.appendChild(canvas);
+        self.canvas2Images();
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    avatarToBase64() {
+      return new Promise((resolve) => {
+        this.img2base64(this.$refs.avatar).then((res) => {
+          this.$refs.avatar.src = res;
+          // this.userInfo.userHead = res;
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+        })
+      })
+    },
+    logoToBase64() {
+      return new Promise((resolve) => {
+        this.img2base64(this.$refs.logo).then((res) => {
+          this.$refs.logo.src = res;
+          // this.shopInfo.logo = res;
+          resolve();
+        }).catch((err) => {
+          console.log(err);
+        })
+      })
+    },
+    async queue(arr) {
+      let res = null
+      for (let promise of arr) {
+        res = await promise(res)
+      }
+      return await res
+    },
+    canvas2Images(canvas) {
+      try {
+        var image = new Image();
+        var canvas = document.getElementById('canvas');
+        // image.setAttribute('crossOrigin', 'anonymous');
+        image.crossOrigin = 'anonymous';
+        image.src = canvas.toDataURL("image/png");
+        image.style.width = '100%';
+        image.style.height = '100%';
+        canvas.style.display = 'none';
+        this.$refs.page.appendChild(image);
+      } catch (e) {
+        console.log('canvas2Images', e);
+      }
+    },
+    img2base64(el) {
+      let url = el.src;
+      return new Promise(resolve => {
+        var img = new Image();
+        // img.setAttribute("crossOrigin", 'Anonymous'); // 防止画布污染
+        img.crossOrigin = 'anonymous';
+        img.src = url;
+        img.onload = () => {
+          const c = document.createElement('canvas');
+          c.width = img.naturalWidth;
+          c.height = img.naturalHeight;
+          const cxt = c.getContext('2d');
+          cxt.drawImage(img, 0, 0);
+          // 得到图片的base64编码数据
+          resolve(c.toDataURL('image/png'));
+        };
+      });
+    }
   }
 }
 
@@ -98,7 +186,7 @@ export default {
 <style scoped lang="scss">
 .page {
   width: 100%;
-  height: 100%;
+  height: 100%; // overflow: hidden;
 }
 
 .underline {
@@ -110,6 +198,9 @@ export default {
   height: 100%;
   background-size: 100% 100%;
   background-image: url('../../assets/images/bg_share_1.png');
+  &.hidden {
+    display: none;
+  }
   .box-2 {
     width: 670px;
     height: 940px;
@@ -146,7 +237,7 @@ export default {
       .save-btn {
         margin: 0 auto;
         margin-top: 40px;
-        width: 180px;
+        width: 260px;
         height: 50px;
         border: 2px solid #F05720;
         border-radius: 25px;

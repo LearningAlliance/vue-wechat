@@ -36,6 +36,7 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 ### 参考
 > * [vue-wechat-title](https://www.npmjs.com/package/vue-wechat-title)	-	vue修改微信中的title
 > * [qrcodejs](https://github.com/davidshimjs/qrcodejs)	-	项目中二维码生成
+> * [html2canvas](http://html2canvas.hertzen.com/getting-started) -		html转成canvas,后使用canvas相关api转成图片
 
 # 页面路径
 > * /   模拟登录页面
