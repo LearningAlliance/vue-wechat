@@ -6,7 +6,7 @@
           <img ref="avatar" class="avatar" :src="userInfo.userHead" crossOrigin="anonymous" />
         </div>
         <div class="user-name">
-          好友 <span class="underline">{{userInfo.userNick}}</span> 向你推荐
+          好友 <span class="underline">{{userInfo.userNick | formatName}}</span> 向你推荐
         </div>
       </div>
       <div class="box-2">
@@ -58,6 +58,18 @@ export default {
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     this.qrySharePath();
+  },
+  filters: {
+    formatName(key){
+      if(!key){
+        return '';
+      }
+      if(key.length <= 4){
+        return key;
+      }else {
+        return key.substring(0, 4) + '...';
+      }
+    }
   },
   data() {
     return {
