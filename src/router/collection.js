@@ -88,7 +88,7 @@ export default [{
 		wxConfig: true,
 		jsApiList: ['getLocation', 'openLocation'],
 		getLocation: true,
-		keepAlive: true,
+		// keepAlive: true,
 	},
 	component: ShopDetail,
 }, {

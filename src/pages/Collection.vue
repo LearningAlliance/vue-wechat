@@ -241,6 +241,8 @@ export default {
     } else if (this.tabOn == 'tab2') {
       this.$refs.tab2List.scrollTop = parseInt(scroll);
     }
+    this.getShops();
+    this.getActivities();
     // TODO点击收藏 取消收藏后刷新列表页面
     // if (!!this.longitude && !!this.latitude) {
     //   this.getShops();
