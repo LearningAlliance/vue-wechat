@@ -3,9 +3,8 @@
     <div ref="box" :class="['box', {'hidden': hideBox}]">
       <div class="info">
         <div class="avatar-box">
-          <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
           <!-- <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
-          <!-- <img ref="avatar" class="avatar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLoJTSB95niaeia0icfVUGTss1J0C2mWiaqhTfGc7DkWg6GAIktNvEtJjuRQJPv5yX8q6fia5HJgN9XNibQ/132" crossOrigin="anonymous" /> -->
+          <img ref="avatar" class="avatar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLoJTSB95niaeia0icfVUGTss1J0C2mWiaqhTfGc7DkWg6GAIktNvEtJjuRQJPv5yX8q6fia5HJgN9XNibQ/132" crossOrigin="anonymous" />
         </div>
         <div class="user-name">
           好友 <span class="underline">{{userInfo.userNick | formatName}}</span> 向你推荐
@@ -15,9 +14,7 @@
         <div class="area">
           <div class="shop-info">
             <div class="shop-logo">
-              <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/>
-              <!-- <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/> -->
-              <!-- <img ref="logo" :src="userInfo.userHead || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
+              <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" />
             </div>
             <div class="shop-content">
               <div class="shop-name">肥宅快乐鸡西湖文化广场店</div>
@@ -40,7 +37,7 @@
             <div id="qrcode" class="code" ref="qrcode"></div>
           </div>
           <div class="code-desc">扫码收藏该店可免费领取大额代金券！</div>
-          <div class="save-btn" @click="save">长按保存到手机</div>
+          <div class="save-btn">长按保存到手机</div>
         </div>
       </div>
     </div>
@@ -53,27 +50,11 @@ import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 import html2canvas from 'html2canvas';
 export default {
-  computed: {
-    ...mapGetters([
-      'userInfo',
-    ])
-  },
   mounted() {
     let { shopId } = this.$route.query;
     this.shopId = shopId;
-    // this.qrySharePath();
     // this.getShopDetail();
-    // _.alert('queue start');
-    // this.queue([this.qrySharePath, this.qrCode, this.getShopDetail, this.doHtml2Canvas])
-    this.queue([this.qrySharePath, this.qrCode, this.getShopDetail])
-      .then((res) => {
-        this.$nextTick(() => {
-          this.doHtml2Canvas();
-        })
-        console.log('success');
-      }).catch((err) => {
-        _.alert('queue', err);
-      })
+    this.qrySharePath();
   },
   filters: {
     formatName(key) {
@@ -93,115 +74,105 @@ export default {
       url: null,
       hideBox: false,
       shopInfo: {},
+      userInfo: {},
     }
   },
   methods: {
-    save() {
-      // _.alert('11111');
-      // this.doHtml2Canvas();
-    },
-    // 查询商家详情
-    getShopDetail() {
-      return new Promise((resolve) => {
-        api.collection.merShop({
-          shopId: this.shopId,
-        }).then((res) => {
-          this.shopInfo = res.data[0];
-          // this.$nextTick(() => {
-          resolve();
-          // });
-        }).catch((err) => {});
-      });
-    },
     qrySharePath() {
-      return new Promise((resolve, reject) => {
-        if (!this.shopId) {
-          reject('shopId is null');
-        }
-        api.earning.qrySharePath({
-          shopId: this.shopId
-        }).then((res) => {
-          let { url = null, shopId, userId } = res.data;
-          this.url = `http://cs.juanzisc.com/collection/shopDetail?shopId=${shopId}`;
-          console.log('qrySharePath');
-          resolve();
-        }).catch((err) => {});
-      })
+      if (!this.shopId) {
+        return;
+      }
+      api.earning.qrySharePath({
+        shopId: this.shopId
+      }).then((res) => {
+        let { url = null, shopId, userId } = res.data;
+        this.url = `http://cs.juanzisc.com/collection/shopDetail?shopId=${shopId}`;
+        this.$nextTick(() => {
+          this.qrCode();
+        });
+      }).catch((err) => {});
     },
     qrCode() {
-      return new Promise((resolve) => {
-        let { clientWidth, clientHeight } = this.$refs.qrcode;
-        this.qrcode = new QRCode(this.$refs.qrcode, {
-          text: this.url,
-          width: clientWidth,
-          height: clientHeight,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
-        console.log('qrCode');
-        resolve();
+      let { clientWidth, clientHeight } = this.$refs.qrcode;
+      this.qrcode = new QRCode(this.$refs.qrcode, {
+        text: this.url,
+        width: clientWidth,
+        height: clientHeight,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
       });
-
-      // var self = this;
-      // this.queue([self.doHtml2Canvas])
+      var self = this;
+      // this.queue([self.getUserInfo, self.avatarToBase64, self.logoToBase64, self.doHtml2Canvas])
       //   .then((res) => {
-      //     console.log('success');
+      //     // console.log('success');
+      //     _.alert('success');
+      //   }).catch((e) => {
+      //     console.log('queue', e);
       //   });
+      this.queue([self.getUserInfo, self.getShopDetail, self.doHtml2Canvas])
+        .then((res) => {
+          console.log('success');
+        });
     },
     doHtml2Canvas() {
       var self = this;
-      // return new Promise((resolve) => {
-      self.img2base64(self.$refs.avatar.src).then((res) => {
-        self.$refs.avatar.src = res;
-        // _.alert('doHtml2Canvas');
-        return self.img2base64(self.$refs.logo.src);
-      }).then((res) => {
-        self.$refs.logo.src = res;
-        return self.html2canvas();
-      }).then((canvas) => {
-        self.canvas2Images(canvas);
-        // _.alert('success');
-        // resolve();
-      });
-      // });
-    },
-    html2canvas() {
-      var self = this;
       return new Promise((resolve) => {
-        html2canvas(this.$refs.page, {
+        html2canvas(self.$refs.page, {
           useCORS: true,
         }).then(function(canvas) {
           self.hideBox = true;
           canvas.id = 'canvas';
           self.$refs.page.appendChild(canvas);
-          resolve(canvas);
+          self.canvas2Images(canvas);
+          resolve();
         }).catch((err) => {
           console.log(err);
         });
       })
     },
-    canvas2Images(canvas) {
-      try {
-        // _.alert('canvas2Images');
-        var image = new Image();
-        // var canvas = document.getElementById('canvas');
-        image.setAttribute('crossOrigin', 'anonymous');
-        // image.crossOrigin = 'anonymous';
-        image.src = canvas.toDataURL("image/png");
-        image.style.width = '100%';
-        image.style.height = '100%';
-        image.style.zIndex = 9999;
-        // image.style.borderColor = '#fff';
-        // image.style.borderWidth = '50px';
-        // image.style.borderStyle = 'solid';
-        canvas.style.display = 'none';
-        this.$refs.page.appendChild(image);
-      } catch (e) {
-        // console.log('canvas2Images', e);
-        // _.alert('canvas2Images');
-      }
+    getUserInfo() {
+      return new Promise((resolve) => {
+        api.user.getUserInfo().then((res) => {
+          let userInfo = res.data[0];
+          this.userInfo = userInfo;
+          this.$nextTick(() => {
+            this.img2base64Two(this.$refs.avatar.src, 'Anonymous').then((res) => {
+              this.$refs.avatar.src = res;
+              resolve();
+            }).catch((err) => {})
+          })
+        }).catch((err) => {
+          console.log(err);
+        });
+      })
     },
+    // avatarToBase64() {
+    //   return new Promise((resolve) => {
+    //     this.img2base64(this.$refs.avatar).then((res) => {
+    //       // this.$refs.avatar.src = res;
+    //       this.userInfo.userHead = res;
+    //       this.$nextTick(() => {
+    //         resolve();
+    //       })
+    //     }).catch((err) => {
+    //       console.log(err);
+    //     })
+    //   })
+    // },
+    // logoToBase64() {
+    //   return new Promise((resolve) => {
+    //     this.img2base64(this.$refs.logo).then((res) => {
+    //       // this.$refs.logo.src = res;
+    //       this.shopInfo.logo = res;
+    //       this.$nextTick(() => {
+    //         resolve();
+    //       })
+    //     }).catch((err) => {
+    //       console.log(err);
+    //     })
+    //   })
+    // },
     async queue(arr) {
       let res = null
       for (let promise of arr) {
@@ -209,10 +180,43 @@ export default {
       }
       return await res
     },
-    img2base64(url) {
+    canvas2Images(canvas) {
+      try {
+        var image = new Image();
+        // var canvas = document.getElementById('canvas');
+        image.setAttribute('crossOrigin', 'anonymous');
+        // image.crossOrigin = 'anonymous';
+        image.src = canvas.toDataURL("image/png");
+        image.style.width = '100%';
+        image.style.height = '100%';
+        canvas.style.display = 'none';
+        this.$refs.page.appendChild(image);
+      } catch (e) {
+        console.log('canvas2Images', e);
+      }
+    },
+    img2base64(el) {
+      var url = el.src;
       return new Promise(resolve => {
-        var img = new Image();
-        img.onload = function() {
+        const img = new Image();
+        img.onload = () => {
+          const c = document.createElement('canvas');
+          c.width = img.naturalWidth;
+          c.height = img.naturalHeight;
+          const cxt = c.getContext('2d');
+          cxt.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+          // 得到图片的base64编码数据
+          resolve(c.toDataURL('image/png'));
+        };
+        img.setAttribute("crossOrigin", 'Anonymous'); // 防止画布污染
+        // img.crossOrigin = 'anonymous';
+        img.src = url;
+      });
+    },
+    img2base64Two(url, crossOrigin) {
+      return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => {
           const c = document.createElement('canvas');
           c.width = img.naturalWidth;
           c.height = img.naturalHeight;
@@ -221,8 +225,26 @@ export default {
           // 得到图片的base64编码数据
           resolve(c.toDataURL('image/png'));
         };
-        img.crossOrigin = 'anonymous';
+        crossOrigin && img.setAttribute('crossOrigin', crossOrigin);
         img.src = url;
+      });
+    },
+    // 查询商家详情
+    getShopDetail() {
+      return new Promise((resolve) => {
+        api.collection.merShop({
+          shopId: this.shopId,
+        }).then((res) => {
+          this.shopInfo = res.data[0];
+          // this.shopInfo.shopLogo = 'http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLoJTSB95niaeia0icfVUGTss1J0C2mWiaqhTfGc7DkWg6GAIktNvEtJjuRQJPv5yX8q6fia5HJgN9XNibQ/132';
+          this.$nextTick(() => {
+            // this.img2base64Two(this.$refs.logo.src, 'Anonymous').then((res) => {
+            this.img2base64Two(this.$refs.logo.src, 'Anonymous').then((res) => {
+              this.$refs.logo.src = res;
+              resolve();
+            }).catch((err) => {})
+          });
+        }).catch((err) => {});
       });
     },
   }

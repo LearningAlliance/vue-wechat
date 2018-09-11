@@ -92,7 +92,7 @@
               </div>
             </div>
             <div class="tag-info clearfix">
-              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName.toUpperCase()}}</span>
+              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</span>
               <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
@@ -107,7 +107,7 @@
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
               <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
-                <div class="label">{{item.merLevelConfig.levelName.toUpperCase()}}</div>
+                <div class="label">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</div>
                 <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
               <div class="cell-item" v-if="item.pensionRate">
@@ -148,7 +148,7 @@
               </div>
             </div>
             <div class="tag-info clearfix">
-              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName.toUpperCase()}}</span>
+              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</span>
               <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
@@ -163,7 +163,7 @@
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
               <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
-                <div class="label">{{item.merLevelConfig.levelName.toUpperCase()}}</div>
+                <div class="label">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</div>
                 <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
               <div class="cell-item" v-if="item.pensionRate">

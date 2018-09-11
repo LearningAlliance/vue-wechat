@@ -16,8 +16,12 @@ const state = {
     routeName: '',
     headerRightFun: '',
     // 文档上的经纬度
-    latitude: 26.444981, // 纬度
-    longitude: 110.855687, // 经度
+    // latitude: 26.444981, // 纬度
+    // longitude: 110.855687, // 经度
+
+    // wu
+    longitude: 120.082565,
+    latitude: 30.200684,
 
     // 杭州测试
     // latitude: 30.31974,
