@@ -16,6 +16,8 @@ import Comment from '../pages/collection/Comment'
 import ShopEggList from '../pages/collection/ShopEggList'
 import EggDetail from '../pages/collection/EggDetail'
 import PutEgg from '../pages/collection/PutEgg'
+import CreatePw from '../pages/collection/CreatePw'
+import PutEggStep1 from '../pages/collection/PutEggStep1'
 
 export default [{
 	path: '/collection',
@@ -169,4 +171,22 @@ export default [{
 		subTitle: '放置彩蛋',
 	},
 	component: PutEgg
+}, {
+	path: '/collection/createPw',
+	name: 'createPw',
+	meta: {
+		title: '创建口令',
+		subTitle: ' ',
+	},
+	component: CreatePw,
+}, {
+	path: '/collection/putEggStep1',
+	name: 'putEggStep1',
+	meta: {
+		title: '收藏',
+		subTitle: ' 放置彩蛋step1',
+		wxConfig: true,
+		jsApiList: ['getLocation'],
+	},
+	component: PutEggStep1,
 }, ]

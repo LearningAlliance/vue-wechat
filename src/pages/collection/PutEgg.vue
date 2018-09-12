@@ -16,8 +16,8 @@
         <div class="cell-label">是否需要放入</div>
         <div :class="['icon-put', {'yes': whetherPut}]"></div>
       </div>
-      <div class="line"></div>
-      <div class="re-type-box clearfix">
+      <div class="line" v-show="whetherPut"></div>
+      <div class="re-type-box clearfix" v-show="whetherPut">
         <div class="re-type" v-for="(item, index) in reTypes">
           <div :class="['re-type-text', {'on': item.select}]" @click="changeReType(index)">{{item.name}}</div>
         </div>
@@ -36,11 +36,14 @@
         </div>
       </div>
       <div class="line"></div>
-      <div class="cell">
-        <div class="cell-label">是否创建口令</div> 
+      <div class="cell" @click="createPw">
+        <div class="cell-label">是否创建口令</div>
+        <div class="cell-right">
+          <div class="cell-right-text">{{eggInfo.pw || '未创建'}}</div>
+        </div>
       </div>
       <div class="line"></div>
-
+      <div :class="['submit-btn', {'on': canSubmit}]" @click="next">下一步</div>
       <div class="blank"></div>
     </div>
   </div>
@@ -48,7 +51,11 @@
 <script type="text/javascript">
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import { mapGetters, mapActions } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters(['eggInfo']),
+  },
   data() {
     return {
       shopId: null,
@@ -63,16 +70,27 @@ export default {
         { name: '微信红包', value: '4', select: false },
         { name: '套餐券', value: '1', select: false },
       ],
+      zoneType: '1',
+      reType: '2',
       whetherPut: true, // 是否放入
       expDate: 1,
+      canSubmit: true,
     }
   },
   mounted() {
     let { shopId } = this.$route.query;
     this.shopId = shopId;
+    if(!shopId){
+      return;
+    }
     this.getShopDetail();
+    // this.updateEggInfoByKey({'amount': 100});
   },
   methods: {
+    ...mapActions({
+      clearEggINfo: 'clearEggINfo',
+      updateEggInfoByKey: 'updateEggInfoByKey',
+    }),
     // 查询商家详情
     getShopDetail() {
       api.collection.merShop({
@@ -89,6 +107,7 @@ export default {
         obj.select = false;
       })
       this.zoneTypes[index].select = true;
+      this.zoneType = this.zoneTypes[index].value;
     },
     changePut() {
       this.whetherPut = !this.whetherPut;
@@ -101,17 +120,43 @@ export default {
         obj.select = false;
       })
       this.reTypes[index].select = true;
+      this.reType = this.reTypes[index].value;
     },
-    add(){
+    add() {
+      if (this.expDate == 7) {
+        _.alert('不能更多了~');
+        return;
+      }
       this.expDate++;
     },
-    minus(){
-      if(this.expDate == 1){
+    minus() {
+      if (this.expDate == 1) {
         _.alert('不能更少了~');
         return;
       }
       this.expDate--;
     },
+    createPw() {
+      this.$router.push({
+        path: '/collection/createPw',
+      });
+    },
+    next() {
+      let payload = {
+        shopId: this.shopId,
+        zoneType: this.zoneType,
+        expDate: this.expDate,
+      }
+      if (this.whetherPut) {
+        payload.reType = this.reType;
+      } else {
+        payload.reType = null;
+      }
+      this.updateEggInfoByKey(payload);
+      this.$router.push({
+        path: '/collection/putEggStep1',
+      });
+    }
   }
 }
 
@@ -125,10 +170,57 @@ export default {
   padding: 0;
 }
 
+.submit-btn {
+  margin: 0 auto;
+  margin-top: 78px;
+  width: 570px;
+  height: 88px;
+  background: #E2E2E2;
+  border-radius: 44px;
+  font-family: PingFangSC-Semibold;
+  font-size: 36px;
+  color: #FFFFFF;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 88px;
+  &.on {
+    background: #F05720;
+    color: #FFF;
+  }
+}
+
 .cell {
   width: 100%;
   height: 110px;
   position: relative;
+  .cell-right {
+    width: 50%;
+    height: 110px;
+    display: inline-block;
+    float: left;
+    font-family: PingFangSC-Regular;
+    font-size: 36px;
+    color: #F05720;
+    letter-spacing: 0;
+    line-height: 110px;
+    text-align: right;
+    position: relative;
+    box-sizing: border-box;
+    padding-right: 60px;
+    &::after {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      margin-top: -25px;
+      right: 0;
+      width: 50px;
+      height: 50px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_back_right@2x.png');
+    }
+  }
   .num-box {
     width: 50%;
     display: inline-block;
@@ -237,14 +329,15 @@ export default {
         padding-right: 29px;
         display: inline-block;
         box-sizing: border-box;
-        border: 3px solid #818B8F;
+        border: 1px solid #818B8F;
+        /*no*/
         border-radius: 34px;
         font-family: PingFangSC-Semibold;
         font-size: 32px;
         color: #818B8F;
         letter-spacing: 0;
         text-align: center;
-        line-height: 62px;
+        line-height: 66px;
         &.on {
           background: #F05720;
           border-color: #F05720;
@@ -269,14 +362,15 @@ export default {
         padding-right: 29px;
         display: inline-block;
         box-sizing: border-box;
-        border: 3px solid #818B8F;
+        border: 1px solid #818B8F;
+        /*no*/
         border-radius: 34px;
         font-family: PingFangSC-Semibold;
         font-size: 32px;
         color: #818B8F;
         letter-spacing: 0;
         text-align: center;
-        line-height: 62px;
+        line-height: 66px;
         &.on {
           background: #F05720;
           border-color: #F05720;

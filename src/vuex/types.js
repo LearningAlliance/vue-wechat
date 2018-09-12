@@ -42,3 +42,8 @@ export const GET_SPORTS_DETAIL = 'GET_SPORTS_DETAIL' //获取主题详情
 
 //travels 主题详情
 export const GET_TRAVELS_DETAIL = 'GET_TRAVELS_DETAIL' //获取主题详情
+
+//egg 设置彩蛋信息
+export const SET_EGG_INFO = 'SET_EGG_INFO'
+export const CLEAR_EGG_INFO = 'CLEAR_EGG_INFO' // 清空彩蛋信息
+export const UPDATE_EGG_INFO_BY_KEY = 'UPDATE_EGG_INFO_BY_KEY' // 更新彩蛋的某个key的值
