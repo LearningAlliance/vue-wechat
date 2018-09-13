@@ -71,3 +71,6 @@ export const getLonLat = (params) => post('/userServer/business/SysGaoDeAction',
 		withUid: false,
 	}
 });
+
+//上传文件
+// 直接在组件中请求了

@@ -8,10 +8,15 @@
     <div class="upload-inner-box">
       <label for="file" class="upload-cell add"></label>
     </div>
-    <input id="file" name="file" class="file-input" @change="onFileChange" accept="image/*" type="file">
+    <form method="POST" :action="url" ref="form" enctype="multipart/form-data">
+      <input id="file" name="file" class="file-input" @change="uploadPic" accept="image/*" type="file" />
+      <!-- <input type="text" name="key" /> -->
+      <button type="submit">提交</button>
+    </form>
   </div>
 </template>
 <script type="text/javascript">
+// import axios from 'axios'
 import config from '@/config'
 export default {
   data() {
@@ -24,33 +29,28 @@ export default {
 
   },
   methods: {
-    onFileChange(e) {
-      console.log(e);
-      let { files, value } = e.target;
-      console.log(files);
-      console.log(files.length);
-      if (files.length == 1) {
-        // this.picList.push(value);
-        this.onReadIn(files[0]);
-      }
-    },
-    onReadIn(fileObj) {
-      console.log(fileObj);
-      let file = fileObj.file;
+    uploadPic(e) {
+      console.log(e.target);
+      let file = e.target.files[0]
+      /* eslint-disable no-undef */
       let param = new FormData() // 创建form对象
       param.append('file', file, file.name) // 通过append向form对象添加数据
-      let config = {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        timeout: 1000 * 60,
-      }
-      this.$axios.post(this.url, param, config)
-        .then((res) => {
-          console.log(res);
-          // var item = res.data.data[0].fileName;
-          console.log(item);
-        }).catch(error => {})
-    },
+      // param.append('chunk', '0') // 添加form表单中其他数据
+      // console.log(param.get('file')) // FormData私有类对象，访问不到，可以通过get判断值是否传进去
 
+      let config = {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      }
+      // 添加请求头
+      axios.post('http://cs.juanzisc.com:9000/userServer/OSSClientFileImport', param, config)
+        .then(response => {
+          console.log("222222");
+          if (response.data.code === 0) {
+            console.log(response.data.data);
+          }
+          console.log(response.data)
+        })
+    },
   },
 }
 

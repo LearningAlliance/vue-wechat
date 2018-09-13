@@ -147,6 +147,18 @@ function initRequest(params = {}, options = {}) {
 	if (withSign) {
 		headers.sign = sign;
 	}
+	delete newOption.head['withPid'];
+	delete newOption.head['withTimestamp'];
+	delete newOption.head['withSign'];
+	headers = { ...headers,
+		...newOption.head
+	};
+	// headers['Content-Type'] = 'multipart/form-data';
+	// headers = { ...headers,
+	// 	...{
+	// 		'Content-Type': 'multipart/form-data'
+	// 	}
+	// };
 	// headers = {
 	// 	pid,
 	// 	timestamp,

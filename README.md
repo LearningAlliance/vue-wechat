@@ -102,3 +102,6 @@ location / {
 
 # 发布到其他服务器可参考
 [Vue Router](https://router.vuejs.org/zh/guide/essentials/history-mode.html#%E5%90%8E%E7%AB%AF%E9%85%8D%E7%BD%AE%E4%BE%8B%E5%AD%90)
+
+# 一些记录
+使用npm安装的axios结合formData上传文件失败，后使用在html中引入axios.min.js完成，参考[uploadImage.vue](https://github.com/LearningAlliance/vue-wechat/blob/master/src/components/uploadImage.vue)与[index.html](https://github.com/LearningAlliance/vue-wechat/blob/master/index.html)
