@@ -3,13 +3,14 @@
     <textarea class="remark" v-model="desc" maxlength="150" placeholder="请输入你想说的..."></textarea>
     <div class="num-left">还剩{{numLeft}}字</div>
     <div class="line-box">
-    	<div class="line"></div>
+      <div class="line"></div>
     </div>
-    <upload-image></upload-image>
+    <upload-image :img-change="imgChange"></upload-image>
     <div :class="['submit-btn', {'on': canSubmit}]" @click="next">下一步</div>
   </div>
 </template>
 <script type="text/javascript">
+import { mapGetters, mapActions } from 'vuex'
 import uploadImage from '@/components/uploadImage'
 export default {
   props: {
@@ -18,12 +19,13 @@ export default {
     }
   },
   components: {
-  	'upload-image': uploadImage,
+    'upload-image': uploadImage,
   },
   computed: {
-  	numLeft() {
-  		return this.max - this.desc.length;
-  	}
+    ...mapGetters(['eggInfo']),
+    numLeft() {
+      return this.max - this.desc.length;
+    }
   },
   data() {
     return {
@@ -36,8 +38,18 @@ export default {
     this.desc = this.remark || '';
   },
   methods: {
+    ...mapActions({
+      updateEggInfoByKey: 'updateEggInfoByKey',
+    }),
     next() {
 
+    },
+    imgChange(picList) {
+    	if(picList.length == 0 || picList == ''){
+    		this.updateEggInfoByKey({zoneFile: ''});
+    	}else{
+    		this.updateEggInfoByKey({zoneFile: picList.join(',')});
+    	}
     }
   }
 }
@@ -50,17 +62,18 @@ export default {
   background: #FFF;
 }
 
-.line-box{
-	box-sizing: border-box;
-	width: 100%;
-	height: 1px;/*no*/
-	padding-left: 30px;
-	padding-right: 30px;
-	.line{
-		width: 100%;
-		height: 100%;
-		background: #E2E2E2;
-	}
+.line-box {
+  box-sizing: border-box;
+  width: 100%;
+  height: 1px;
+  /*no*/
+  padding-left: 30px;
+  padding-right: 30px;
+  .line {
+    width: 100%;
+    height: 100%;
+    background: #E2E2E2;
+  }
 }
 
 .remark {
