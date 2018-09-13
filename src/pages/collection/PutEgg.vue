@@ -108,6 +108,8 @@ export default {
       })
       this.zoneTypes[index].select = true;
       this.zoneType = this.zoneTypes[index].value;
+      // 切换时 清空附件
+      this.updateEggInfoByKey({zoneFile: ''});
     },
     changePut() {
       this.whetherPut = !this.whetherPut;
@@ -155,6 +157,9 @@ export default {
       this.updateEggInfoByKey(payload);
       this.$router.push({
         path: '/collection/putEggStep1',
+        query: {
+          shopId: this.shopId,
+        }
       });
     }
   }

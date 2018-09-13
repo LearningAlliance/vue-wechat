@@ -52,7 +52,7 @@ export default {
     'previewer': Previewer
   },
   mounted() {
-  	this.picList = !!this.eggInfo.zoneFile ? this.eggInfo.zoneFile.split(',') : [];
+    this.picList = !!this.eggInfo.zoneFile ? this.eggInfo.zoneFile.split(',') : [];
   },
   methods: {
     uploadPic(e) {
@@ -70,7 +70,8 @@ export default {
         let param = new FormData() // 创建form对象
         param.append('file', file, file.name) // 通过append向form对象添加数据
         let config = {
-          headers: { 'Content-Type': 'multipart/form-data' }
+          headers: { 'Content-Type': 'multipart/form-data' },
+          timeout: 1000 * 60,
         }
         axios.post('http://cs.juanzisc.com:9000/userServer/OSSClientFileImport', param, config)
           .then((res) => {

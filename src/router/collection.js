@@ -18,6 +18,7 @@ import EggDetail from '../pages/collection/EggDetail'
 import PutEgg from '../pages/collection/PutEgg'
 import CreatePw from '../pages/collection/CreatePw'
 import PutEggStep1 from '../pages/collection/PutEggStep1'
+import PutEggStep2 from '../pages/collection/PutEggStep2'
 
 export default [{
 	path: '/collection',
@@ -185,8 +186,18 @@ export default [{
 	meta: {
 		title: '收藏',
 		subTitle: ' 放置彩蛋step1',
-		wxConfig: true,
-		jsApiList: ['getLocation'],
+		// wxConfig: true,
+		// jsApiList: ['getLocation'],
 	},
 	component: PutEggStep1,
+}, {
+	path: '/collection/putEggStep2',
+	name: 'putEggStep2',
+	meta: {
+		title: '收藏',
+		subTitle: ' 放置彩蛋step2',
+		// wxConfig: true,
+		// jsApiList: ['getLocation'],
+	},
+	component: PutEggStep2,
 }, ]

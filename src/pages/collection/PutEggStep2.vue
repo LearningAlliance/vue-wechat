@@ -1,23 +1,22 @@
 <template>
   <div class="page">
-    <zone-type-one :remark="eggInfo.desc" v-if="eggInfo.zoneType == 1"></zone-type-one>
-    <zone-type-two v-if="eggInfo.zoneType == 2"></zone-type-two>
-    <zone-type-three v-if="eggInfo.zoneType == 3"></zone-type-three>
+    步骤二
+    <!-- <zone-type-one :remark="eggInfo.desc" v-if="eggInfo.zoneType == 1"></zone-type-one> -->
   </div>
 </template>
 <script type="text/javascript">
 import { mapGetters, mapActions } from 'vuex'
-import zoneTypeOne from '@/components/putEgg/zoneTypeOne'
-import zoneTypeTwo from '@/components/putEgg/zoneTypeTwo'
-import zoneTypeThree from '@/components/putEgg/zoneTypeThree'
+// import zoneTypeOne from '@/components/putEgg/zoneTypeOne'
+// import zoneTypeTwo from '@/components/putEgg/zoneTypeTwo'
+// import zoneTypeThree from '@/components/putEgg/zoneTypeThree'
 export default {
   computed: {
     ...mapGetters(['eggInfo']),
   },
   components: {
-    'zone-type-one': zoneTypeOne,
-    'zone-type-two': zoneTypeTwo,
-    'zone-type-three': zoneTypeThree,
+    // 'zone-type-one': zoneTypeOne,
+    // 'zone-type-two': zoneTypeTwo,
+    // 'zone-type-three': zoneTypeThree,
   },
   mounted() {
     let { shopId } = this.$route.query;

@@ -29,9 +29,14 @@ export default {
   },
   data() {
     return {
-      canSubmit: true,
+      canSubmit: false,
       desc: '',
       max: 150,
+    }
+  },
+  watch: {
+    desc(newVal, oldVal) {
+      this.canSubmit = newVal.length > 0
     }
   },
   mounted() {
@@ -42,14 +47,20 @@ export default {
       updateEggInfoByKey: 'updateEggInfoByKey',
     }),
     next() {
-
+      if (!this.canSubmit) {
+        return;
+      }
+      this.updateEggInfoByKey({ desc: this.desc });
+      this.$router.push({
+        path: '/collection/putEggStep2'
+      });
     },
     imgChange(picList) {
-    	if(picList.length == 0 || picList == ''){
-    		this.updateEggInfoByKey({zoneFile: ''});
-    	}else{
-    		this.updateEggInfoByKey({zoneFile: picList.join(',')});
-    	}
+      if (picList.length == 0 || picList == '') {
+        this.updateEggInfoByKey({ zoneFile: '' });
+      } else {
+        this.updateEggInfoByKey({ zoneFile: picList.join(',') });
+      }
     }
   }
 }

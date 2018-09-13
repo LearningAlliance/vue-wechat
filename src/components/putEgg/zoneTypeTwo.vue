@@ -1,6 +1,6 @@
 <template>
 	<div class="page">
-		3
+		2
 	</div>
 </template>
 
