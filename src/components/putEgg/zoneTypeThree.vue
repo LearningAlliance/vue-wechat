@@ -136,6 +136,9 @@ export default {
       margin: 119px auto 0 auto;
       width: 59.5px;
       height: 41px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/icon_player.png');
     }
     .icon-player-desc {
       margin-top: 30px;

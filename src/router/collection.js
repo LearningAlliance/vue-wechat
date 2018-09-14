@@ -186,8 +186,8 @@ export default [{
 	meta: {
 		title: '收藏',
 		subTitle: ' 放置彩蛋step1',
-		// wxConfig: true,
-		// jsApiList: ['getLocation'],
+		wxConfig: true,
+		jsApiList: ['startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'uploadVoice'],
 	},
 	component: PutEggStep1,
 }, {
