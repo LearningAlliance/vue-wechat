@@ -78,6 +78,7 @@ export default {
     }
   },
   mounted() {
+    this.clearEggINfo();
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     if(!shopId){
@@ -110,6 +111,8 @@ export default {
       this.zoneType = this.zoneTypes[index].value;
       // 切换时 清空附件
       this.updateEggInfoByKey({zoneFile: ''});
+      // 清空红包金额
+      this.updateEggInfoByKey({amount: null});
     },
     changePut() {
       this.whetherPut = !this.whetherPut;

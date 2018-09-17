@@ -117,7 +117,8 @@ export const formatPrice = (price) => {
     if (typeof price != 'number') {
         return '';
     }
-    let p = price / 100;
+    // let p = price / 100;
+    let p = price;
     if (String(p).indexOf('.') > -1) {
         return p.toFixed(2) + '元';
     } else {
@@ -130,7 +131,8 @@ export const formatPriceWithoutUnit = (price) => {
     if (typeof price != 'number') {
         return '';
     }
-    let p = price / 100;
+    // let p = price / 100;
+    let p = price;
     if (String(p).indexOf('.') > -1) {
         return p.toFixed(2);
     } else {

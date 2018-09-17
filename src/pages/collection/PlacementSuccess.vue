@@ -8,14 +8,30 @@
     </div>
     <div class="btn-group clearfix">
       <div class="btn-show">分享给好友</div>
-      <div class="btn-back">返回商家</div>
+      <div class="btn-back" @click="toShop">返回商家</div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 export default {
   data() {
-    return {}
+    return {
+      shopId: null,
+    }
+  },
+  mounted(){
+    let {shopId} = this.$route.query;
+    this.shopId = shopId;
+  },
+  methods: {
+    toShop(){
+      this.$router.push({
+        path: '/collection/shopDetail',
+        query: {
+          shopId: this.shopId,
+        }
+      })
+    }
   }
 }
 

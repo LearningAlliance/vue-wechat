@@ -127,3 +127,9 @@ export const qrySysZoneCount = (params) => post('/userServer/business/SysZoneAct
 	action: 'qrySysZoneCount',
 	data: JSON.stringify(params),
 });
+
+// 放置彩蛋
+export const saveSysZone = (params) => post('/userServer/business/SysZoneAction', {
+	action: 'saveSysZone',
+	data: JSON.stringify(params),
+})

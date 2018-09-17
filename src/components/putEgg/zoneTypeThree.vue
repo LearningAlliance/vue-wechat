@@ -28,13 +28,16 @@ export default {
     return {
       videoUrl: [], // [{src: 'abc.mp4'}] 视频地址格式
       canSubmit: false,
+      shopId: null,
     }
   },
-  mounted(){
-  	if(!!this.eggInfo.zoneFile){
-  		let obj = {src: this.eggInfo.zoneFile};
-  		this.videoUrl = [obj];
-  	}
+  mounted() {
+    let { shopId } = this.$route.query;
+    this.shopId = shopId;
+    if (!!this.eggInfo.zoneFile) {
+      let obj = { src: this.eggInfo.zoneFile };
+      this.videoUrl = [obj];
+    }
   },
   components: {
     'my-player': myPlayer,
@@ -57,7 +60,10 @@ export default {
       }
       this.updateEggInfoByKey({ zoneFile: this.videoUrl[0].src });
       this.$router.push({
-        path: '/collection/putEggStep2'
+        path: '/collection/putEggStep2',
+        query: {
+          shopId: this.shopId,
+        }
       });
     },
     uploadVideo(e) {

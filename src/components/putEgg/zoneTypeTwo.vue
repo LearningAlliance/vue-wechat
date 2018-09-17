@@ -28,6 +28,7 @@ export default {
   data() {
     return {
       // currentTime: '00:16:50',
+      shopId: null,
       on: false,
       play: false,
       canSubmit: true,
@@ -43,6 +44,10 @@ export default {
   },
   components: {
     wave,
+  },
+  mounted() {
+    let { shopId } = this.$route.query;
+    this.shopId = shopId;
   },
   methods: {
     ...mapActions({
@@ -119,7 +124,10 @@ export default {
       }
       this.updateEggInfoByKey({ zoneFile: this.audioUrl });
       this.$router.push({
-        path: '/collection/putEggStep2'
+        path: '/collection/putEggStep2',
+        query: {
+          shopId: this.shopId,
+        }
       });
     },
     startRecord() {

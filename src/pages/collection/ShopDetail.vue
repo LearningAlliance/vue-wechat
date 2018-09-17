@@ -379,13 +379,17 @@ export default {
       });
     },
     payTheBill() {
-      console.log('TODO 买单');
       this.$router.push({
         path: '/collection/payTheBill',
       });
     },
     toShare() {
-      _.alert('分享推荐');
+      this.$router.push({
+        path: '/earning/aShareBefore',
+        query: {
+          shopId: this.shopId,
+        }
+      });
     },
     putEgg() {
       this.$router.push({
@@ -503,7 +507,7 @@ export default {
         this.$set(collectInfo, 'state', follow);
         api.collection.userFollow({
           shopId: this.shopId,
-          isFollow: follow, 
+          isFollow: follow,
         }).then((res) => {
           this.showModal = false;
           this.$set(this.collectInfo, 'isFollow', follow);

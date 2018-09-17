@@ -1,22 +1,23 @@
 <template>
   <div class="page">
-    步骤二
-    <!-- <zone-type-one :remark="eggInfo.desc" v-if="eggInfo.zoneType == 1"></zone-type-one> -->
+    <re-type-one :remark="eggInfo.desc" v-if="eggInfo.reType == 1"></re-type-one>
+    <re-type-two :remark="eggInfo.desc" v-if="eggInfo.reType == 2"></re-type-two>
+    <re-type-four :remark="eggInfo.desc" v-if="eggInfo.reType == 4"></re-type-four>
   </div>
 </template>
 <script type="text/javascript">
 import { mapGetters, mapActions } from 'vuex'
-// import zoneTypeOne from '@/components/putEgg/zoneTypeOne'
-// import zoneTypeTwo from '@/components/putEgg/zoneTypeTwo'
-// import zoneTypeThree from '@/components/putEgg/zoneTypeThree'
+import reTypeOne from '@/components/putEgg/reTypeOne'
+import reTypeTwo from '@/components/putEgg/reTypeTwo'
+import reTypeFour from '@/components/putEgg/reTypeFour'
 export default {
   computed: {
     ...mapGetters(['eggInfo']),
   },
   components: {
-    // 'zone-type-one': zoneTypeOne,
-    // 'zone-type-two': zoneTypeTwo,
-    // 'zone-type-three': zoneTypeThree,
+    're-type-one': reTypeOne,
+    're-type-two': reTypeTwo,
+    're-type-four': reTypeFour,
   },
   mounted() {
     let { shopId } = this.$route.query;

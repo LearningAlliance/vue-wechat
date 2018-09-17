@@ -40,6 +40,8 @@ export default {
     }
   },
   mounted() {
+    let { shopId } = this.$route.query;
+    this.shopId = shopId;
     this.desc = this.remark || '';
   },
   methods: {
@@ -52,7 +54,10 @@ export default {
       }
       this.updateEggInfoByKey({ desc: this.desc });
       this.$router.push({
-        path: '/collection/putEggStep2'
+        path: '/collection/putEggStep2',
+        query: {
+          shopId: this.shopId,
+        }
       });
     },
     imgChange(picList) {

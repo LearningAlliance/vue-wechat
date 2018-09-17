@@ -19,7 +19,7 @@ import PutEgg from '../pages/collection/PutEgg'
 import CreatePw from '../pages/collection/CreatePw'
 import PutEggStep1 from '../pages/collection/PutEggStep1'
 import PutEggStep2 from '../pages/collection/PutEggStep2'
-
+import PutEggPay from '../pages/collection/PutEggPay'
 export default [{
 	path: '/collection',
 	name: 'collection',
@@ -200,4 +200,12 @@ export default [{
 		// jsApiList: ['getLocation'],
 	},
 	component: PutEggStep2,
+}, {
+	path: '/collection/putEggPay',
+	name: 'putEggPay',
+	meta: {
+		title: '收藏',
+		subTitle: ' 放置彩蛋',
+	},
+	component: PutEggPay,
 }, ]

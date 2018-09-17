@@ -35,6 +35,32 @@ const actions = {
 	}, payload) {
 		commit(types.UPDATE_EGG_INFO_BY_KEY, payload)
 	},
+	saveEgg({
+		commit
+	}, payload) {
+		let {
+			router,
+			shopId,
+		} = payload;
+		console.log(router);
+		router.push({
+			path: '/collection/placementSuccess',
+			query: {
+				shopId,
+			}
+		})
+		api.collection.saveSysZone(state.eggInfo).then((res) => {
+			console.log(res);
+			router.push({
+				path: '/collection/placementSuccess',
+				query: {
+					shopId,
+				}
+			})
+			// 放置彩蛋后清空彩蛋信息
+			commit(types.CLEAR_EGG_INFO, payload);
+		}).catch((err) => {});
+	},
 }
 
 const getters = {

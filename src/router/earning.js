@@ -2,6 +2,7 @@ import Earning from '../pages/Earning'
 import AShare from '../pages/earning/AShare'
 import AShareShopList from '../pages/earning/AShareShopList'
 import AShareDetail from '../pages/earning/AShareDetail'
+import AShareBefore from '../pages/earning/AShareBefore'
 
 export default [{
 	path: '/earning',
@@ -37,4 +38,12 @@ export default [{
 		subTitle: '分享获得积分收益',
 	},
 	component: AShareDetail,
+}, {
+	path: '/earning/aShareBefore',
+	name: 'aShareBefore',
+	meta: {
+		title: '微信',
+		subTitle: '全民分享',
+	},
+	component: AShareBefore,
 }, ]

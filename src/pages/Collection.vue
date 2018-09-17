@@ -92,7 +92,7 @@
               </div>
             </div>
             <div class="tag-info clearfix">
-              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig')">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</span>
+              <span class="tag-cell" v-if="item.hasOwnProperty('merLevelConfig') && typeof(item.merLevelConfig) == 'object'">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</span>
               <span class="tag-cell" v-show="item.zoneCount > 0">彩蛋</span>
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
@@ -822,6 +822,9 @@ export default {
             font-size: 32px;
             color: #2E3141;
             line-height: 41.6px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .coupon-name {
             margin-top: 20.8px;
@@ -830,6 +833,9 @@ export default {
             font-size: 24px;
             color: #2E3141;
             line-height: 31.2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .other-info {
             margin-top: 10.8px;
