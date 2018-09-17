@@ -18,7 +18,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import config from '@/config'
+import * as conf from '@/config'
 import * as _ from '@/util/tool.js'
 import { Indicator } from 'mint-ui'
 import { Previewer } from 'vux'
@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      url: `${config.baseUrlPro}/userServer/OSSClientFileImport`,
+      url: `${conf.baseUrlPro}/userServer/OSSClientFileImport`,
       picList: [],
       previewerList: [],
       imgUrl: '',
@@ -73,7 +73,7 @@ export default {
           headers: { 'Content-Type': 'multipart/form-data' },
           timeout: 1000 * 60,
         }
-        axios.post('http://cs.juanzisc.com:9000/userServer/OSSClientFileImport', param, config)
+        axios.post(`${conf.baseUrlPro}/userServer/OSSClientFileImport`, param, config)
           .then((res) => {
             var res = res.data;
             this.picList.push(res.data[0].fileName);

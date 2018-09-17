@@ -167,3 +167,9 @@ export const getInvalidVoucher = (params) => post('/userServer/business/UserCoup
 		}
 	}),
 })
+
+// 修改会员头像
+export const updateUserHead = (params) => post('/userServer/business/UserInfoAction', {
+	action: 'updateUserHead',
+	data: JSON.stringify(params),
+})

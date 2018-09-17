@@ -2,16 +2,18 @@
   <div class="page">
     <div class="margin-top-20"></div>
     <div class="group">
-      <div class="cell" @click="changeAvatar">
-        <div class="cell-div clearfix has-avatar">
-          <div class="cell-l has-avatar" >
-            <span class="text margin-left-0">头像</span>
+      <div class="cell">
+        <label for="file">
+          <div class="cell-div clearfix has-avatar">
+            <div class="cell-l has-avatar">
+              <span class="text margin-left-0">头像</span>
+            </div>
+            <div class="cell-r right-0 has-avatar">
+              <span class="avatar" v-show="userInfo.userHead"><img :src="userInfo.userHead" alt="" /></span>
+              <img src="../../assets/images/ic_back_right@2x.png" class="more" alt="">
+            </div>
           </div>
-          <div class="cell-r right-0 has-avatar">
-            <span class="avatar" v-show="userInfo.userHead"><img :src="userInfo.userHead" alt="" /></span>
-            <img src="../../assets/images/ic_back_right@2x.png" class="more" alt="">
-          </div>
-        </div>
+        </label>
       </div>
       <div class="cell">
         <router-link to="/mine/modifyUserNick" class="clearfix no-border">
@@ -27,6 +29,7 @@
     </div>
     <!-- <user-group :cell-lists="cellLists2"></user-group> -->
     <user-group :cell-lists="cellLists1"></user-group>
+    <input id="file" ref="file" name="file" class="file-input" @change="uploadPic" accept="image/*" type="file" />
   </div>
 </template>
 <script type="text/javascript">
@@ -34,6 +37,8 @@ import userGroup from '@/components/group'
 import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import { Indicator } from 'mint-ui'
+import * as conf from '@/config/index'
 
 export default {
   data() {
@@ -82,8 +87,55 @@ export default {
     ])
   },
   methods: {
-    changeAvatar(){
+    changeAvatar() {
       _.alert('选择相册图片开发中');
+    },
+    uploadPic(e) {
+      var self = this;
+      try {
+        if (e.target.files.length != 1) {
+          return;
+        }
+        Indicator.open({
+          text: '上传中',
+          spinnerType: 'fading-circle'
+        });
+        let file = e.target.files[0];
+        /* eslint-disable no-undef */
+        let param = new FormData() // 创建form对象
+        param.append('file', file, file.name) // 通过append向form对象添加数据
+        let config = {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          timeout: 1000 * 60,
+        }
+        axios.post(`${conf.baseUrlPro}/userServer/OSSClientFileImport`, param, config)
+          .then((res) => {
+            var res = res.data;
+            // console.log(res);
+            this.setAvatar(res.data[0].fileName);
+            Indicator.close();
+          }).catch((err) => {
+            Indicator.close();
+            _.alert('上传失败，请重试');
+          });
+      } catch (e) {
+        Indicator.close();
+      }
+    },
+    setAvatar(avatar) {
+      api.user.updateUserHead({
+        userHead: avatar,
+      }).then((res) => {
+        _.alert('修改头像成功');
+        api.user.getUserInfo().then((res) => {
+          let userInfo = res.data[0];
+          this.$store.dispatch('setUserInfo', userInfo);
+        }).catch((err) => {
+          console.log(err);
+        });
+      }).catch((err) => {
+        _.alert('修改头像失败，请重试');
+      })
     }
   },
 }
@@ -96,6 +148,17 @@ export default {
   background: #F8F8FC;
 }
 
+.file-input {
+  position: absolute;
+  left: -99999px;
+  top: -99999px;
+  width: 100px;
+  height: 20px;
+  opacity: 0;
+  overflow: visible;
+  z-index: -1;
+}
+
 .group {
   margin-bottom: 20px;
 }
@@ -103,7 +166,8 @@ export default {
 .cell {
   position: relative;
   background: #fff;
-  a, .cell-div {
+  a,
+  .cell-div {
     display: block;
     height: 88px;
     line-height: 88px;
