@@ -36,7 +36,7 @@ export default {
   },
   created() {
     api.user.getUserFamilyRateList().then((res) => {
-      console.log(res);
+      // console.log(res);
       this.list = res.data;
       this.setUserFamilyRateList(res.data);
     })

@@ -234,20 +234,16 @@
 
 	套餐详情-查看图文详情部分
 
-TODO
-	搜索发现中的数据是静态的 ，需接口获取 
 	有活动页面上半部分调用接口添加类别参数
-/userServer/business/MerShopAction?action=hotShop
-/userServer/business/MerCouponAction?action=qryMerCouponHot
-这两个接口也加了shopMainType参数
+	/userServer/business/MerShopAction?action=hotShop
+	/userServer/business/MerCouponAction?action=qryMerCouponHot
+	这两个接口也加了shopMainType参数
 
-没好的页面
-	a2.4.6
-	a2.4.7
-	a2.5.4
-	a2.8.*
-	a2.9.*
-	a2.10.*
-
+TODO
+	搜索发现中的数据是静态的 ，需接口获取
+	订单支付，取消逻辑 
+	彩蛋详情，放置，详情调试
+	兑换商城兑换等
+	个人中心-保障金部分调试
 
 	

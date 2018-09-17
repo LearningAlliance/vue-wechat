@@ -50,6 +50,8 @@ export default {
   data() {
     return {
       hasMore: true,
+      pageNum: 1,
+      pageRow: 20,
     }
   },
   computed: {
@@ -76,6 +78,12 @@ export default {
     },
     getInfo() {
       // 获取上方信息
+      api.earning.qryShare({ 
+        pageNum: this.pageNum, 
+        pageRow: this.pageRow,
+      }).then((res) => {
+        console.log(res);
+      }).catch((err) => {});
     },
     getList() {
       // 获取列表信息

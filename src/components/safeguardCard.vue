@@ -12,7 +12,7 @@
       <div class="box clearfix" v-else>
         <div class="cell left">
           <div class="btn" @click="toShop">兑换</div>
-          <p>已兑换养老金100元</p>
+          <p>已兑换养老金{{accountPensions}}元</p>
         </div>
         <div class="cell right">
           <div class="btn no-bg" @click="toGive">转赠</div>
@@ -30,26 +30,31 @@ export default {
   data() {
     return {
       accountSafeGuard: 0,
+      accountPensions: 0,
     }
   },
-  created(){
-this.getAccountSafeGuard();
+  mounted() {
+    this.getData();
   },
   methods: {
-    toComplate() {
+    toComplate() { 
       this.$router.push('/mine/safeguardComplete')
     },
-    toShop(){
-    	_.alert('TODO 跳转到兑换商城')
+    toShop() {
+      this.$router.push('/discovery/exchangeMall');
     },
-    toGive(){
+    toGive() {
       this.$router.push('/mine/safeguardGive')
     },
-        getAccountSafeGuard(){
+    getData() {
       api.user.getAccountSafeGuard().then((res) => {
         let item = res.data[0];
-        this.accountSafeGuard = !!item.amount ? item.amount.toFixed(2) : 0;
-      });
+        this.accountSafeGuard = !!item.amount ? Number(item.amount).toFixed(2) : 0;
+      }).catch((err) => {console.log(err)});
+      api.user.getAccountPensions().then((res) => {
+        let item = res.data[0];
+        this.accountPensions = !!item.amount ? Number(item.amount).toFixed(2) : 0;
+      }).catch((err) => {console.log(err)});
     },
   },
   computed: {

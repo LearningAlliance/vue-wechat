@@ -5,7 +5,7 @@
       <div class="section-body">
         <div class="section-header clearfix">
           <img class="shop-logo" :src="myOrder.shopLogo" />
-          <div class="shop-name">{{myOrder.shopName}}</div>
+          <div class="shop-name" @click="toShop">{{myOrder.shopName}}</div>
           <div class="shop-right-icon"></div>
           <div :class="['box-status', {'order-state-1': myOrder.orderState == 1, 'order-state-2': myOrder.orderState == 2 || myOrder.orderState == 3} ]">{{myOrder.orderState | formatOrderState}}</div>
         </div>
@@ -38,7 +38,7 @@
             满减
             <span class="section-value">-{{Number((myOrder.activityPrice || 0)/100).toFixed(2)}}元</span>
           </p>
-<!--           <p class="section-p margin-top-28 clearfix">
+          <!--           <p class="section-p margin-top-28 clearfix">
             优惠金额
             <span class="section-value">-{{Number(myOrder.discountAmount/100).toFixed(2)}}元</span>
           </p> -->
@@ -81,6 +81,17 @@ export default {
     },
     cancelOrder() {
       _.alert('TODO 取消支付');
+    },
+    toShop() {
+      if (!this.myOrder.shopId) {
+        return;
+      }
+      this.$router.push({
+        path: '/collection/shopDetail',
+        query: {
+          shopId: this.myOrder.shopId,
+        }
+      })
     }
   }
 }

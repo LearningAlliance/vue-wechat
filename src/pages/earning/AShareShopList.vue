@@ -1,19 +1,19 @@
 <template>
-  <div class="page">
+  <div class="page" @scroll="handleScroll()">
     <div class="list">
-      <div class="cell">
-        <div class="cell-top" @click.stop="toShopDetail">
+      <div class="cell" v-for="(item, index) in list">
+        <div class="cell-top" @click.stop="toShopDetail(index)">
           <div class="cell-logo">
-            <img :src="'' || require('../../assets/images/icon_shop_default.png')" />
+            <img :src="item.shopLogo || require('../../assets/images/icon_shop_default.png')" />
           </div>
           <div class="cell-content">
-            <div class="shop-name">快乐肥宅茶武林店</div>
-            <div class="shop-desc">去过 <span class="black">12次</span> 消费 <span class="black">86.00元</span></div>
+            <div class="shop-name">{{item.shopName}}</div>
+            <div class="shop-desc">去过 <span class="black">{{item.consumeNums || 0}}次</span> 消费 <span class="black">{{item.sumRealAmount}}元</span></div>
           </div>
           <div class="line"></div>
         </div>
         <div class="cell-footer">
-          <div class="footer-desc">美食 黄龙商圈</div>
+          <div class="footer-desc">{{item.tradingArea || ''}}</div>
           <div class="footer-btn" @click.stop="recommend">推荐这家</div>
         </div>
       </div>
@@ -22,10 +22,15 @@
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
       hasMore: true,
+      pageNum: 1,
+      pageRow: 20,
+      list: [],
     }
   },
   mounted() {
@@ -33,7 +38,17 @@ export default {
   },
   methods: {
     getList() {
-      this.hasMore = false;
+      // this.hasMore = false;
+      api.earning.qryShareCollect({
+        pageNum: this.pageNum,
+        pageRow: this.pageRow,
+      }).then((res) => {
+        let list = res.data;
+        if (list.length < this.pageRow) {
+          this.hasMore = false;
+        }
+        this.list = this.pageNum == 1 ? list : this.list.concat(list);
+      }).catch((err) => {});
     },
     recommend() {
       // 测试
@@ -44,13 +59,25 @@ export default {
         },
       });
     },
-    toShopDetail() {
+    toShopDetail(index) {
       this.$router.push({
         path: '/collection/shopDetail',
         query: {
-          shopId: 1,
+          shopId: this.list[index].shopId,
         },
       });
+    },
+    handleScroll() {
+      if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
+        this.loadMore();
+      }
+    },
+    loadMore() {
+      if (!this.hasMore) {
+        return;
+      }
+      this.pageNum++;
+      this.getList();
     },
   },
 }
