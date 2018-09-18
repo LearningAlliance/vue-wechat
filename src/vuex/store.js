@@ -7,6 +7,7 @@ import travel from './modules/travel'
 import detail from './modules/detail'
 import com from './modules/com'
 import egg from './modules/egg'
+import vip from './modules/vip'
 
 Vue.use(Vuex)
 
@@ -18,5 +19,6 @@ export default new Vuex.Store({
 		detail,
 		com,
 		egg,
+		vip,
 	}
 })

@@ -44,6 +44,9 @@ import InvalidVoucher from '../pages/mine/InvalidVoucher'
 // user下的文件
 import UserInfo from '../pages/mine/UserInfo'
 
+// 会员中心
+import MemberCenter from '../pages/mine/MemberCenter'
+
 export default [{
 	path: '/mine',
 	name: 'mine',
@@ -243,4 +246,12 @@ export default [{
 		subTitle: '失效的代金券',
 	},
 	component: InvalidVoucher,
-}]
+}, {
+	path: '/mine/memberCenter',
+	name: 'memberCenter',
+	meta: {
+		title: '个人中心',
+		subTitle: '会员中心',
+	},
+	component: MemberCenter,
+}, ]

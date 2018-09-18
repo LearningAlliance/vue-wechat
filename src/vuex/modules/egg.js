@@ -42,15 +42,15 @@ const actions = {
 			router,
 			shopId,
 		} = payload;
-		console.log(router);
-		router.push({
-			path: '/collection/placementSuccess',
-			query: {
-				shopId,
-			}
-		})
+		// console.log(router);
+		// router.push({
+		// 	path: '/collection/placementSuccess',
+		// 	query: {
+		// 		shopId,
+		// 	}
+		// })
 		api.collection.saveSysZone(state.eggInfo).then((res) => {
-			console.log(res);
+			// console.log(res);
 			router.push({
 				path: '/collection/placementSuccess',
 				query: {

@@ -2,7 +2,7 @@
   <div class="section">
     <div class="card">
       <div class="card-box">
-        <div class="sign-in-box">已签到</div>
+        <!-- <div class="sign-in-box">已签到</div> -->
         <div class="avatar">
           <img v-bind:src="userInfo.userHead" />
         </div>
@@ -11,8 +11,8 @@
           <i :class="['user-sex-hidden', userSex]"></i>
         </div>
         <div class="level">
-          <div class="level-box">
-            <span class="level-text">青铜会员</span>
+          <div :class="['level-box', {'level-0': vipLevel == 0, 'level-1': vipLevel == 1, 'level-2': vipLevel == 2, 'level-3': vipLevel == 3, 'level-4': vipLevel == 4, 'level-5': vipLevel == 5, }]">
+            <span class="level-text">{{vipName}}</span>
           </div>
         </div>
         <div class="box">
@@ -43,14 +43,17 @@ export default {
       accountCredits: 0,
     }
   },
-  created(){
+  created() {
     this.getAccountSafeGuard();
     this.getAccountCredits();
   },
   computed: {
     ...mapGetters([
       'loginStatus',
-      'userInfo'
+      'userInfo',
+      'vipLevel',
+      'vipScore',
+      'vipName',
     ]),
     userSex() {
       let value = this.userInfo.userSex;
@@ -66,13 +69,13 @@ export default {
     toSafeGuard() {
       this.$router.push('/mine/safeguard');
     },
-    getAccountSafeGuard(){
+    getAccountSafeGuard() {
       api.user.getAccountSafeGuard().then((res) => {
         let item = res.data[0];
         this.accountSafeGuard = item.amount || 0;
       }).catch((err) => {});
     },
-    getAccountCredits(){
+    getAccountCredits() {
       api.user.getAccountCredits().then((res) => {
         let item = res.data[0];
         this.accountCredits = item.amount || 0;
@@ -160,14 +163,38 @@ export default {
           display: inline-block;
           text-align: center;
           height: 40px;
-          border: 2px solid #AF957E;
+          border: 2px solid #B6B6B6;
           border-radius: 25px;
           box-sizing: border-box;
+          color: #B6B6B6;
+          &.level-0 {
+            border-color: #B6B6B6;
+            color: #B6B6B6;
+          }
+          &.level-1 {
+            border-color: #AF957E;
+            color: #AF957E;
+          }
+          &.level-2 {
+            border-color: #58A2C7;
+            color: #58A2C7;
+          }
+          &.level-3 {
+            border-color: #F0A719;
+            color: #F0A719;
+          }
+          &.level-4 {
+            border-color: #6F41FF;
+            color: #6F41FF;
+          }
+          &.level-5 {
+            border-color: #02DAFF;
+            color: #02DAFF;
+          }
           .level-text {
             display: inline-block;
             font-family: PingFangSC-Regular;
             font-size: 24px;
-            color: #AF957E;
             line-height: 40px;
             padding: 0 22px 0 22px;
           }

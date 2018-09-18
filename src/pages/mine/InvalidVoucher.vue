@@ -6,7 +6,7 @@
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <ul class="list-box">
           <li class="list" v-for="(item, index) in pageList">
-            <div class="box">
+            <div class="box with-shadow">
               <div class="box-content clearfix">
                 <img class="box-logo" :src="item.shopLogo" />
                 <div class="box-center">
@@ -147,6 +147,8 @@ export default {
       padding-left: 40px;
       padding-right: 34px;
       box-sizing: border-box;
+      border-radius: 12px;
+      overflow: hidden;
       background-image: url('../../assets/images/ic_voucher_invalid_bg.png');
       background-size: 100% 100%;
       background-repeat: no-repeat;

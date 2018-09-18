@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="list">
-        <div class="box clearfix" v-for="(item, index) in voucherList" :key="'valid' + index" @click="selectCoupon(index)">
+        <div class="box clearfix with-shadow" v-for="(item, index) in voucherList" :key="'valid' + index" @click="selectCoupon(index)">
           <div :class="['icon-select', {'selected': selectedIndex == index}]"></div>
           <div class="box-content clearfix">
             <div class="box-left">
@@ -95,7 +95,7 @@
           </div>
         </div>
         <div class="invalidVoucherTitle">不可使用优惠券</div>
-        <div class="box invalid clearfix" v-for="(item, index) in invalidVoucherList" :key="'invalid' + index">
+        <div class="box invalid clearfix with-shadow" v-for="(item, index) in invalidVoucherList" :key="'invalid' + index">
           <div class="box-content clearfix">
             <div class="box-left">
               <div class="box-coupon-price"><span class="box-coupon-currency">￥</span>{{item.couponPrice/100}}</div>

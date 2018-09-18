@@ -11,26 +11,30 @@ const actions = {
     /**
      * 获取活动详情
      */
-    getDetail({ commit }, palyload) {
+    getDetail({
+        commit
+    }, palyload) {
         commit(types.COM_LOADING_STATUS, true)
-        if(palyload.router == 'sport') {
+        if (palyload.router == 'sport') {
             api.SportsDetail(palyload.id)
                 .then(res => {
                     commit(types.COM_LOADING_STATUS, false)
                     commit(types.GET_SPORTS_DETAIL, res)
                 })
-        } else if(palyload.router == 'travel') {
+        } else if (palyload.router == 'travel') {
             api.TravelsDetail(palyload.id)
                 .then(res => {
                     commit(types.COM_LOADING_STATUS, false)
                     commit(types.GET_TRAVELS_DETAIL, res)
                 })
-        }   
+        }
     },
     /**
      * 活动点击次数
      */
-    travelClicks({ commit }, id) {
+    travelClicks({
+        commit
+    }, id) {
         api.travelClicks(id)
             .then(res => {
                 console.log(res)

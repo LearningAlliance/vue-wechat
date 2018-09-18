@@ -63,7 +63,7 @@ axios.interceptors.response.use((res) => {
 							withUid: false,
 						}
 					}).then((res) => {
-						// console.log('getToken', res);
+						// console.log('get Token', res);
 						let {
 							token,
 							uid
@@ -84,6 +84,7 @@ axios.interceptors.response.use((res) => {
 
 		});
 	} else {
+		console.log(res);
 		// resultCode 2011 2014
 		let code = res.data.resultCode || -1;
 		code = Number(code);

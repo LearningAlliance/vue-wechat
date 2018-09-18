@@ -1,15 +1,15 @@
 <template>
-  <div class="page">
+  <div class="page" @scroll="handleScroll()">
     <div class="card-box">
       <div class="card with-shadow">
         <div class="card-desc clearfix">
           <div class="card-left">
             <div class="card-title">共分享推荐(条)</div>
-            <div class="card-num ellipsis">12</div>
+            <div class="card-num ellipsis">{{info.allCount || 0}}</div>
           </div>
           <div class="card-right">
             <div class="card-title">已获得奖励积分</div>
-            <div class="card-num ellipsis">1542</div>
+            <div class="card-num ellipsis">{{info.allintegral || 0}}</div>
           </div>
         </div>
         <div class="card-btn" @click="toMoreShop">推荐更多收藏商家</div>
@@ -18,23 +18,23 @@
     <div class="section-title">
       <div class="section-title-text">正在获取奖励的推荐</div>
     </div>
-    <div class="list">
+    <div class="list" v-for="(item, index) in list">
       <div class="cell" @click="recommend">
-        <div class="cell-title">肥宅快乐鸡西湖文化广场店</div>
+        <div class="cell-title">{{item.shopName || ''}}</div>
         <div class="cell-content clearfix">
           <div class="cell-item">
             <div class="item-title">已打开(人)</div>
-            <div class="item-num ellipsis">2</div>
+            <div class="item-num ellipsis">{{item.noPayShareCount || 0}}</div>
           </div>
           <div class="vertical-line line-1"></div>
           <div class="cell-item">
             <div class="item-title">已消费(人)</div>
-            <div class="item-num ellipsis">2</div>
+            <div class="item-num ellipsis">{{item.isPayShareCount || 0}}</div>
           </div>
           <div class="vertical-line line-2"></div>
           <div class="cell-item">
             <div class="item-title">获得积分</div>
-            <div class="item-num ellipsis orange">500</div>
+            <div class="item-num ellipsis orange">{{item.shopIntegral || 0}}</div>
           </div>
         </div>
       </div>
@@ -52,6 +52,8 @@ export default {
       hasMore: true,
       pageNum: 1,
       pageRow: 20,
+      list: [],
+      info: {},
     }
   },
   computed: {
@@ -74,15 +76,27 @@ export default {
     // 点击右上角规则
     toRule() {
       this.$store.dispatch('setHeaderRightFun', '');
-      console.log('toRule');
+    },
+    handleScroll() {
+      if (this.$el.scrollTop + this.$el.offsetHeight >= this.$el.scrollHeight) {
+        this.loadMore();
+      }
     },
     getInfo() {
       // 获取上方信息
-      api.earning.qryShare({ 
-        pageNum: this.pageNum, 
+      api.earning.qryShare({
+        pageNum: this.pageNum,
         pageRow: this.pageRow,
       }).then((res) => {
-        console.log(res);
+        res = res.data[0];
+        if (this.pageNum == 1) {
+          this.info = res;
+        }
+        let { userShare = [] } = res;
+        if (userShare.length < this.pageRow) {
+          this.hasMore = false;
+        }
+        this.list = this.pageNum == 1 ? userShare : this.list.concat(userShare);
       }).catch((err) => {});
     },
     getList() {
@@ -93,7 +107,7 @@ export default {
       this.$router.push({
         path: '/earning/aShareShopList',
       });
-    },
+    }, 
     recommend() {
       // 测试
       this.$router.push({
@@ -102,6 +116,13 @@ export default {
           shopId: 1,
         },
       });
+    },
+    loadMore() {
+      if (!this.hasMore) {
+        return;
+      }
+      this.pageNum++;
+      this.getInfo();
     },
   },
 }
@@ -197,6 +218,9 @@ export default {
       font-size: 32px;
       color: #2E3141;
       line-height: 41.6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       &::before {
         content: '';
         position: absolute;
