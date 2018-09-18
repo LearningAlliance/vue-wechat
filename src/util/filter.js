@@ -114,28 +114,38 @@ export const formatDistanceCN = (distance) => {
 
 // 格式化价格
 export const formatPrice = (price) => {
-    if (typeof price != 'number') {
+    try {
+        if (typeof price != 'number') {
+            price = Number(price);
+        }
+        // let p = price / 100;
+        let p = price;
+        if (String(p).indexOf('.') > -1) {
+            return p.toFixed(2) + '元';
+        } else {
+            return p + '元';
+        }
+    } catch (e) {
+        console.log('Error in formatPrice:' + e);
         return '';
-    }
-    // let p = price / 100;
-    let p = price;
-    if (String(p).indexOf('.') > -1) {
-        return p.toFixed(2) + '元';
-    } else {
-        return p + '元';
     }
 }
 
 // 格式化价格-不带单位
 export const formatPriceWithoutUnit = (price) => {
-    if (typeof price != 'number') {
+    try {
+        if (typeof price != 'number') {
+            price = Number(price);
+        }
+        // let p = price / 100;
+        let p = price;
+        if (String(p).indexOf('.') > -1) {
+            return p.toFixed(2);
+        } else {
+            return p;
+        }
+    } catch (e) {
+        console.log('Error in formatPriceWithoutUnit:' + e);
         return '';
-    }
-    // let p = price / 100;
-    let p = price;
-    if (String(p).indexOf('.') > -1) {
-        return p.toFixed(2);
-    } else {
-        return p;
     }
 }

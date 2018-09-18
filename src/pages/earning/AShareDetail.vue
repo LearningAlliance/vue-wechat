@@ -59,6 +59,8 @@ export default {
     ])
   },
   mounted() {
+    let parentUserId = localStorage.getItem('uid') || null;
+    this.parentUserId = parentUserId;
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     // this.qrySharePath();
@@ -89,6 +91,7 @@ export default {
   },
   data() {
     return {
+      parentUserId: null, // 分享人的id
       shopId: null,
       url: null,
       hideBox: false,
@@ -122,8 +125,7 @@ export default {
           shopId: this.shopId
         }).then((res) => {
           let { url = null, shopId, userId } = res.data;
-          this.url = `http://cs.juanzisc.com/collection/shopDetail?shopId=${shopId}`;
-          console.log('qrySharePath');
+          this.url = `http://cs.juanzisc.com/collection/shopDetail?shopId=${shopId}&parentUserId=${this.parentUserId}`;
           resolve();
         }).catch((err) => {});
       })

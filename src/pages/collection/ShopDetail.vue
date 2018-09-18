@@ -203,6 +203,7 @@ export default {
       collectInfo: {}, // 店铺收藏信息
       showModal: false, // 显示收藏的遮罩
       subscribe: false, // 是否订阅
+      parentUserId: null, // 分享人id(不是必传)
     }
   },
   computed: {
@@ -222,8 +223,9 @@ export default {
     },
   },
   mounted() {
-    let { shopId } = this.$route.query;
+    let { shopId, parentUserId = null } = this.$route.query;
     this.shopId = shopId;
+    this.parentUserId = parentUserId;
     if (!!this.longitude && !!this.latitude) {
       this.getShopDetail();
     }
@@ -501,9 +503,12 @@ export default {
         follow = 1;
       }
       let collectInfo = this.collectInfo;
-      api.collection.toUserCollect({
-        shopId: this.shopId,
-      }).then((res) => {
+      var postData = {};
+      postData.shopId = this.shopId;
+      if(!!this.parentUserId){
+        postData.parentUserId = this.parentUserId;
+      }
+      api.collection.toUserCollect(postData).then((res) => {
         this.$set(collectInfo, 'state', follow);
         api.collection.userFollow({
           shopId: this.shopId,

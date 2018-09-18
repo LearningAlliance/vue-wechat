@@ -26,3 +26,9 @@ export const qryShopList = (params) => post('/userServer/business/MerShopAction'
 	action: 'qryShopList',
 	data: JSON.stringify(params),
 });
+
+// 兑换
+export const changeUserAccount = (params) => post('/userServer/business/UserAccountAction', {
+	action: 'changeUserAccount',
+	data: JSON.stringify(params),
+})

@@ -102,7 +102,20 @@ export default {
       }
     },
     confirm(){
-    	_.alert('确定兑换');
+    	api.discovery.changeUserAccount({
+        amount: this.value,
+        type: 1,
+      }).then((res) => {
+        _.alert('兑换成功');
+        let {type, amount } = res.data;
+        this.$router.replace({
+          path: '/discovery/success',
+          query: {
+            type: 1,
+            amount: amount,
+          },
+        })
+      }).catch((err) => {});
     },
   }
 }

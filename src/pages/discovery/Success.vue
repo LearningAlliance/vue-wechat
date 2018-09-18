@@ -4,19 +4,52 @@
     <div class="box">
       <img src="../../assets/images/img_success.png" />
       <p class="text">兑换成功</p>
-      <p class="text-2">恭喜你，养老金 <span class="color-orange">+100</span>元</p>
+      <p class="text-2">恭喜你，{{typeText}} <span class="color-orange">+{{amount}}</span>元</p>
     </div>
     <div class="btn-group clearfix">
-      <div class="btn-show">查看养老金</div>
-      <div class="btn-back">返回</div>
+      <div class="btn-show" @click="showDetail">查看{{typeText}}</div>
+      <div class="btn-back" @click="back">返回</div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 export default {
   data() {
-    return {}
-  }
+    return {
+      type: null,
+      amount: null,
+    }
+  },
+  mounted() {
+    let { type, amount } = this.$route.query;
+    this.type = type;
+    this.amount = amount;
+  },
+  computed(){
+    typeText = () => {
+      if(this.type == 1){
+        return '积分';
+      }else if(this.type == 2){
+        return '养老金';
+      }else {
+        return '';
+      }
+    }
+  },
+  methods: {
+    back(){
+      history.back();
+    },
+    showDetail(){
+      if(this.type == 1){
+        history.back();
+      }else if(this.type == 2){
+        this.$router.replace({
+          path: '/mine/pensionList'
+        })
+      }
+    }
+  },
 }
 
 </script>

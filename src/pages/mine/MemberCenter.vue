@@ -38,7 +38,7 @@
     </div>
     <div class="section">
       <div class="section-title">会员等级与权益</div>
-      <div class="list">
+      <div class="list"> 
         <div :class="['cell', {'no-bottom': dicList.length - 1 == index}]" v-for="(item, index) in dicList">
           <div class="cell-left">{{item.left}}</div>
           <div class="cell-right">
