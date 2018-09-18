@@ -39,12 +39,12 @@
         </div>
       </div>
     </div>
-    <div class="line-box">
+<!--     <div class="line-box">
       <div class="line"></div>
     </div>
     <div class="section-3">
       <div class="title">查看图文详情</div>
-    </div>
+    </div> -->
     <div class="section-4">
       <div class="title">购买须知</div>
       <div class="sub-title">有效期</div>
