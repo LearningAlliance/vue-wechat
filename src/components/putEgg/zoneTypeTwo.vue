@@ -130,7 +130,11 @@ export default {
         }
       });
     },
-    startRecord() {
+    startRecord(flag) {
+      if(flag){
+        // 取消录音则 不上传
+        return;
+      }
       var self = this;
       this.$wechat.startRecord({
         success: function() {
@@ -171,12 +175,14 @@ export default {
     },
     uploadVoice() {
       var self = this;
+      console.log('up:' + self.localId);
       this.$wechat.uploadVoice({
         localId: self.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: function(res) { 
           var serverId = res.serverId; // 返回音频的服务器端ID
           console.log('uploadVoice: ' + serverId);
+          alert('uploadVoice: ' + serverId);
         }
       });
     },
