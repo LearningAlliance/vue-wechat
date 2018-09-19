@@ -20,6 +20,8 @@ import CreatePw from '../pages/collection/CreatePw'
 import PutEggStep1 from '../pages/collection/PutEggStep1'
 import PutEggStep2 from '../pages/collection/PutEggStep2'
 import PutEggPay from '../pages/collection/PutEggPay'
+import SaveCouponSuccess from '../pages/collection/SaveCouponSuccess'
+
 export default [{
 	path: '/collection',
 	name: 'collection',
@@ -208,4 +210,11 @@ export default [{
 		subTitle: ' 放置彩蛋',
 	},
 	component: PutEggPay,
+}, {
+	path: '/collection/saveCouponSuccess',
+	name: 'saveCouponSuccess',
+	meta: {
+		title: '套餐',
+	},
+	component: SaveCouponSuccess,
 }, ]

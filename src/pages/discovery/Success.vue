@@ -42,7 +42,10 @@ export default {
     },
     showDetail(){
       if(this.type == 1){
-        history.back();
+        // history.back();
+        this.$router.replace({
+          path: '/mine/memberCenter'
+        })
       }else if(this.type == 2){
         this.$router.replace({
           path: '/mine/pensionList'

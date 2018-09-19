@@ -63,7 +63,7 @@ import { Loadmore, MessageBox } from 'mint-ui';
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
-  props: ['myOrder', 'coupons', 'orderDetail', 'myOrderNo', 'createDate'],
+  props: ['myOrder', 'coupons', 'orderDetail', 'myOrderNo', 'createDate', 'refresh'],
   data() {
     return {
       // order: {
@@ -77,10 +77,31 @@ export default {
   },
   methods: {
     payOrder() {
-      _.alert('TODO 支付');
+      _.alert('购买成功， todo 支付逻辑， 假装支付成功');
+      setTimeout(() => {
+        this.$router.push({
+          path: '/collection/saveCouponSuccess',
+          query: {
+            orderNo: this.myOrderNo,
+            createDate: this.createDate,
+          },
+        })
+      }, 1000);
     },
     cancelOrder() {
-      _.alert('TODO 取消支付');
+      MessageBox.confirm('即将取消订单，是否继续?').then(action => {
+        if (action) {
+          api.collection.cancelOrder({
+            orderNo: this.myOrderNo,
+          }).then((res) => {
+            console.log('cancel', res);
+            // location.reload();
+            this.refresh();
+          }).catch((err) => {})
+        }
+      }).catch((err) => {
+        // 取消
+      });
     },
     toShop() {
       if (!this.myOrder.shopId) {

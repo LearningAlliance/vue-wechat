@@ -5,25 +5,25 @@
       <div :class="['vip-level-logo', {'level-0': vipLevel == 0, 'level-1': vipLevel == 1, 'level-2': vipLevel == 2, 'level-3': vipLevel == 3, 'level-4': vipLevel == 4, 'level-5': vipLevel == 5, }]"></div>
       <div class="vip-score">经验值 {{score}}/{{totalScore}}</div>
       <div class="vip-process-box">
-        <div class="process-left">青铜</div>
+        <div class="process-left">{{nowLevel.levelName}}</div>
         <div ref="box" class="process">
           <div ref="process" class="process-inner"></div>
         </div>
-        <div class="process-right">白银</div>
+        <div class="process-right">{{nextLevel.levelName}}</div>
       </div>
       <div class="card-bottom clearfix">
         <div class="card-box">
           <div class="card-logo logo-1"></div>
           <div class="card-box-inner">
             <div class="box-inner-title">生日送积分</div>
-            <div class="box-inner-desc">生日当天领100积分</div>
+            <div class="box-inner-desc">生日当天领{{nowLevel.integral}}积分</div>
           </div>
         </div>
         <div class="card-box">
           <div class="card-logo logo-2"></div>
           <div class="card-box-inner">
-            <div class="box-inner-title">积分获得1.1倍</div>
-            <div class="box-inner-desc">获得积分多10%</div>
+            <div class="box-inner-title">积分获得{{nowLevel.levelRate}}倍</div>
+            <div class="box-inner-desc">获得积分多{{(Number(nowLevel.levelRate) * 100).toFixed(0)}}%</div>
           </div>
         </div>
       </div>
@@ -38,12 +38,12 @@
     </div>
     <div class="section">
       <div class="section-title">会员等级与权益</div>
-      <div class="list"> 
-        <div :class="['cell', {'no-bottom': dicList.length - 1 == index}]" v-for="(item, index) in dicList">
-          <div class="cell-left">{{item.left}}</div>
+      <div class="list">
+        <div :class="['cell', {'no-bottom': allLevel.length - 1 == index}]" v-for="(item, index) in allLevel">
+          <div class="cell-left">{{item.levelName}}</div>
           <div class="cell-right">
-            <div class="cell-top">{{item.top}}</div>
-            <div class="cell-bottom">{{item.bottom}}</div>
+            <div class="cell-top">所需经验值{{item.upgradeRule}}</div>
+            <div class="cell-bottom">{{item.levelDesc}}</div>
           </div>
         </div>
       </div>
@@ -51,60 +51,82 @@
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'vipLevel',
-      'vipScore',
-      'vipName',
+      // 'vipLevel',
+      // 'vipScore',
+      // 'vipName',
     ])
   },
   data() {
     return {
+      vipLevel: 0,
       score: 0,
-      totalScore: 1500,
-      dicList: [{
-        left: '初心',
-        top: '所需经验值0',
-        bottom: '生日积分送100',
-      }, {
-        left: '青铜',
-        top: '所需经验值1000',
-        bottom: '生日积分送100  积分获得1.2倍特权',
-      }, {
-        left: '白银',
-        top: '所需经验值2000',
-        bottom: '生日积分送100  积分获得1.4倍特权',
-      }, {
-        left: '黄金',
-        top: '所需经验值3000',
-        bottom: '生日积分送100  积分获得1.5倍特权',
-      }, {
-        left: '铂金',
-        top: '所需经验值4000',
-        bottom: '生日积分送100  积分获得1.6倍特权',
-      }, {
-        left: '钻石',
-        top: '所需经验值4000',
-        bottom: '生日积分送100  积分获得1.6倍特权',
-      }, ],
+      totalScore: 70000,
+      // dicList: [{
+      //   left: '初心',
+      //   top: '所需经验值0',
+      //   bottom: '生日积分送100',
+      // }, {
+      //   left: '青铜',
+      //   top: '所需经验值1000',
+      //   bottom: '生日积分送100  积分获得1.2倍特权',
+      // }, {
+      //   left: '白银',
+      //   top: '所需经验值2000',
+      //   bottom: '生日积分送100  积分获得1.4倍特权',
+      // }, {
+      //   left: '黄金',
+      //   top: '所需经验值3000',
+      //   bottom: '生日积分送100  积分获得1.5倍特权',
+      // }, {
+      //   left: '铂金',
+      //   top: '所需经验值4000',
+      //   bottom: '生日积分送100  积分获得1.6倍特权',
+      // }, {
+      //   left: '钻石',
+      //   top: '所需经验值4000',
+      //   bottom: '生日积分送100  积分获得1.6倍特权',
+      // }, ],
+      allLevel: {},
+      nextLevel: {},
+      nowLevel: {},
     }
   },
   mounted() {
     // TODO
     this.getData();
+    this.getAccountCredits();
   },
   methods: {
+    getAccountCredits() {
+        api.user.getAccountCredits().then((res) => {
+          let item = res.data[0];
+          this.score = item.amount || 0;
+          this.setProcess();
+        }).catch((err) => {});
+    },
     getData() {
-      // TODO 测试
-      setTimeout(() => {
-        this.score = 500;
-        this.setProcess();
-      }, 1000);
+        api.user.userLevel({}).then((res) => {
+          let {
+            allLevel = {},
+              nextLevel = {},
+              nowLevel = {},
+          } = res.data[0];
+          this.allLevel = allLevel;
+          this.nextLevel = nextLevel;
+          this.nowLevel = nowLevel;
+          this.vipLevel = this.nowLevel.levelId;
+          this.totalScore = nowLevel.upgradeRule;
+          this.getAccountCredits();
+        }).catch((err) => {});
     },
     setProcess() {
-      let width = this.score / this.totalScore * this.$refs.box.clientWidth;
+      let width = Number(this.score) / Number(this.totalScore) * this.$refs.box.clientWidth;
       this.$refs.process.style.width = width + 'px';
     }
   }
@@ -132,8 +154,8 @@ export default {
       padding-left: 140px;
       margin-bottom: 42px;
       position: relative;
-      &.no-bottom{
-      	margin-bottom: 0;
+      &.no-bottom {
+        margin-bottom: 0;
       }
       .cell-left {
         position: absolute;
@@ -307,8 +329,8 @@ export default {
     padding-right: 100px;
     position: relative;
   }
-  .height-10{
-  	height: 10px;
+  .height-10 {
+    height: 10px;
   }
   .vip-level-logo {
     margin: 0 auto;

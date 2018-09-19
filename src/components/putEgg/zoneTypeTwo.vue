@@ -161,10 +161,22 @@ export default {
           console.log('stopRecord', res);
           let { localId = '' } = res;
           self.localId = localId;
-          console.log('updataRecord success')
+          console.log('stopRecord success')
+          self.uploadVoice();
         },
         fail: function(res) {
           console.log(JSON.stringify(res))
+        }
+      });
+    },
+    uploadVoice() {
+      var self = this;
+      this.$wechat.uploadVoice({
+        localId: self.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function(res) { 
+          var serverId = res.serverId; // 返回音频的服务器端ID
+          console.log('uploadVoice: ' + serverId);
         }
       });
     },

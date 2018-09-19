@@ -104,7 +104,7 @@ export default {
       MessageBox.confirm('确定要取消吗?').then(action => {
         console.log(action);
         if (action) {
-          api.trade.cancelOrder({
+          api.collection.cancelOrder({
             orderNo,
           }).then((res) => {
             this.loadTop();

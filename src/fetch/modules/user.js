@@ -173,3 +173,8 @@ export const updateUserHead = (params) => post('/userServer/business/UserInfoAct
 	action: 'updateUserHead',
 	data: JSON.stringify(params),
 })
+
+export const userLevel = (params) => post('/userServer/business/UserInfoAction', {
+	action: 'userLevel',
+	data: JSON.stringify(params),
+})

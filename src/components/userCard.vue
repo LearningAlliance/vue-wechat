@@ -12,7 +12,7 @@
         </div>
         <div class="level">
           <div :class="['level-box', {'level-0': vipLevel == 0, 'level-1': vipLevel == 1, 'level-2': vipLevel == 2, 'level-3': vipLevel == 3, 'level-4': vipLevel == 4, 'level-5': vipLevel == 5, }]">
-            <span class="level-text">{{vipName}}</span>
+            <span class="level-text">{{vipName}}会员</span>
           </div>
         </div>
         <div class="box">
@@ -41,19 +41,23 @@ export default {
     return {
       accountSafeGuard: 0,
       accountCredits: 0,
+      vipLevel: 0,
+      vipName: '初心',
+      nowLevel: {},
     }
   },
   created() {
     this.getAccountSafeGuard();
     this.getAccountCredits();
+    this.getVipData();
   },
   computed: {
     ...mapGetters([
       'loginStatus',
       'userInfo',
-      'vipLevel',
-      'vipScore',
-      'vipName',
+      // 'vipLevel',
+      // 'vipScore',
+      // 'vipName',
     ]),
     userSex() {
       let value = this.userInfo.userSex;
@@ -79,6 +83,18 @@ export default {
       api.user.getAccountCredits().then((res) => {
         let item = res.data[0];
         this.accountCredits = item.amount || 0;
+      }).catch((err) => {});
+    },
+    getVipData() {
+      api.user.userLevel({}).then((res) => {
+        let {
+          allLevel = {},
+            nextLevel = {},
+            nowLevel = {},
+        } = res.data[0];
+        this.nowLevel = nowLevel;
+        this.vipLevel = nowLevel.levelId;
+        this.vipName = nowLevel.levelName;
       }).catch((err) => {});
     }
   }

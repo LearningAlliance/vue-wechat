@@ -78,8 +78,9 @@
           <div class="desc">返10%养老保障金</div>
         </div>
         <div class="cell-info">
-          <div class="desc no-top">满100元立减5元 (周一至周五)</div>
-          <div class="desc">满100元送小猪佩奇 (周一至周五)</div>
+          <div class="desc no-top" v-if="payAct.activityType == 10">满{{payAct.couponLimit}}元立减{{payAct.couponPrice}}元 <span v-if="payAct.limitDesc">({{payAct.limitDesc}})</span></div>
+          <div class="desc no-top" v-if="payAct.activityType == 11"><span v-if="payAct.limitDesc">({{payAct.limitDesc}})</span></div>
+          <!-- <div class="desc">满100元送小猪佩奇 (周一至周五) </div> -->
         </div>
       </div>
       <div class="btn" @click="payTheBill">买单</div>
@@ -204,6 +205,7 @@ export default {
       showModal: false, // 显示收藏的遮罩
       subscribe: false, // 是否订阅
       parentUserId: null, // 分享人id(不是必传)
+      payAct: {}, // 买单活动
     }
   },
   computed: {
@@ -235,6 +237,7 @@ export default {
     this.qryShopCoupon();
     this.qryShopComments();
     this.qryUserCollect();
+    this.getPayAct();
   },
   methods: {
     // 查询商家详情
@@ -331,6 +334,15 @@ export default {
         infoUrl: '' // 在查看位置界面底部显示的超链接,可点击跳转
       });
     },
+    // 获取买单活动
+    getPayAct() {
+      api.collection.qryShopCoupon({
+        shopId: this.shopId,
+        couponType: '2',
+      }).then((res) => {
+        this.payAct = res.data.length > 0 ? res.data[0] : {};
+      }).catch((err) => {});
+    },
     setStars(sc) {
       if (typeof(sc) == 'string') {
         sc = Number(sc);
@@ -383,6 +395,9 @@ export default {
     payTheBill() {
       this.$router.push({
         path: '/collection/payTheBill',
+        query: {
+          shopId: this.shopId,
+        }
       });
     },
     toShare() {
@@ -505,7 +520,7 @@ export default {
       let collectInfo = this.collectInfo;
       var postData = {};
       postData.shopId = this.shopId;
-      if(!!this.parentUserId){
+      if (!!this.parentUserId) {
         postData.parentUserId = this.parentUserId;
       }
       api.collection.toUserCollect(postData).then((res) => {

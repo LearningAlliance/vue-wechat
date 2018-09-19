@@ -16,10 +16,10 @@
     <div class="section">
       <div class="section-cell line clearfix">
         <div class="cell-left">
-          <span class="label">满100减20</span>
+          <span class="label">{{payActName}}</span>
         </div>
         <div class="cell-right">
-          <span class="value orange">-40元</span>
+          <span class="value orange">-{{payActNum}}元</span>
         </div>
       </div>
       <div class="section-cell clearfix" @click="toUseCoupons">
@@ -50,26 +50,68 @@
     <div class="blank"></div>
     <div class="footer clearfix">
       <div class="footer-label">合计</div>
-      <div class="footer-price">494元</div>
+      <div class="footer-price">{{total}}元</div>
       <div class="footer-btn">确认支付</div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
+import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
+      shopId: null,
       amount: null,
       hasPrice: true, // 是否有不参与优惠的金额， 默认没有
       price: null,
+      payAct: {}, // 买单活动
+      payActName: '',
+      payActNum: 0,
+      discount: 0, // 扣减金额
+      couponLimit: 0, //满减限制
+    }
+  },
+  mounted() {
+    let { shopId } = this.$route.query;
+    this.shopId = shopId;
+    this.getPayAct();
+  },
+  computed: {
+    total() {
+      return Number(this.amount) + Number(this.price) - Number(this.discount);
+    }
+  },
+  watch: {
+    amount(newVal, oldVal) {
+      if (newVal > this.couponLimit) {
+        this.discount = this.payActNum;
+      }else {
+        this.discount = 0;
+      }
     }
   },
   methods: {
     changeHasPrice() {
       this.hasPrice = !this.hasPrice;
     },
-    toUseCoupons(){
+    toUseCoupons() {
       this.$router.push('/collection/useCoupons');
+    },
+    // 获取买单活动
+    getPayAct() {
+      api.collection.qryShopCoupon({
+        shopId: this.shopId,
+        couponType: '2',
+      }).then((res) => {
+        let payAct = res.data.length > 0 ? res.data[0] : {};
+        this.payAct = payAct;
+        if (payAct.activityType == 10) {
+          this.payActName = `满${payAct.couponLimit}元减${payAct.couponPrice}元`;
+          this.couponLimit = Number(payAct.couponLimit);
+          this.payActNum = Number(payAct.couponPrice);
+        }
+      }).catch((err) => {});
     },
   },
 }

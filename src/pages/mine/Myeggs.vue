@@ -17,11 +17,11 @@
           <li class="list" v-for="(item, index) in pageList">
             <div class="box" @click="toDetail(item.id)">
               <p class="egg-info clearfix">
-                红包彩蛋{{item.zoneType | getType}}
+                {{item.reType | getReType}}彩蛋{{item.zoneType | getType}}
                 <span :class="['egg-status', {'state-1': item.state == 1}]">{{item.state | formatReType}}</span>
               </p>
               <p class="egg-desc clearfix">
-                2018-06-01 18:00:00
+                {{item.createDate}}
                 <span class="expDay" v-show="item.state == 1 && searchCondition.operType == 1">{{item.expDay}}天后消失</span>
                 <span class="user-name" v-show="searchCondition.operType == 1 && item.userName">领取人: {{item.userName}}</span>
                 <span class="user-name" v-show="searchCondition.operType == 2 && item.userName">放置人: {{item.userName}}</span>
@@ -77,6 +77,28 @@ export default {
           return '';
           break;
       }
+    },
+    getReType(key) {
+      if (key == null || key == undefined) {
+        return '';
+      }
+      switch (key) {
+        case 1:
+          return '优惠券';
+          break;
+        case 2:
+          return '碎片';
+          break;
+        case 3:
+          return '代金券';
+          break;
+        case 4:
+          return '红包';
+          break;
+        default:
+          return '';
+          break;
+      }
     }
   },
   methods: {
@@ -90,12 +112,18 @@ export default {
       this.loadTop();
     },
     toDetail(id) {
+      // this.$router.push({
+      //   path: '/mine/eggDetail',
+      //   query: {
+      //     id,
+      //   }
+      // });
       this.$router.push({
-        path: '/mine/eggDetail',
+        path: '/collection/eggDetail',
         query: {
           id,
         }
-      });
+      })
     },
     loadTop() {
       this.searchCondition.pageNum = 1;

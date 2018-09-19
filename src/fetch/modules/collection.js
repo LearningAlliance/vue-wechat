@@ -132,4 +132,16 @@ export const qrySysZoneCount = (params) => post('/userServer/business/SysZoneAct
 export const saveSysZone = (params) => post('/userServer/business/SysZoneAction', {
 	action: 'saveSysZone',
 	data: JSON.stringify(params),
-})
+});
+
+// 订单详情
+export const orderDetail = (params) => post('/userServer/business/OrderBaseInfoAction', {
+	action: 'orderDetail',
+	data: JSON.stringify(params),
+});
+
+// 取消订单
+export const cancelOrder = (params) => post('/userServer/business/OrderBaseInfoAction', {
+	action: 'cancelOrder',
+	data: JSON.stringify(params),
+});
