@@ -5,7 +5,7 @@
         <div :class="['main-kind', {'on': dataLeftIndex == index}]" v-for="(item, index) in dataLeft" :key="'kind' + index" @click="changeKind(index)">{{item.name}}</div>
       </div>
       <div class="list-right">
-        <div :class="['sub-kind', {'on': dataRightIndex == index}]" v-for="(item, index) in dataRight[dataLeftIndex]" @click="changeSubKind(index, item.value)" :key="'subKind' + index">{{item.name}}</div>
+        <div :class="['sub-kind', {'on': dataRightIndex == index}]" v-for="(item, index) in dataRight" @click="changeSubKind(index)" :key="'subKind' + index">{{item.name}}</div>
       </div>
     </div>
     <div class="" <div class="close-btn" @click="closeModal"></div>
@@ -30,14 +30,14 @@ export default {
       subKinds: [{ id: 0, name: '500米', value: 500, sort: 0 }, { id: 0, name: '1公里', value: 1000, sort: 1 }, { id: 0, name: '2公里', value: 2000, sort: 2 }, { id: 0, name: '3公里', value: 3000, sort: 3 }, { id: 0, name: '5公里', value: 5000, sort: 4 }],
       distance: 10000,
       businessAreas: [], // 商圈信息
-      dataRight: [
-        [
-          { id: 0, name: '500米', value: 500, sort: 0 },
-          { id: 0, name: '1公里', value: 1000, sort: 1 },
-          { id: 0, name: '2公里', value: 2000, sort: 2 },
-          { id: 0, name: '3公里', value: 3000, sor: 3 },
-          { id: 0, name: '5公里', value: 5000, sort: 4 }
-        ],
+      dataRight: [],
+      defaultDataRight: [
+        { id: 0, name: '500米', value: 500, sort: 0 },
+        { id: 1, name: '1公里', value: 1000, sort: 1 },
+        { id: 2, name: '2公里', value: 2000, sort: 2 },
+        { id: 3, name: '3公里', value: 3000, sor: 3 },
+        { id: 4, name: '5公里', value: 5000, sort: 4 },
+        { id: 5, name: '10公里', value: 10000, sort: 5 },
       ],
       dataLeftIndex: 0,
       dataRightIndex: 0
@@ -63,6 +63,7 @@ export default {
     if (!!this.latitude && !!this.longitude) {
       this.getData();
     }
+    this.dataRight = this.defaultDataRight;
   },
   methods: {
     // 获取附近信息
@@ -73,29 +74,59 @@ export default {
       }).then((res) => {
         var t;
         try {
-          let { businessAreas = [] } = res.regeocode.addressComponent;
-          t = businessAreas;
+          let { areaItem = [] } = res.data;
+          this.dataLeft = this.dataLeft.concat(areaItem);
+          // let { businessAreas = [], adcode = "330100", citycode = "0571" } = res.regeocode.addressComponent;
+          // t = businessAreas;
+          // api.discovery.qrySysOrganizeList({
+          //   // id: adcode
+          //   id: 330100
+          // }).then((res) => {
+          //   this.dataLeft = this.dataLeft.concat(res.data);
+          // }).catch((err) => {
+          //   console.log('Error in qrySysOrganizeList:' + err);
+          // })
         } catch (e) {
           t = [];
         }
         this.businessAreas = t;
       }).catch((err) => {});
     },
-    changeKind() {
-
+    qrySysOrganizeList(params) {
+      let { id = null, name = '' } = params;
+      api.discovery.qrySysOrganizeList({
+        id,
+      }).then((res) => {
+        if (res.data.length == 0) {
+          this.dataRight = [params];
+        } else {
+          this.dataRight = res.data;
+        }
+      }).catch((err) => {
+        console.log('Error in qrySysOrganizeList:' + err);
+      })
+    },
+    changeKind(index) {
+      if (this.dataLeftIndex == index) {
+        return;
+      }
+      this.dataLeftIndex = index;
+      if (index == 0) {
+        // 修改的为附近
+        this.dataRight = this.defaultDataRight;
+      } else {
+        this.qrySysOrganizeList(this.dataLeft[index])
+      }
     },
     changeSubKind(index, value) {
+      this.dataRightIndex = index;
       if (this.dataLeftIndex == 0) {
         //附近时，修改distance
-        this.dataRightIndex = index;
-        // this.changeSearch(1, this.dataRight[this.dataLeftIndex][this.dataRightIndex].value);
-        this.changeSearch(1, {distance: value});
+        this.changeSearch(1, { distance: this.dataRight[index].value });
         this.closeModal();
       } else {
         // 修改商圈信息时
-        this.dataRightIndex = index;
-        // this.changeSearch(1, this.dataRight[this.dataLeftIndex][this.dataRightIndex].value);
-        this.changeSearch(2, {name: name});
+        this.changeSearch(2, { name: this.dataRight[index].name });
         this.closeModal();
       }
     }

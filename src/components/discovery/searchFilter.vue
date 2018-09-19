@@ -84,8 +84,13 @@ export default {
       }else if(index == 1){
         // 修改附近
         this.refresh({distance: obj.distance});
+        this.refresh({name: ''});
+        this.searchKinds[1].label = '附近';
       }else if(index == 2){
         // 修改商圈
+        this.refresh({distance: 10000});
+        this.refresh({name: obj.name});
+        this.searchKinds[1].label = obj.name;
       }else if(index == 3){
         // 修改排序
         this.refresh({sort: obj.sort});

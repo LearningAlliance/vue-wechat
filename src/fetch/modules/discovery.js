@@ -31,4 +31,10 @@ export const qryShopList = (params) => post('/userServer/business/MerShopAction'
 export const changeUserAccount = (params) => post('/userServer/business/UserAccountAction', {
 	action: 'changeUserAccount',
 	data: JSON.stringify(params),
-})
+});
+
+// 查询地区列表
+export const qrySysOrganizeList = (params) => post('/userServer/business/SysOrganizeAction', {
+	action: 'qrySysOrganizeList',
+	data: JSON.stringify(params),
+});
