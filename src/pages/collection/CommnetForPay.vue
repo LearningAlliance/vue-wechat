@@ -23,17 +23,21 @@
     </div>
     <div class="num-box">{{num}}/140</div>
     <div class="line-box">
-    	<div class="line"></div>
+      <div class="line"></div>
     </div>
-    <div :class="['btn', {'can-submit': num > 0}]" @click="comment">立即评价</div>
+    <div class="share-title">分享图片 <span class="color-000">(0/4)</span></div>
+    <upload-image :img-change="imgChange" :max-num="4"></upload-image>
+    <div :class="['btn', {'can-submit': true}]" @click="comment">立即评价</div>
   </div>
 </template>
 <script type="text/javascript">
+import uploadImage from '@/components/uploadImage'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
   data() {
     return {
+      orderNo: null,
       remark: '',
       commentId: null,
       avg: null, // 人均消费
@@ -52,11 +56,16 @@ export default {
         selected: false,
       }, ],
       selectService: null, // 选中的服务评价
+      img: '',// 图片地址
     }
   },
+  components: {
+    'upload-image': uploadImage,
+  },
   mounted() {
-    let { commentId } = this.$route.query;
+    let { commentId, orderNo } = this.$route.query;
     this.commentId = commentId;
+    this.orderNo = orderNo;
   },
   computed: {
     num() {
@@ -69,7 +78,7 @@ export default {
         _.alert('请先选择综合评价');
         return;
       }
-      if (!avg) {
+      if (!this.avg) {
         _.alert('请先输入人均消费');
         return;
       }
@@ -84,8 +93,13 @@ export default {
     },
     doComment() {
       api.collection.saveShopComment({
-        id: this.commentId,
+        // id: this.commentId,
+        orderNo: this.orderNo,
         remark: this.remark,
+        img: this.img,
+        service: this.services[this.selectService].key,
+        avg: this.avg,
+        type: this.type,
       }).then((res) => {
         _.alert('发布评论成功~');
         history.go(-1);
@@ -95,11 +109,15 @@ export default {
       this.services.forEach((obj) => {
         obj.selected = false;
       })
+      this.selectService = index;
       this.services[index].selected = true;
     },
-    changeType(){
-    	this.type = !this.type;
-    }
+    changeType() {
+      this.type = !this.type;
+    },
+    imgChange(picList) {
+      this.img = picList.join(',');
+    },
   }
 }
 
@@ -110,17 +128,30 @@ export default {
   height: 100%; // background: #FFF;
 }
 
-.line-box{
-	width: 100%;
-	height: 1px; /*no*/
-	box-sizing: border-box;
-	padding-left: 30px;
-	padding-right: 30px;
-	.line{
-		width: 100%;
-		height: 100%;
-		background: #E2E2E2;
-	}
+.color-000 {
+  color: #818B8F;
+}
+
+.line-box {
+  width: 100%;
+  height: 1px;
+  /*no*/
+  box-sizing: border-box;
+  padding-left: 30px;
+  padding-right: 30px;
+  .line {
+    width: 100%;
+    height: 100%;
+    background: #E2E2E2;
+  }
+}
+
+.share-title {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+  padding-bottom: 0;
+  background: #FFF;
 }
 
 .section {
@@ -264,10 +295,11 @@ export default {
 }
 
 .btn {
-  position: fixed;
-  bottom: 120px;
-  left: 50%;
-  margin-left: -285px;
+  // position: fixed;
+  // bottom: 120px;
+  // left: 50%;
+  // margin-left: -285px;
+  margin: 120px auto 80px auto;
   width: 570px;
   height: 88px;
   background: #E2E2E2;

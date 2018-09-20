@@ -30,6 +30,9 @@ export default {
       type: Function,
       required: true,
     },
+    maxNum: {
+      type: Number,
+    },
   },
   data() {
     return {
@@ -56,6 +59,10 @@ export default {
   },
   methods: {
     uploadPic(e) {
+      if(!!this.maxNum && this.picList.length >= this.maxNum){
+        _.alert(`最多上传${this.maxNum}张， 请检查后再试`);
+        return;
+      }
       var self = this;
       try {
         if (e.target.files.length != 1) {
@@ -116,7 +123,8 @@ export default {
 }
 
 .upload-box {
-  margin-top: 30px;
+  padding-top: 30px;
+  background: #FFF;
   width: 100%;
   .upload-inner-box {
     float: left;

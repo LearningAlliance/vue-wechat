@@ -136,14 +136,15 @@ export default {
         return;
       }
       var self = this;
-      this.$wechat.startRecord({
-        success: function() {
-          console.log('wx.startRecord success');
-        },
-        cancel: function() {
-          _this.oRecordInfo.bShowRecording = false;
-        }
-      });
+      // this.$wechat.startRecord({
+      //   success: function() {
+      //     console.log('wx.startRecord success');
+      //   },
+      //   cancel: function() {
+      //     // _this.oRecordInfo.bShowRecording = false;
+      //   }
+      // });
+      this.$wechat.startRecord();
       this.$wechat.onVoiceRecordEnd({
         // 录音时间超过一分钟没有停止的时候会执行 complete 回调
         complete: function(res) {
@@ -156,7 +157,7 @@ export default {
       // 取消的时候需要置空逻辑等
       // TODO
       // flag == true时 不执行替换音频操作
-      if (flag) {
+      if (!!flag) {
         return;
       }
       var self = this;
