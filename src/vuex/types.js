@@ -47,3 +47,8 @@ export const GET_TRAVELS_DETAIL = 'GET_TRAVELS_DETAIL' //获取主题详情
 export const SET_EGG_INFO = 'SET_EGG_INFO'
 export const CLEAR_EGG_INFO = 'CLEAR_EGG_INFO' // 清空彩蛋信息
 export const UPDATE_EGG_INFO_BY_KEY = 'UPDATE_EGG_INFO_BY_KEY' // 更新彩蛋的某个key的值
+
+//pay 设置订单信息
+export const SET_PAY_INFO = 'SET_PAY_INFO'
+export const CLEAR_PAY_INFO = 'CLEAR_PAY_INFO'
+export const UPDATE_PAY_INFO_BY_KEY = 'UPDATE_PAY_INFO_BY_KEY'

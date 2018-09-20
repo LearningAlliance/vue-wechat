@@ -21,6 +21,8 @@ import PutEggStep1 from '../pages/collection/PutEggStep1'
 import PutEggStep2 from '../pages/collection/PutEggStep2'
 import PutEggPay from '../pages/collection/PutEggPay'
 import SaveCouponSuccess from '../pages/collection/SaveCouponSuccess'
+import PayTheBillSuccess from '../pages/collection/PayTheBillSuccess'
+import CommnetForPay from '../pages/collection/CommnetForPay'
 
 export default [{
 	path: '/collection',
@@ -217,4 +219,19 @@ export default [{
 		title: '套餐',
 	},
 	component: SaveCouponSuccess,
+}, {
+	path: '/collection/payTheBillSuccess',
+	name: 'payTheBillSuccess',
+	meta: {
+		title: '买单成功',
+	},
+	component: PayTheBillSuccess,
+}, {
+	path: '/collection/commnetForPay',
+	name: 'commnetForPay',
+	meta: {
+		title: '评论',
+		subTitle: '评论',
+	},
+	component: CommnetForPay,
 }, ]

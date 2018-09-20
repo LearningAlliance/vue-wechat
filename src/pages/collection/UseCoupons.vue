@@ -39,7 +39,7 @@
       </div>
       <div class="section">
         <div class="section-cell clearfix">
-          <input type="text" class="code-input" placeholder="请输入券码数字" />
+          <input type="text" class="code-input" v-model="code" placeholder="请输入券码数字" />
         </div>
       </div>
       <div class="error-text" v-show="resultMsg">{{resultMsg}}</div>
@@ -82,8 +82,8 @@
           <div :class="['icon-select', {'selected': selectedIndex == index}]"></div>
           <div class="box-content clearfix">
             <div class="box-left">
-              <div class="box-coupon-price"><span class="box-coupon-currency">￥</span>{{item.couponPrice/100}}</div>
-              <div class="box-coupon-limit" v-show="item.couponLimit">满{{item.couponLimit/100}}可用</div>
+              <div class="box-coupon-price"><span class="box-coupon-currency">￥</span>{{Number(item.couponPrice)}}</div>
+              <div class="box-coupon-limit" v-show="item.couponLimit">满{{Number(item.couponLimit)}}可用</div>
             </div>
             <div class="box-right">
               <div class="box-coupon-name">{{item.couponName}}</div>
@@ -98,8 +98,8 @@
         <div class="box invalid clearfix with-shadow" v-for="(item, index) in invalidVoucherList" :key="'invalid' + index">
           <div class="box-content clearfix">
             <div class="box-left">
-              <div class="box-coupon-price"><span class="box-coupon-currency">￥</span>{{item.couponPrice/100}}</div>
-              <div class="box-coupon-limit" v-show="item.couponLimit">满{{item.couponLimit/100}}可用</div>
+              <div class="box-coupon-price"><span class="box-coupon-currency">￥</span>{{Number(item.couponPrice)}}</div>
+              <div class="box-coupon-limit" v-show="item.couponLimit">满{{Number(item.couponLimit)}}可用</div>
             </div>
             <div class="box-right">
               <div class="box-coupon-name">{{item.couponName}}</div>
@@ -114,11 +114,12 @@
       <div class="height-140"></div>
     </div>
     <div class="confirm">
-      <div class="confirm-btn" @click="confirm">确定使用</div>
+      <div class="confirm-btn" @click="confirm" v-text="useType == 'no' ? '确定' : '确定使用'"></div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
+import { mapGetters, mapActions } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
@@ -129,15 +130,47 @@ export default {
       voucherList: [],
       selectedIndex: -1,
       resultMsg: '', // 错误提示
+      shopId: null,
+      code: '',
     }
   },
-  created() {
-    this.getVoucher();
-    this.getInvalidVoucher();
+  mounted() {
+    let { shopId } = this.$route.query;
+    this.shopId = shopId;
+    this.getCouponInfo();
+    // this.getVoucher();
+    // this.getInvalidVoucher();
+  },
+  computed: {
+    ...mapGetters([
+      'payInfo',
+    ]),
   },
   methods: {
+    ...mapActions({
+      setPayInfo: 'setPayInfo',
+      clearPayINfo: 'clearPayINfo',
+      updatePayInfoByKey: 'updatePayInfoByKey',
+    }),
     changeClick(type) {
       this.useType = type;
+      if (type != 'user') {
+        this.selectedIndex = -1;
+      }
+    },
+    getCouponInfo() {
+      api.collection.qryShopCoupon({
+        shopId: this.shopId,
+        couponType: 1,
+      }).then((res) => {
+        let list = res.data;
+        this.voucherList = list.filter((obj) => {
+          return obj.state == 1;
+        });
+        this.invalidVoucherList = list.filter((obj) => {
+          return obj.state != 1;
+        });
+      }).catch((err) => {});
     },
     getVoucher() {
       api.user.getVoucher({ pageNum: 1, pageRow: 1000 }).then((res) => {
@@ -154,6 +187,7 @@ export default {
       });
     },
     selectCoupon(index) {
+      this.useType = 'use';
       if (this.selectedIndex == index) {
         this.selectedIndex = -1;
       } else {
@@ -161,21 +195,50 @@ export default {
       }
     },
     confirm() {
-      _.alert('提交TODO');
-      // 错误消息判断
-      // 调用接口
-      // 查询代金券核销码校验
-      let res = {
-        "resultMsg": "Successful",
-        "data": {
-          "id": 2
-        },
-        "resultCode": "0"
-      };
-      if (res.resultCode == 0){
-      	this.resultMsg = '';
-      }else{
-      	this.resultMsg = res.resultMsg;
+      // this.resultMsg
+
+      if (this.useType == 'no') {
+        this.updatePayInfoByKey({
+          couponId: null,
+          couponName: '未使用',
+        })
+        history.back();
+      } else if (this.useType == 'use') {
+        if (this.selectedIndex == -1) {
+          _.alert('请选择要使用的代金券');
+          return;
+        } else {
+          let { couponId, couponName } = this.voucherList[this.selectedIndex];
+          this.updatePayInfoByKey({
+            couponId,
+            couponName,
+          })
+          history.back();
+        }
+      } else if (this.useType == 'code') {
+        if (!this.code) {
+          _.alert('请先输入券码数字');
+          return;
+        } else {
+          api.collection.qryUserCouponCode({
+            amount: this.payInfo.total,
+            code: this.code,
+          }).then((res) => {
+            console.log(res);
+            let { id } = res.data;
+            this.updatePayInfoByKey({
+              couponId: id,
+              couponName: '代金券串码',
+            })
+            history.back();
+          }).catch((err) => {
+            // this.updatePayInfoByKey({
+            //   couponId: 2,
+            //   couponName: '代金券串码',
+            // })
+            // history.back();
+          })
+        }
       }
     }
   }

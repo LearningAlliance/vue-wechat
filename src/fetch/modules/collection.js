@@ -145,3 +145,28 @@ export const cancelOrder = (params) => post('/userServer/business/OrderBaseInfoA
 	action: 'cancelOrder',
 	data: JSON.stringify(params),
 });
+
+// 查询代金券核销码校验
+export const qryUserCouponCode = (params) => post('/userServer/business/UserCouponAction', {
+	action: 'qryUserCouponCode',
+	data: JSON.stringify(params),
+});
+
+// 创建买单订单
+export const saveOrderBaseInfo = (params) => post('/userServer/business/OrderBaseInfoAction', {
+	action: 'saveOrderBaseInfo',
+	data: JSON.stringify(params),
+});
+
+// 买单成功优惠券显示
+export const qryOrderMerCouponList = (params) => post('/userServer/business/MerCouponAction', {
+	action: 'qryOrderMerCouponList',
+	data: JSON.stringify(params),
+});
+
+
+// 查询买单-领券列表
+export const qryCommendCouponList = (params) => post('/userServer/business/MerCouponAction', {
+	action: 'qryCommendCouponList',
+	data: JSON.stringify(params),
+});

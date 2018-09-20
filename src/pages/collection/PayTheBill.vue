@@ -14,12 +14,12 @@
       <input type="number" class="amount" v-model.number="price" placeholder="请与收银员确认金额" />
     </div>
     <div class="section">
-      <div class="section-cell line clearfix">
+      <div class="section-cell line clearfix" v-if="payActNum != 0">
         <div class="cell-left">
           <span class="label">{{payActName}}</span>
         </div>
         <div class="cell-right">
-          <span class="value orange">-{{payActNum}}元</span>
+          <span class="value orange">-{{discount}}元</span>
         </div>
       </div>
       <div class="section-cell clearfix" @click="toUseCoupons">
@@ -30,7 +30,7 @@
           <div class="icon-right-box">
             <i class="icon-right"></i>
           </div>
-          <span class="value">未使用</span>
+          <span class="value">{{payInfo.couponName}}</span>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="cell-right">
-          <span class="value orange">8元</span>
+          <span class="value orange">{{pensionAmount}}元</span>
         </div>
       </div>
     </div>
@@ -51,52 +51,86 @@
     <div class="footer clearfix">
       <div class="footer-label">合计</div>
       <div class="footer-price">{{total}}元</div>
-      <div class="footer-btn">确认支付</div>
+      <div class="footer-btn" @click="toPay">确认支付</div>
     </div>
   </div>
 </template>
 <script type="text/javascript">
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data() {
     return {
       shopId: null,
       amount: null,
-      hasPrice: true, // 是否有不参与优惠的金额， 默认没有
+      hasPrice: null, // 是否有不参与优惠的金额， 默认没有
       price: null,
       payAct: {}, // 买单活动
       payActName: '',
       payActNum: 0,
       discount: 0, // 扣减金额
       couponLimit: 0, //满减限制
+      pensionRate: 0, // 养老金比例
     }
   },
   mounted() {
+    let { amount = null, price = null, hasPrice = true } = this.payInfo;
+    this.amount = amount;
+    this.price = price;
+    this.hasPrice = hasPrice;
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     this.getPayAct();
+    this.getShopDetail();
   },
   computed: {
+    ...mapGetters([
+      'payInfo',
+    ]),
     total() {
-      return Number(this.amount) + Number(this.price) - Number(this.discount);
+      return (Number(this.amount) + Number(this.price) - Number(this.discount)).toFixed(2);
+    },
+    // 赠送养老金
+    pensionAmount() {
+      return ((Number(this.amount) + Number(this.price)) * Number(this.pensionRate)).toFixed(2);
     }
   },
   watch: {
     amount(newVal, oldVal) {
-      if (newVal > this.couponLimit) {
+      this.updatePayInfoByKey({ amount: newVal });
+      if (newVal >= this.couponLimit) {
         this.discount = this.payActNum;
-      }else {
+      } else {
         this.discount = 0;
       }
+    },
+    price(newVal, oldVal) {
+      this.updatePayInfoByKey({ price: newVal });
     }
   },
   methods: {
+    ...mapActions({
+      setPayInfo: 'setPayInfo',
+      clearPayINfo: 'clearPayINfo',
+      updatePayInfoByKey: 'updatePayInfoByKey',
+    }),
     changeHasPrice() {
       this.hasPrice = !this.hasPrice;
     },
     toUseCoupons() {
-      this.$router.push('/collection/useCoupons');
+      this.updatePayInfoByKey({
+        amount: this.amount,
+        price: this.price,
+        hasPrice: this.hasPrice,
+        total: this.total,
+      });
+      this.$router.push({
+        path: '/collection/useCoupons',
+        query: {
+          shopId: this.shopId,
+        }
+      });
     },
     // 获取买单活动
     getPayAct() {
@@ -112,6 +146,43 @@ export default {
           this.payActNum = Number(payAct.couponPrice);
         }
       }).catch((err) => {});
+    },
+    getShopDetail() {
+      api.collection.merShop({
+        shopId: this.shopId,
+      }).then((res) => {
+        this.pensionRate = res.data[0].pensionRate || 0;
+      }).catch((err) => {});
+    },
+    toPay() {
+      if (this.amount <= 0 || !this.amount) {
+        _.alert('请先输入订单金额');
+        return;
+      }
+      var postData = {
+        amount: this.total,
+        shopId: this.shopId,
+      };
+      if (this.hasPrice && this.price > 0) {
+        postData.price = this.price;
+      }
+      if (!!this.couponId) {
+        postData.couponId = this.payInfo.couponId;
+      }
+      api.collection.saveOrderBaseInfo(postData).then((res) => {
+        this.clearPayINfo();
+        let { createDate, orderNo, url } = res.data;
+        _.alert('支付逻辑todo, 假装支付完成');
+        location.href = url;
+        // TODO 支付完成跳转逻辑
+        this.$router.push({
+            path: '/collection/payTheBillSuccess',
+            query: {
+              createDate,
+              orderNo,
+            },
+        });
+      }).catch((err) => {})
     },
   },
 }
