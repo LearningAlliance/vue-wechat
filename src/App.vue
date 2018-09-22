@@ -193,6 +193,8 @@ export default {
       let signature = config.signature || '';
       let jsApiList = this.$route.meta.jsApiList || [];
       let getLocation = this.$route.meta.getLocation || false;
+      let hasAudio = this.$route.meta.hasAudio || false;
+      let AudioIndex = this.$route.meta.AudioIndex || 0;
       wx.config({
         // debug: process.env.NODE_ENV == "development" ? true : false,
         debug: false,
@@ -203,6 +205,10 @@ export default {
         jsApiList: jsApiList,
       });
       wx.ready(function() {
+        if(hasAudio){
+          // console.log(docoument)
+          document.getElementsByTagName('Audio')[AudioIndex].play();
+        }
         wx.checkJsApi({
           jsApiList: jsApiList,
           success: function(res) {

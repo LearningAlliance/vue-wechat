@@ -1,3 +1,4 @@
+<!-- reType = 4 -->
 <template>
   <div class="page">
     <div class="title">获得红包</div>

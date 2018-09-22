@@ -170,3 +170,9 @@ export const qryCommendCouponList = (params) => post('/userServer/business/MerCo
 	action: 'qryCommendCouponList',
 	data: JSON.stringify(params),
 });
+
+// 查询用户活动碎片列表
+export const qryActivityUserList = (params) => post('/userServer/business/ActivityUserAction', {
+	action: 'qryActivityUserList',
+	data: JSON.stringify(params),
+});

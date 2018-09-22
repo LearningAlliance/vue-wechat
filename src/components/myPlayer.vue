@@ -51,8 +51,14 @@ export default {
       // alert("pause");
     },
   },
+  mounted(){
+    // setTimeout(() => {
+    //   this.$refs.videoPlayer.player.pause();
+    // }, 1000);
+  },
   computed: {
     player() {
+      // console.log(this.$refs.videoPlayer.player);
       return this.$refs.videoPlayer.player
     }
   }

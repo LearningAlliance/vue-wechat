@@ -10,7 +10,8 @@
       <div :class="['icon-record-play', {'with-shadow': !play}]" @touchstart="touchPlay" @touchend="touchPlayEnd"></div>
       <div class="icon-record-desc">播放</div>
     </div>
-    <div :class="['submit-btn', {'on': canSubmit}]" @click="next">下一步</div>
+    <!-- <div :class="['submit-btn', {'on': canSubmit}]" @click="next">下一步</div> -->
+    <div :class="['submit-btn', {'on': !!audioUrl}]" @click="next">下一步</div>
   </div>
 </template>
 <script type="text/javascript">
@@ -34,7 +35,8 @@ export default {
       canSubmit: true,
       clientX_start: null,
       clientY_start: null,
-      audioUrl: 'http://m10.music.126.net/20180914170902/95ccd17f5936b34882d206b140665944/ymusic/afec/8b3a/6745/ec2c0046e5a80032f377012448795bb2.mp3',
+      // audioUrl: 'http://m10.music.126.net/20180914170902/95ccd17f5936b34882d206b140665944/ymusic/afec/8b3a/6745/ec2c0046e5a80032f377012448795bb2.mp3',
+      audioUrl: '',
       m: 0, // 分
       s: 0, // 秒
       ms: 0, // 毫秒
@@ -119,7 +121,8 @@ export default {
     },
     next() {
       // TODO 通过audioUrl 判断是否能够正常提交
-      if (!this.canSubmit) {
+      if (!this.audioUrl) {
+        _.alert('请上传语音后再进行下一步');
         return;
       }
       this.updateEggInfoByKey({ zoneFile: this.audioUrl });
@@ -131,7 +134,7 @@ export default {
       });
     },
     startRecord(flag) {
-      if(flag){
+      if (flag) {
         // 取消录音则 不上传
         return;
       }
@@ -180,12 +183,26 @@ export default {
       this.$wechat.uploadVoice({
         localId: self.localId, // 需要上传的音频的本地ID，由stopRecord接口获得
         isShowProgressTips: 1, // 默认为1，显示进度提示
-        success: function(res) { 
+        success: function(res) {
           var serverId = res.serverId; // 返回音频的服务器端ID
-          console.log('uploadVoice: ' + serverId);
-          alert('uploadVoice: ' + serverId);
+          // console.log('uploadVoice: ' + serverId);
+          // alert('uploadVoice: ' + serverId);
+          self.getUrlFromOss(serverId);
+          // 测试
+          // self.getUrlFromOss('pq5E5PnzGuAo23eZQSu3IQQToR2w6WgBEzfZnNqcGxWGnVHUQT6yONU4TvW9mR9f');
         }
       });
+    },
+    getUrlFromOss(serverId) {
+      api.common.getWechatmedia({
+        serverid: serverId,
+      }).then((res) => {
+        console.log(res);
+        let { url = '' } = res.data[0];
+        if(!!url){
+          this.audioUrl = url;
+        }
+      }).catch((err) => {});
     },
     touchPlay(ev) {
       var self = this;

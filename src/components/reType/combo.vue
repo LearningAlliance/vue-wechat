@@ -8,11 +8,11 @@
     <div class="desc-box">
       <div class="cell clearfix">
         <div class="cell-left">核销串码</div>
-        <div class="cell-right">1201855269871</div>
+        <div class="cell-right">{{info.code}}</div>
       </div>
       <div class="cell margin-top clearfix">
         <div class="cell-left">有效日期</div>
-        <div class="cell-right">2018-11-30</div>
+        <div class="cell-right">{{!!info.expDate ? info.expDate.substring(0, 10) : ''}}</div>
       </div>
     </div>
   </div>
@@ -70,6 +70,7 @@ export default {
   box-sizing: border-box;
   padding-left: 30px;
   padding-right: 30px;
+  padding-bottom: 24px;
 }
 
 .combo-title {

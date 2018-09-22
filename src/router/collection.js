@@ -165,7 +165,10 @@ export default [{
 	name: 'shopEggDetail',
 	meta: {
 		title: '彩蛋',
-		subTitle: '彩蛋'
+		subTitle: '彩蛋',
+		wxConfig: true,
+		hasAudio: true,
+		AudioIndex: 0,
 	},
 	component: EggDetail,
 }, {

@@ -64,21 +64,21 @@ export default {
     'v-loadmore': Loadmore,
   },
   created() {
-    _.alert('暂无获取是否开通到账通知接口')
-    api.user.getFamilyAccoutNotice().then(() => {
-      this.value = false;
-    });
+    // _.alert('暂无获取是否开通到账通知接口')
+    // api.user.getFamilyAccoutNotice().then(() => {
+    //   this.value = false;
+    // });
     this.getInitList();
   },
   methods: {
     turn() {
-      _.alert('暂无获取是否开通到账通知接口')
-      console.log(this.value);
-      api.user.getFamilyAccoutNotice({
-        status: this.value
-      }).then(() => {
+      // _.alert('暂无获取是否开通到账通知接口')
+      // console.log(this.value);
+      // api.user.getFamilyAccoutNotice({
+      //   status: this.value
+      // }).then(() => {
 
-      });
+      // });
     },
     changeRate(item) {
       this.$router.push({

@@ -74,3 +74,9 @@ export const getLonLat = (params) => post('/userServer/business/SysGaoDeAction',
 
 //上传文件
 // 直接在组件中请求了
+
+// 从微信服务器获取临时素材存到oss
+export const getWechatmedia = (params) => post('/userServer/business/SysWechatAction', {
+	action: 'getWechatmedia',
+	data: JSON.stringify(params),
+});

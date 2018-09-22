@@ -49,7 +49,13 @@ const actions = {
 		// 		shopId,
 		// 	}
 		// })
-		api.collection.saveSysZone(state.eggInfo).then((res) => {
+		let postData = {};
+		for (var key in state.eggInfo) {
+			if (!!state.eggInfo[key]) {
+				postData[key] = state.eggInfo[key];
+			}
+		}
+		api.collection.saveSysZone(postData).then((res) => {
 			// console.log(res);
 			router.push({
 				path: '/collection/placementSuccess',

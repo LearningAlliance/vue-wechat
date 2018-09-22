@@ -1,3 +1,4 @@
+<!-- reType = 3 -->
 <template>
   <div class="page">
     <div class="amount"><span class="currency">￥</span><span class="price">{{info.price || 0}}</span></div>

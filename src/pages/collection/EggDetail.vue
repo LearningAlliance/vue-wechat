@@ -3,7 +3,7 @@
     <open-success :visible="showSuccess" :close-modal="closeModal"></open-success>
     <!-- reType -->
     <!--       
-      绿色套餐	1
+      绿色套餐  1
       蓝色碎片  2
       粉色代金券  3
       红色红包  4
@@ -35,9 +35,9 @@
     </div>
     <div class="egg-content">
       <div>
-        <z-character v-if="info.zoneType == 1" :remark="info.remark"></z-character>
-        <z-voice v-if="info.zoneType == 2"></z-voice>
-        <z-video v-if="info.zoneType == 3"></z-video>
+        <z-character v-if="info.zoneType == 1" :remark="info.remark" :info="info"></z-character>
+        <z-voice v-if="info.zoneType == 2" :info="info" :audio-url="audioUrl"></z-voice>
+        <z-video v-if="info.zoneType == 3" :info="info" :video-url="videoUrl"></z-video>
       </div>
       <div>
         <z-combo v-if="info.reType == 1" :info="info"></z-combo>
@@ -104,6 +104,18 @@ export default {
         id: this.id,
       }).then((res) => {
         this.info = res.data;
+
+        // this.info.zoneType = 2;
+
+        if (this.info.zoneType == 3) {
+          this.videoUrl = this.info.file.split(',');
+        }
+        if(this.info.zoneType == 2){
+          // this.audioUrl = 'http://vk88.vka88.com/00006/2017063014590719381_Stay the Night.mp3';
+          // this.audioUrl = 'http://p-shop.juanzisc.com/userServer/Wechat/Y9WET1YhY-vw4S6J6BrFz_T1o7a5vt4LaQa-iyV_7ikmkdUFbhqczHaFZKcNq4aw.amr';
+          this.audioUrl = this.info.file;
+        }
+
         // // 测试 todo
         // this.info.reType = 1;
         // this.info.zoneType = 2;

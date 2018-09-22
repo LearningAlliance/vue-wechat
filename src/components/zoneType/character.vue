@@ -2,17 +2,41 @@
   <div class="page">
     <div class="remark">{{remark}}</div>
     <!-- <div class="">图片TODO</div> -->
+    <show-image :inital-list="picList" :inital-previewer-list="previewList"></show-image>
   </div>
 </template>
 <script type="text/javascript">
+import showImage from '@/components/showImage'
 export default {
   props: {
     remark: {
       default: '',
+    },
+    info: {
+      default: '',
     }
   },
+    components: {
+    'show-image': showImage,
+  },
   data() {
-    return {}
+    return {
+      picList: [],
+      previewList: [],
+    }
+  },
+  mounted(){
+    // this.info.file = 'http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg,http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg,http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg,http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg,http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg,http://pic35.photophoto.cn/20150409/0005018337384017_b.jpg';
+    this.picList = this.info.file.split(',');
+    let list = [];
+    this.picList.forEach((item) => {
+      list.push({src: item});
+    });
+    this.previewList = list;
+    console.log(list);
+  },
+  methods: {
+
   }
 }
 

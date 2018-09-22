@@ -7,7 +7,7 @@
       <p class="text-2">在该店或附近即可打开该彩蛋</p>
     </div>
     <div class="btn-group clearfix">
-      <div class="btn-show">分享给好友</div>
+      <div class="btn-show" @click="share">分享给好友</div>
       <div class="btn-back" @click="toShop">返回商家</div>
     </div>
   </div>
@@ -19,19 +19,27 @@ export default {
       shopId: null,
     }
   },
-  mounted(){
-    let {shopId} = this.$route.query;
+  mounted() {
+    let { shopId } = this.$route.query;
     this.shopId = shopId;
   },
   methods: {
-    toShop(){
+    toShop() {
       this.$router.push({
         path: '/collection/shopDetail',
         query: {
           shopId: this.shopId,
         }
       })
-    }
+    },
+    share() {
+      this.$router.push({
+        path: '/earning/aShareBefore',
+        query: {
+          shopId: this.shopId,
+        }
+      })
+    },
   }
 }
 

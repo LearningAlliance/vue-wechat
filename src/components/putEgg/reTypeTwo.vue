@@ -14,6 +14,7 @@
   </div>
 </template>
 <script type="text/javascript">
+import api from '@/fetch/api.js'
 import { mapGetters, mapActions } from 'vuex'
 import * as _ from '@/util/tool.js'
 export default {
@@ -46,7 +47,7 @@ export default {
         return;
       }
       // TODO updateEggInfoByKey
-      this.updateEggInfoByKey({id: this.id});
+      // this.updateEggInfoByKey({id: this.id});
       let router = this.$router;
       this.saveEgg({
         router,
@@ -54,25 +55,32 @@ export default {
       });
     },
     getData() {
-      // TODO 调用接口
-      this.list = [{
-      	id: 1,
-        name: '新客到店',
-        num: 4,
-        select: true,
-      }, {
-      	id: 2,
-        name: '新客到店2',
-        num: 4,
-        select: false,
-      }, ];
-      if (this.list.length > 0) {
-      	// this.list[0].select = true;
-       //  this.couponId = this.list[0].couponId;
-        this.canSubmit = true;
-      } else {
-        _.alert('暂无可用碎片');
-      }
+      api.collection.qryActivityUserList().then((res) => {
+        let list = res.data;
+        list.forEach((obj) => {
+          obj.select = false;
+        })
+        this.list = list;
+        if (this.list.length > 0) {
+          // this.list[0].select = true;
+          //  this.couponId = this.list[0].couponId;
+          this.canSubmit = true;
+        } else {
+          _.alert('暂无可用碎片');
+        }
+      }).catch((err) => {});
+      // // TODO 调用接口
+      // this.list = [{
+      //   id: 1,
+      //   name: '新客到店',
+      //   num: 4,
+      //   select: true,
+      // }, {
+      //   id: 2,
+      //   name: '新客到店2',
+      //   num: 4,
+      //   select: false,
+      // }, ];
     },
     changeSelect(index) {
       if (this.list[index].select) {

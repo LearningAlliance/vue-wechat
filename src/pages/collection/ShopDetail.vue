@@ -44,11 +44,11 @@
       </div>
     </div>
     <div class="section-2 clearfix">
-      <div class="cell first" v-if="!!shopInfo.shopVideo">
-        视频
+      <div class="cell first" v-if="shopVideoList.length > 0" @click="showVideo">
+        <!--         {{shopInfo.shopVideo}} -->
       </div>
-      <div class="cell" v-if="!!shopInfo.mainImgUrl">
-        <img class="image" :src="shopInfo.mainImgUrl" />
+      <div class="cell" v-if="!!shopMainImgList.length > 0" v-for="(item, index) in shopMainImgList" @click="previewImg(index)">
+        <img class="image" :src="item" />
       </div>
       <!-- TODO -->
       <!--       <div class="cell"></div>
@@ -176,12 +176,20 @@
         <div class="footer-btn put-egg">放置彩蛋</div>
       </div>
     </div>
+    <previewer ref="previewer" :list="shopMainImgListForPre" :options="options"></previewer>
+    <div class="player-box" v-show="showPlayer" @click="hidePlayer">
+      <div class="player-inner">
+        <my-player ref="myPlayer" v-if="playList.length > 0" :video-url="playList"></my-player>
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import myPlayer from '@/components/myPlayer'
+import { Previewer } from 'vux'
 import {
   MessageBox,
 } from 'mint-ui';
@@ -206,7 +214,22 @@ export default {
       subscribe: false, // 是否订阅
       parentUserId: null, // 分享人id(不是必传)
       payAct: {}, // 买单活动
+      shopMainImgList: [], // 店铺 图片列表
+      shopMainImgListForPre: [], // 预览用图片列表
+      shopVideoList: [], // 视频列表
+      playList: [], // 当前播放列表
+      showPlayer: false,
+      // shopVideoList: ["http://p-shop.juanzisc.com/merServer/mp4/201809111635202031.mp4"],
+      options: {
+        isClickableElement: function(el) {
+          return /previewer-delete-icon/.test(el.className)
+        }
+      },
     }
+  },
+  components: {
+    'previewer': Previewer,
+    'my-player': myPlayer,
   },
   computed: {
     ...mapGetters([
@@ -253,6 +276,17 @@ export default {
         // }
         // res.data[0].collectCoupon = obj; 
         this.shopInfo = res.data[0];
+        if (!!this.shopInfo.mainImgUrl) {
+          this.shopMainImgList = this.shopInfo.mainImgUrl.split(',');
+          // 测试
+          // this.shopMainImgList.push(this.shopMainImgList[0]);
+          this.shopMainImgList.forEach((item) => {
+            this.shopMainImgListForPre.push({ src: item });
+          })
+        }
+        if (!!this.shopInfo.shopVideo) {
+          this.shopVideoList = this.shopInfo.shopVideo.split(',');
+        }
         let score = res.data[0].score;
         this.eggNum = res.data[0].zoneCount;
         this.stars = this.setStars(score);
@@ -541,7 +575,21 @@ export default {
 
         }).catch((err) => {});
       }).catch((err) => {});
-    }
+    },
+    // 图片预览
+    previewImg(index) {
+      this.$refs.previewer.show(index)
+    },
+    showVideo() {
+      // this.$refs.myPlayer.click();
+      this.showPlayer = true;
+      this.playList = this.shopVideoList;
+    },
+    hidePlayer(){
+      this.showPlayer = false;
+      this.playList = [];
+      // console.log(this.$refs.videoPlayer);
+    },
   },
 }
 
@@ -553,6 +601,25 @@ export default {
   min-height: 100%;
   box-sizing: border-box;
   background: #F8F8FC;
+}
+
+.player-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  .player-inner{
+    width: 750px;
+    height: 420px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -210px;
+    margin-left: -375px;
+  }
 }
 
 .modal {
@@ -1309,6 +1376,21 @@ export default {
     overflow: hidden;
     &.first {
       margin-left: 30px;
+      background: #000;
+      position: relative;
+    }
+    &.first::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -25px;
+      margin-left: -25px;
+      content: '';
+      width: 50px;
+      height: 50px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-image: url('../../assets/images/ic_eggdetail_play.png');
     }
     .image {
       width: 100%;

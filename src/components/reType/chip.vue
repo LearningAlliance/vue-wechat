@@ -1,3 +1,4 @@
+<!-- reType = 2 -->
 <template>
   <div class="page">
     <div class="chip-title">获得夺宝碎片1个</div>
