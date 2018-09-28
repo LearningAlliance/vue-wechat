@@ -8,7 +8,7 @@
         <!-- <input type="text" class="search-input" @keyup.enter="search" v-model.trim="keyWords" /> -->
         <div class="search-icon-delete" v-show="!!keyWords" @click="resetKeyWords"></div>
       </div>
-      <div class="search-cancel" @click="goBack">取消</div>
+      <div class="search-cancel" @click="goBack">搜索</div>
     </div>
     <div class="section">
       <div class="section-header">
@@ -55,9 +55,9 @@ export default {
     search() {
       if (!this.keyWords) {
         return;
-      } 
-      if(this.list1.indexOf(this.keyWords) > -1){
-      	this.list1.splice(this.list1.indexOf(this.keyWords), 1);
+      }
+      if (this.list1.indexOf(this.keyWords) > -1) {
+        this.list1.splice(this.list1.indexOf(this.keyWords), 1);
       }
       this.list1.unshift(this.keyWords);
       localStorage.setItem('searchHistory', JSON.stringify(this.list1));
@@ -70,12 +70,20 @@ export default {
       });
     },
     goBack() {
-      this.$router.replace({
-        path: '/discovery/findShop',
-        query: {
-          keyWords: '',
-        }
-      });
+      if (!this.keyWords) {
+        this.$router.replace({
+          path: '/discovery/findShop',
+          query: {
+            keyWords: '',
+          }
+        });
+        return;
+      }
+      if (this.list1.indexOf(this.keyWords) > -1) {
+        this.list1.splice(this.list1.indexOf(this.keyWords), 1);
+      }
+      this.list1.unshift(this.keyWords);
+      localStorage.setItem('searchHistory', JSON.stringify(this.list1));
     },
     resetKeyWords() {
       this.keyWords = '';
@@ -102,11 +110,11 @@ export default {
       if (!keyWords) {
         return;
       }
-      if(this.list1.indexOf(keyWords) > -1){
-      	this.list1.splice(this.list1.indexOf(keyWords), 1);
+      if (this.list1.indexOf(keyWords) > -1) {
+        this.list1.splice(this.list1.indexOf(keyWords), 1);
       }
       this.list1.unshift(keyWords);
-      if(this.list1.length > 10){
+      if (this.list1.length > 10) {
         this.list1.splice(10);
       }
       localStorage.setItem('searchHistory', JSON.stringify(this.list1));
@@ -122,7 +130,6 @@ export default {
 
 </script>
 <style scoped lang="scss">
-
 .page {
   width: 100%;
   background: #FFF;
@@ -140,7 +147,7 @@ export default {
       float: left;
       position: relative;
       width: 590px;
-      height: 100%;
+      height: 60px;
       .search-icon {
         position: absolute;
         background-size: 100% 100%;
@@ -155,7 +162,7 @@ export default {
       }
       .search-input {
         width: 590px;
-        height: 100%;
+        height: 60px;
         border-radius: 30px;
         line-height: 80px;
         background: #F8F8FC;

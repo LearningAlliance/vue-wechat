@@ -53,7 +53,7 @@ export default {
     this.setRouteName(routeName || '');
     try {
       let code = _.getRequest('code');
-      if (!!code) {
+      if (!!code && !localStorage.getItem('token') && !localStorage.getItem('uid')) {
         api.common.getOpenIdByCode({ code, }).then((res) => {
           // console.log(res);
           let { userWecharId } = res.data[0]; //openid

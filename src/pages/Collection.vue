@@ -72,7 +72,7 @@
         <div class="no-more" v-show="allLoadedForAct">没有更多了</div>
       </div>
     </div>
-    <div class="shop-list" v-show="tabOn == 'tab1'" ref="tab1List"  @scroll="handleScroll">
+    <div class="shop-list" v-show="tabOn == 'tab1'" ref="tab1List" @scroll="handleScroll">
       <div class="common-list collecttion-list">
         <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList" :key="'collection' + index" @click.stop="toShopDetail(item.shopId)">
           <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
@@ -235,6 +235,8 @@ export default {
   },
   activated() {
     // 再次进入到缓存的页面时 需要keep-live
+    let { keyWords } = this.$route.query;
+    this.keyWords = keyWords || '';
     let scroll = sessionStorage.getItem('scroll');
     if (this.tabOn == 'tab1') {
       this.$refs.tab1List.scrollTop = parseInt(scroll);
@@ -248,6 +250,9 @@ export default {
     //   this.getShops();
     //   this.getActivities();
     // }
+  },
+  created(){
+    console.log('collection created');
   },
   components: {
     'map-demo': mapDemo,
@@ -263,13 +268,11 @@ export default {
       return !!this.longitude && !!this.latitude;
     }
   },
-  created() {
+  mounted() {
     this.$store.dispatch('setLoadingState', true);
     let { keyWords } = this.$route.query;
     this.keyWords = keyWords || '';
     this.getKinds();
-  },
-  mounted() {
     if (!!this.longitude && !!this.latitude) {
       this.getShops();
       this.getActivities();
@@ -353,9 +356,9 @@ export default {
     handleScroll() {
       // console.log(this.$refs.tab1List.scrollTop, this.$refs.tab1List.offsetHeight, this.$refs.tab1List.scrollHeight, this.$refs.tab1List.offsetTop);
       let element = null;
-      if(this.tabOn == 'tab1'){
+      if (this.tabOn == 'tab1') {
         element = this.$refs.tab1List;
-      }else if(this.tabOn == 'tab2'){
+      } else if (this.tabOn == 'tab2') {
         element = this.$refs.tab2List;
       }
       // console.log(element.scrollTop, element.offsetHeight, element.scrollHeight);
@@ -799,7 +802,7 @@ export default {
           left: 0;
         }
         &.no-border::after {
-          border: none; 
+          border: none;
         }
         .box-left {
           position: absolute;
@@ -903,7 +906,8 @@ export default {
   }
 }
 
-.shop-list, .activity-list{
+.shop-list,
+.activity-list {
   height: 100%;
   overflow: scroll;
 }

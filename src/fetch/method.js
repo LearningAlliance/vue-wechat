@@ -36,6 +36,8 @@ axios.interceptors.request.use((config) => {
 	return Promise.reject(error);
 });
 
+var hasGetNewToken = false;
+
 //返回状态判断
 axios.interceptors.response.use((res) => {
 	// console.log('interceptors', res);
@@ -48,41 +50,77 @@ axios.interceptors.response.use((res) => {
 		// _.toast(res.data.msg);
 		return res;
 	} else if (res.data.resultCode == 9985) {
-		MessageBox.confirm('当前token已过期，是否重新获取?').then(action => {
-			if (action) {
-				if (process.env.NODE_ENV == "development") {
-					// 测试用获取token
-					post('/userServer/business/UserInfoAction', {
-						action: 'qryToken',
-						data: JSON.stringify({
-							user: 13333333333
-						}),
-					}, {
-						body: {
-							withToken: false,
-							withUid: false,
-						}
-					}).then((res) => {
-						// console.log('get Token', res);
-						let {
-							token,
-							uid
-						} = res.data;
-						localStorage.setItem('token', token);
-						localStorage.setItem('uid', uid);
-						location.reload();
-					}).cathc((err) => {
-						reject(err);
-						// location.reload();
-					})
-				} else {
-					let oldUrl = encodeURIComponent(location.href.split('?')[0]);
-					location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
-				}
-			}
-		}).catch((err) => {
+		localStorage.setItem('token', '');
+		localStorage.setItem('uid', '');
+		if (hasGetNewToken) {
+			return;
+		}
+		hasGetNewToken = true;
+		// MessageBox.confirm('当前token已过期，是否重新获取?').then(action => {
+		// 	if (action) {
+		// 		if (process.env.NODE_ENV == "development") {
+		// 			// 测试用获取token
+		// 			post('/userServer/business/UserInfoAction', {
+		// 				action: 'qryToken',
+		// 				data: JSON.stringify({
+		// 					user: 13333333333
+		// 				}),
+		// 			}, {
+		// 				body: {
+		// 					withToken: false,
+		// 					withUid: false,
+		// 				}
+		// 			}).then((res) => {
+		// 				// console.log('get Token', res);
+		// 				let {
+		// 					token,
+		// 					uid
+		// 				} = res.data;
+		// 				localStorage.setItem('token', token);
+		// 				localStorage.setItem('uid', uid);
+		// 				location.reload();
+		// 			}).cathc((err) => {
+		// 				reject(err);
+		// 				// location.reload();
+		// 			})
+		// 		} else {
+		// 			let oldUrl = encodeURIComponent(location.href.split('?')[0]);
+		// 			location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+		// 		}
+		// 	}
+		// }).catch((err) => {
 
-		});
+		// });
+
+		if (process.env.NODE_ENV == "development") {
+			// 测试用获取token
+			post('/userServer/business/UserInfoAction', {
+				action: 'qryToken',
+				data: JSON.stringify({
+					user: 13333333333
+				}),
+			}, {
+				body: {
+					withToken: false,
+					withUid: false,
+				}
+			}).then((res) => {
+				// console.log('get Token', res);
+				let {
+					token,
+					uid
+				} = res.data;
+				localStorage.setItem('token', token);
+				localStorage.setItem('uid', uid);
+				location.reload();
+			}).cathc((err) => {
+				reject(err);
+				// location.reload();
+			})
+		} else {
+			let oldUrl = encodeURIComponent(location.href.split('?')[0]);
+			location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+		}
 	} else {
 		console.log(res);
 		// resultCode 2011 2014
