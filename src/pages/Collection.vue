@@ -251,9 +251,9 @@ export default {
     //   this.getActivities();
     // }
   },
-  created(){
-    console.log('collection created');
-  },
+  // created(){
+  //   console.log('collection created');
+  // },
   components: {
     'map-demo': mapDemo,
     'my-map': map,
@@ -388,6 +388,7 @@ export default {
           this.getRecommendList();
         }
         if (!res.hasOwnProperty('data')) {
+          this.collectionList = [];
           return;
         }
         res.data.forEach((obj) => {

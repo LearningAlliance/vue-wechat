@@ -3,7 +3,7 @@
     <div class="card">
       <div class="height-10"></div>
       <div :class="['vip-level-logo', {'level-0': vipLevel == 0, 'level-1': vipLevel == 1, 'level-2': vipLevel == 2, 'level-3': vipLevel == 3, 'level-4': vipLevel == 4, 'level-5': vipLevel == 5, }]"></div>
-      <div class="vip-score">经验值 {{score}}/{{totalScore}}</div>
+      <div class="vip-score">经验值 {{Number(score)}}/{{totalScore || 0}}</div>
       <div class="vip-process-box">
         <div class="process-left">{{nowLevel.levelName}}</div>
         <div ref="box" class="process">
@@ -22,8 +22,8 @@
         <div class="card-box">
           <div class="card-logo logo-2"></div>
           <div class="card-box-inner">
-            <div class="box-inner-title">积分获得{{nowLevel.levelRate}}倍</div>
-            <div class="box-inner-desc">获得积分多{{(Number(nowLevel.levelRate) * 100).toFixed(0)}}%</div>
+            <div class="box-inner-title">积分获得{{nowLevel.levelRate || 0}}倍</div>
+            <div class="box-inner-desc">获得积分多{{(Number(nowLevel.levelRate || 0) * 100).toFixed(0)}}%</div>
           </div>
         </div>
       </div>

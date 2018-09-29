@@ -25,7 +25,7 @@
         <div class="line"></div>
         <div class="card-content">
           <div class="card-img">
-            <img :src="item.shopLogo || require('../../assets/images/icon_shop_default.png')" />
+            <img :src="item.logo || require('../../assets/images/icon_shop_default.png')" />
           </div>
           <div class="card-content-right">
             <div class="shop-title">
@@ -33,7 +33,8 @@
               <div class="shop-distance">距{{item.distance | formatDistance }}</div>
             </div>
             <div class="shop-desc">
-              快餐简餐 黄龙商圈
+              <!-- 快餐简餐 黄龙商圈 -->
+              {{item.hasOwnProperty('coupon') && item.coupon.length > 0 ? item.coupon[0].name : ''}}
             </div>
             <div class="shop-tags clearfix">
               <div class="shop-tag">返{{item.rate * 100}}%保障金</div>

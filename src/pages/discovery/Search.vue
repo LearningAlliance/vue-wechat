@@ -84,6 +84,12 @@ export default {
       }
       this.list1.unshift(this.keyWords);
       localStorage.setItem('searchHistory', JSON.stringify(this.list1));
+      this.$router.replace({
+        path: '/discovery/findShop',
+        query: {
+          keyWords: this.keyWords,
+        }
+      });
     },
     resetKeyWords() {
       this.keyWords = '';
@@ -148,6 +154,8 @@ export default {
       position: relative;
       width: 590px;
       height: 60px;
+      background: #F8F8FC;
+      border-radius: 30px;
       .search-icon {
         position: absolute;
         background-size: 100% 100%;
@@ -161,10 +169,12 @@ export default {
         background-image: url('../../assets/images/ic_search.png');
       }
       .search-input {
-        width: 590px;
+        // width: 590px;
+        // margin-top: 16px;
+        width: 100%;
         height: 60px;
         border-radius: 30px;
-        line-height: 80px;
+        line-height: 60px;
         background: #F8F8FC;
         padding-left: 94px;
         padding-right: 94px;
@@ -192,7 +202,7 @@ export default {
       float: right;
       width: 100px;
       text-align: right;
-      height: 100px;
+      height: 60px;
       line-height: 60px;
       font-family: PingFangSC-Regular;
       font-size: 32px;
