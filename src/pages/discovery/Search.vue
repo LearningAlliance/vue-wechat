@@ -20,7 +20,7 @@
         <div class="none" v-show="list1.length == 0">暂无搜索记录</div>
       </div>
     </div>
-    <div class="section">
+    <!-- <div class="section">
       <div class="section-header">
         <p class="section-header-p">搜索发现</p>
         <div :class="['icon',{'icon-show': showDiscovery == 'show', 'icon-hidden': showDiscovery != 'show'}]" @click="changeShow"></div>
@@ -29,7 +29,7 @@
         <div class="cell" v-for="(item, index) in list2" v-show="showDiscovery == 'show'" @click="clickCell(item)">{{item}}</div>
         <div class="none" v-show="showDiscovery != 'show'">当前搜索发现已隐藏</div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script type="text/javascript">

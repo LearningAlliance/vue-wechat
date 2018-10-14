@@ -158,6 +158,7 @@ export default {
           path: '/collection/shopDetail',
           query: {
             shopId: id,
+            from: 'discovery',
           },
         });
       }else if(type == '2'){

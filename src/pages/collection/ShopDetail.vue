@@ -75,7 +75,7 @@
       <div class="section-content">
         <div class="cell-header clearfix">
           <div class="title">买单</div>
-          <div class="desc">返10%养老保障金</div>
+          <div class="desc" v-if="shopInfo.pensionRate">返{{!!shopInfo.pensionRate ? shopInfo.pensionRate * 100 : 0}}%养老保障金</div>
         </div>
         <div class="cell-info">
           <div class="desc no-top" v-if="payAct.activityType == 10">满{{payAct.couponLimit}}元立减{{payAct.couponPrice}}元 <span v-if="payAct.limitDesc">({{payAct.limitDesc}})</span></div>
@@ -108,7 +108,7 @@
         <div class="desc">{{vipInfo.merLevelConfig.levelDesc}}</div>
       </div>
       <div class="cell-2">
-        <div class="title">{{(vipInfo.merLevelConfig.upgradeAmount || 0) | formatPrice}}元后升级可享</div>
+        <div class="title">{{(vipInfo.merLevelConfig.upgradeAmount || 0) | formatPrice}}后升级可享</div>
         <div class="desc">{{vipInfo.nextmerLevelConfig.levelDesc}}</div>
       </div>
     </div>
@@ -185,7 +185,7 @@
   </div>
 </template>
 <script type="text/javascript">
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 import myPlayer from '@/components/myPlayer'
@@ -263,6 +263,11 @@ export default {
     this.getPayAct();
   },
   methods: {
+    ...mapActions({
+      setPayInfo: 'setPayInfo',
+      clearPayINfo: 'clearPayINfo',
+      updatePayInfoByKey: 'updatePayInfoByKey',
+    }),
     // 查询商家详情
     getShopDetail() {
       api.collection.merShop({
@@ -403,9 +408,16 @@ export default {
       this.$router.history.go(-1);
     },
     toHome() {
-      this.$router.push({
-        path: '/collection',
-      });
+      if (this.$route.query.from == 'discovery') {
+        this.$router.push({
+          path: '/discovery',
+        });
+      } else {
+        this.$router.push({
+          path: '/collection',
+        });
+      }
+
     },
     makePhone(tel) {
       window.location.href = `tel:${tel}`;
@@ -427,6 +439,7 @@ export default {
       });
     },
     payTheBill() {
+      this.clearPayINfo();
       this.$router.push({
         path: '/collection/payTheBill',
         query: {
@@ -585,7 +598,7 @@ export default {
       this.showPlayer = true;
       this.playList = this.shopVideoList;
     },
-    hidePlayer(){
+    hidePlayer() {
       this.showPlayer = false;
       this.playList = [];
       // console.log(this.$refs.videoPlayer);
@@ -611,7 +624,7 @@ export default {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
   z-index: 1000;
-  .player-inner{
+  .player-inner {
     width: 750px;
     height: 420px;
     position: absolute;

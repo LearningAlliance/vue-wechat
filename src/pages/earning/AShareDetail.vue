@@ -20,8 +20,8 @@
               <!-- <img ref="logo" :src="userInfo.userHead || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
             </div>
             <div class="shop-content">
-              <div class="shop-name">肥宅快乐鸡西湖文化广场店</div>
-              <div class="shop-area">西湖区</div>
+              <div class="shop-name">{{shopInfo.shopName}}</div>
+              <div class="shop-area">{{shopInfo.tradingArea}}</div>
             </div>
           </div>
           <div class="coupon-info clearfix">

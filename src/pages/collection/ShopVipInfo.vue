@@ -44,6 +44,7 @@ export default {
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     this.qryMerLevel();
+    this.getShopDetail();
   },
   methods: {
     // 商铺会员等级信息
@@ -52,6 +53,13 @@ export default {
         shopId: this.shopId,
       }).then((res) => {
         this.vipInfo = res.data[0];
+      }).catch((err) => {});
+    },
+    getShopDetail() {
+      api.collection.merShop({
+        shopId: this.shopId,
+      }).then((res) => {
+        this.shopInfo = res.data[0];
       }).catch((err) => {});
     },
   }

@@ -176,7 +176,7 @@ export default {
   .cell {
     position: relative;
     width: 100%;
-    height: 88px;
+    min-height: 88px;
     box-sizing: border-box;
     padding-top: 19px;
     padding-left: 30px;
@@ -189,6 +189,7 @@ export default {
       font-size: 28px;
       color: #2E3141;
       letter-spacing: 0;
+      width: 70%;
     }
     .cell-right {
       display: inline-block;
@@ -198,6 +199,7 @@ export default {
       color: #2E3141;
       letter-spacing: 0;
       text-align: right;
+      width: 30%;
       .num-text {
         display: inline-block;
         float: right;

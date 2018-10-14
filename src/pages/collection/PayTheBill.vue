@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <p class="shop-name">快乐肥宅茶武林店</p>
+    <p class="shop-name">{{shopInfo.shopName || ''}}</p>
     <div class="amount-box">
       <div class="amount-label">订单金额(元)</div>
       <input type="number" class="amount" v-model.number="amount" placeholder="请与收银员确认金额" />
@@ -72,6 +72,7 @@ export default {
       discount: 0, // 扣减金额
       couponLimit: 0, //满减限制
       pensionRate: 0, // 养老金比例
+      shopInfo: {}, // 店铺详情
     }
   },
   mounted() {
@@ -152,6 +153,7 @@ export default {
         shopId: this.shopId,
       }).then((res) => {
         this.pensionRate = res.data[0].pensionRate || 0;
+        this.shopInfo = res.data[0];
       }).catch((err) => {});
     },
     toPay() {

@@ -97,7 +97,7 @@
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
-              <span class="tag-cell">套餐</span>
+              <span class="tag-cell" v-if="typeof(item.coupon) == 'object' && item.coupon.hasOwnProperty('couponName')">套餐</span>
             </div>
             <div class="cell-footer-btn" @click.stop="showDiscounts(index)">查看优惠</div>
           </div>
@@ -153,7 +153,7 @@
               <span class="tag-cell" v-show="item.pensionRate">返{{item.pensionRate * 100}}%保金</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 10">满减</span>
               <span class="tag-cell" v-show="typeof(item.cashCoupon) == 'object' && item.cashCoupon.activityType == 11">满送</span>
-              <span class="tag-cell">套餐</span>
+              <span class="tag-cell" v-if="typeof(item.coupon) == 'object' && item.coupon.hasOwnProperty('couponName')">套餐</span>
             </div>
             <div class="cell-footer-btn" @click.stop="showDiscounts2(index)">查看优惠</div>
           </div>

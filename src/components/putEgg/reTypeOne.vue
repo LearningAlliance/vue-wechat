@@ -41,6 +41,10 @@ export default {
       updateEggInfoByKey: 'updateEggInfoByKey',
     }),
     next() {
+      if(this.list.length == 0){
+        _.alert('暂无可用套餐券');
+        return;
+      }
       if (!this.canSubmit || !this.couponId) {
         _.alert('请选择套餐券后再提交');
         return;
@@ -53,6 +57,8 @@ export default {
       });
     },
     getData() {
+      this.list = [];
+      return;
       api.user.getVoucher({ pageNum: 1, pageRow: 1000 }).then((res) => {
         let list = res.data;
         list.forEach((obj) => {
@@ -67,18 +73,6 @@ export default {
           _.alert('暂无可用套餐券');
         }
       }).catch((err) => {});
-      return;
-      // TODO 调用接口
-      this.list = [{
-        name: '新客到店',
-        num: 4,
-        select: true,
-      }, {
-        name: '新客到店2',
-        num: 4,
-        select: false,
-      }, ];
-
     },
     changeSelect(index) {
       if (this.list[index].select) {
