@@ -3,12 +3,12 @@
     <div class="vip-card" v-if="!!vipInfo.merLevelConfig.levelName">
       <div class="header">
         <div class="level">{{(vipInfo.merLevelConfig.levelName || '').toUpperCase()}}</div>
-        <div class="top">顶级</div>
+        <div class="top" v-if="vipInfo.merLevelConfig.levelGrade == vipInfo.allmerLevelConfig.length">顶级</div>
         <div class="shop-name">{{shopInfo.shopName}}</div>
       </div>
       <div class="cell-1">
         <div class="title">当前VIP权益</div>
-        <div class="desc-1">买单{{vipInfo.merLevelConfig.levelRate * 100}}折  同享</div>
+        <div class="desc-1">买单{{vipInfo.merLevelConfig.levelRate}}折  同享</div>
         <div class="desc-2">{{vipInfo.merLevelConfig.levelDesc}}</div>
       </div>
     </div>
@@ -20,7 +20,7 @@
             <span class="text-golden">{{item.levelName.toUpperCase()}}  </span>累计消费 <span class="text-golden">{{item.upgradeAmount | formatPriceWithoutUnit}}元</span>
             <span class="top" v-if="vipInfo.allmerLevelConfig.length == item.levelGrade">顶级</span>
           </div>
-          <div class="vip-desc">权益 买单{{item.levelRate * 100}}折 同享 &nbsp;&nbsp;&nbsp;{{item.levelDesc}}</div>
+          <div class="vip-desc">权益 买单{{item.levelRate}}折 同享 &nbsp;&nbsp;&nbsp;{{item.levelDesc}}</div>
         </div>
         <i class="icon-down" v-if="vipInfo.allmerLevelConfig.length - 1 !== index"></i>
       </div>

@@ -215,18 +215,10 @@ function initRequest(params = {}, options = {}) {
 	if (withUid) {
 		params.uid = uid;
 	}
-	if (new Date().getTime() < new Date('2018-10-16').getTime()) {
-		return {
-			params,
-			headers,
-		}
-	} else {
-		return {
-			params: null,
-			headers: null,
-		};
-	}
-
+	return {
+		params: null,
+		headers: null,
+	};
 }
 
 export function get(url, data, options = {}) {

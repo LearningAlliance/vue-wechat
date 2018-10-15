@@ -37,7 +37,7 @@
               {{item.hasOwnProperty('coupon') && item.coupon.length > 0 ? item.coupon[0].name : ''}}
             </div>
             <div class="shop-tags clearfix">
-              <div class="shop-tag">返{{item.rate * 100}}%保障金</div>
+              <div class="shop-tag">返{{item.rate }}%保障金</div>
               <div class="shop-tag" v-if="item.zone == 1">有彩蛋惊喜</div>
             </div>
           </div>

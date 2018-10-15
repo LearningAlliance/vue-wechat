@@ -108,7 +108,7 @@
         <div class="desc">{{vipInfo.merLevelConfig.levelDesc}}</div>
       </div>
       <div class="cell-2">
-        <div class="title">{{(vipInfo.merLevelConfig.upgradeAmount || 0) | formatPrice}}后升级可享</div>
+        <div class="title">{{(vipInfo.nextmerLevelConfig.upgradeAmount || 0) | formatPrice}}后升级可享</div>
         <div class="desc">{{vipInfo.nextmerLevelConfig.levelDesc}}</div>
       </div>
     </div>
