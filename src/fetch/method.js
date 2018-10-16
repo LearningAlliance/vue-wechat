@@ -216,8 +216,8 @@ function initRequest(params = {}, options = {}) {
 		params.uid = uid;
 	}
 	return {
-		params: null,
-		headers: null,
+		params,
+		headers,
 	};
 }
 
