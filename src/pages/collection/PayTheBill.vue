@@ -175,6 +175,7 @@ export default {
         this.clearPayINfo();
         let { createDate, orderNo, url } = res.data;
         _.alert('支付逻辑todo, 假装支付完成');
+        // return;
         location.href = url;
         // TODO 支付完成跳转逻辑
         this.$router.push({

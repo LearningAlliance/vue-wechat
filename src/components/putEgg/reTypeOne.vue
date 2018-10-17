@@ -1,7 +1,7 @@
 <!-- 套餐券 -->
 <template>
   <div class="page">
-    <div class="section-title">请选择放置夺宝奇兵活动的套餐券</div>
+    <div class="section-title">请选择放置您的套餐券</div>
     <div class="list">
       <div :class="['cell', {'no-border': index == list.length - 1}]" v-for="(item, index) in list" @click="changeSelect(index)">
         <div :class="['cell-top', {'on': item.select}]">{{item.couponName}}</div>

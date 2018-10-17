@@ -66,7 +66,7 @@ export default {
         { name: '视频', value: '3', select: false },
       ],
       reTypes: [
-        { name: '碎片', value: '2', select: true },
+        // { name: '碎片', value: '2', select: true },
         { name: '微信红包', value: '4', select: false },
         { name: '套餐券', value: '1', select: false },
       ],
@@ -328,7 +328,8 @@ export default {
     .re-type {
       display: inline-block;
       float: left;
-      width: 33%;
+      // width: 33%;
+      width: 50%;
       height: 68px;
       text-align: center;
       .re-type-text {

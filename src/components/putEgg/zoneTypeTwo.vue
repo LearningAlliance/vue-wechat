@@ -260,6 +260,7 @@ export default {
     line-height: 31.2px;
   }
   .icon-record-play {
+    cursor: pointer;
     position: absolute;
     top: 232px;
     right: 145px;
@@ -272,6 +273,7 @@ export default {
     background-image: url('../../assets/images/icon_record_play.png');
   }
   .icon-record-btn {
+    cursor: pointer;
     position: absolute;
     top: 226px;
     left: 50%;

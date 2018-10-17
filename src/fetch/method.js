@@ -97,7 +97,8 @@ axios.interceptors.response.use((res) => {
 			post('/userServer/business/UserInfoAction', {
 				action: 'qryToken',
 				data: JSON.stringify({
-					user: 13333333333
+					// user: 13333333333
+					user: 18868195887
 				}),
 			}, {
 				body: {

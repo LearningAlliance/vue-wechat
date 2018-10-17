@@ -91,7 +91,8 @@ export default [{
 	path: '/collection/shopDetail',
 	name: 'shopDetail',
 	meta: {
-		title: '收藏',
+		// title: '收藏',
+		title: '店铺详情',
 		wxConfig: true,
 		jsApiList: ['getLocation', 'openLocation'],
 		getLocation: true,
@@ -194,7 +195,7 @@ export default [{
 		title: '收藏',
 		subTitle: ' 放置彩蛋step1',
 		wxConfig: true,
-		jsApiList: ['startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'uploadVoice'],
+		jsApiList: ['startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'uploadVoice', 'pauseVoice', 'stopVoice'],
 	},
 	component: PutEggStep1,
 }, {

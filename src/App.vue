@@ -209,24 +209,24 @@ export default {
           // console.log(docoument)
           document.getElementsByTagName('Audio')[AudioIndex].play();
         }
-        wx.checkJsApi({
-          jsApiList: jsApiList,
-          success: function(res) {
-            let flag = true;
-            if (typeof(res.checkResult) == 'string') {
-              res.checkResult = JSON.parse(res.checkResult);
-            }
-            for (let key in res.checkResult) {
-              if (!res.checkResult[key]) {
-                flag = false;
-              }
-            }
-            if (!flag) {
-              _.alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
-              return;
-            }
-          }
-        });
+        // wx.checkJsApi({
+        //   jsApiList: jsApiList,
+        //   success: function(res) {
+        //     let flag = true;
+        //     if (typeof(res.checkResult) == 'string') {
+        //       res.checkResult = JSON.parse(res.checkResult);
+        //     }
+        //     for (let key in res.checkResult) {
+        //       if (!res.checkResult[key]) {
+        //         flag = false;
+        //       }
+        //     }
+        //     if (!flag) {
+        //       _.alert('你的微信版本太低，不支持微信JS接口，请升级到最新的微信版本！');
+        //       return;
+        //     }
+        //   }
+        // });
         // 调用js-sdk
         if (getLocation) {
           wx.getLocation({

@@ -5,8 +5,9 @@
     <div class="info-box with-shadow" v-show="showModal">
       <div class="info-box-cancel" @click.stop="hideModal"></div>
       <div class="info-header">是否收藏该店？</div>
-      <div class="info-content">首次收藏该店将获得500元代金券</div>
-      <div class="info-extra">
+      <!-- <div class="info-content">首次收藏该店将获得500元代金券</div> -->
+      <div class="info-content" v-if="!!shopInfo.collectCoupon && shopInfo.collectCoupon.couponPrice">首次收藏该店将获得{{shopInfo.collectCoupon.couponPrice}}元代金券</div>
+      <div class="info-extra" :class="[{'margin-top-1': !shopInfo.collectCoupon}]">
         <div :class="['extra-text', {'select-yes': subscribe, 'select-no': !subscribe}]" @click.stop="toggleSubscribe">订阅该店个性化优惠信息</div>
       </div>
       <div class="info-footer">
@@ -18,8 +19,8 @@
       <i class="icon icon-home" @click="toHome"></i>
       <!--             <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1')}]" @click="userFollow(collectInfo.isFollow)"></i> -->
-      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('state') && collectInfo.state == 1 ? '已特别关注' : '未特别关注'}}</span>
-      <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('state') && collectInfo.state == 1)}]"></i>
+      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1 ? '已特别关注' : '未特别关注'}}</span>
+      <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1)}]" @click="userFollow(collectInfo.isFollow)"></i>
     </div>
     <div class="height-100"></div>
     <div class="section-1">
@@ -488,7 +489,6 @@ export default {
       } else {
         follow = 1;
       }
-
       if (follow == 1) { // 收藏
         this.showModal = true;
       } else if (follow == 0) {
@@ -499,6 +499,8 @@ export default {
               shopId: this.shopId,
             }).then((res) => {
               this.$set(this.collectInfo, 'state', 0);
+              this.$set(this.collectInfo, 'isFollow', 0);
+              // this.doFollow(0);
             }).catch((err) => {
               this.$set(this.collectInfo, 'state', 0)
             });
@@ -549,10 +551,10 @@ export default {
       this.subscribe = !this.subscribe;
     },
     doCollect() {
-      if (!this.subscribe) {
-        _.alert('请先订阅完成收藏');
-        return;
-      }
+      // if (!this.subscribe) {
+      //   _.alert('请先订阅完成收藏');
+      //   return;
+      // }
       this.doCollectShop(this.collectInfo.state);
     },
     doCollectShop(status) {
@@ -572,21 +574,20 @@ export default {
       }
       api.collection.toUserCollect(postData).then((res) => {
         this.$set(collectInfo, 'state', follow);
-        api.collection.userFollow({
-          shopId: this.shopId,
-          isFollow: follow,
-        }).then((res) => {
+        if (!this.subscribe) {
           this.showModal = false;
-          this.$set(this.collectInfo, 'isFollow', follow);
-
-          // api.collection.userFollow({
-          //   shopId: this.shopId,
-          //   isFollow: 1,
-          // }).then((res) => {
-          //   console.log('userFollow', res);
-          // }).catch((err) => {});
-
-        }).catch((err) => {});
+          return;
+        }
+        this.doFollow(follow);
+      }).catch((err) => {});
+    },
+    doFollow(follow) {
+      api.collection.userFollow({
+        shopId: this.shopId,
+        isFollow: follow,
+      }).then((res) => {
+        this.showModal = false;
+        this.$set(this.collectInfo, 'isFollow', follow);
       }).catch((err) => {});
     },
     // 图片预览
@@ -675,12 +676,12 @@ export default {
     text-align: center;
   }
   .info-content {
-    margin-top: 30px;
-    margin-bottom: 20px;
+    margin-top: 30px; // margin-bottom: 20px;
     font-size: 32px;
     text-align: center;
   }
   .info-extra {
+    margin-top: 20px;
     font-size: 30px;
     height: 40px;
     line-height: 40px;
@@ -1117,6 +1118,10 @@ export default {
       line-height: 40px;
     }
   }
+}
+
+.margin-top-1 {
+  margin-top: 60px !important;
 }
 
 .vip-card {
