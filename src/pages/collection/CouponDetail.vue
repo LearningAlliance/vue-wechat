@@ -25,7 +25,7 @@
           <i class="icon-tag"></i>
           <span class="tag-desc">免预约</span>
         </div>
-        <div class="count">销量 {{couponInfo.surplusNum || 0}}</div>
+        <div class="count">销量 {{couponInfo.saleVolume || 0}}</div>
       </div>
       <div class="coupon-info">
         <div class="title">套餐内容</div>

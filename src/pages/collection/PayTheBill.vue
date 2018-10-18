@@ -90,17 +90,17 @@ export default {
       'payInfo',
     ]),
     total() {
-      return (Number(this.amount) + Number(this.price) - Number(this.discount)).toFixed(2);
+      return (Number(this.amount) - Number(this.discount)).toFixed(2);
     },
     // 赠送养老金
     pensionAmount() {
-      return ((Number(this.amount) + Number(this.price)) * Number(this.pensionRate)).toFixed(2);
+      return ((Number(this.amount)) * Number(this.pensionRate)).toFixed(2);
     }
   },
   watch: {
     amount(newVal, oldVal) {
       this.updatePayInfoByKey({ amount: newVal });
-      if (newVal >= this.couponLimit) {
+      if (newVal - this.price >= this.couponLimit) {
         this.discount = this.payActNum;
       } else {
         this.discount = 0;
@@ -108,6 +108,11 @@ export default {
     },
     price(newVal, oldVal) {
       this.updatePayInfoByKey({ price: newVal });
+      if (this.amount - newVal >= this.couponLimit) {
+        this.discount = this.payActNum;
+      } else {
+        this.discount = 0;
+      }
     }
   },
   methods: {
@@ -175,15 +180,17 @@ export default {
         this.clearPayINfo();
         let { createDate, orderNo, url } = res.data;
         _.alert('支付逻辑todo, 假装支付完成');
+        // location.href = 'https://ibsbjstar.ccb.com.cn/CCBIS/QR?QRCODE=CCB9980005524947325807371';
         // return;
         location.href = url;
+        return;
         // TODO 支付完成跳转逻辑
         this.$router.push({
-            path: '/collection/payTheBillSuccess',
-            query: {
-              createDate,
-              orderNo,
-            },
+          path: '/collection/payTheBillSuccess',
+          query: {
+            createDate,
+            orderNo,
+          },
         });
       }).catch((err) => {})
     },

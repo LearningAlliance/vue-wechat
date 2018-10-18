@@ -3,8 +3,8 @@
     <div ref="box" :class="['box', {'hidden': hideBox}]">
       <div class="info">
         <div class="avatar-box">
-          <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
-          <!-- <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
+          <!-- <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
+          <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
           <!-- <img ref="avatar" class="avatar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLoJTSB95niaeia0icfVUGTss1J0C2mWiaqhTfGc7DkWg6GAIktNvEtJjuRQJPv5yX8q6fia5HJgN9XNibQ/132" crossOrigin="anonymous" /> -->
         </div>
         <div class="user-name">
@@ -15,8 +15,8 @@
         <div class="area">
           <div class="shop-info">
             <div class="shop-logo">
-              <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/>
-              <!-- <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/> -->
+              <!-- <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/> -->
+              <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" />
               <!-- <img ref="logo" :src="userInfo.userHead || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
             </div>
             <div class="shop-content">
@@ -26,14 +26,19 @@
           </div>
           <div class="coupon-info clearfix">
             <div class="coupon-left">
-              <div class="coupon-title">
-                <span class="currency">￥</span>30
+              <div class="coupon-title" v-if="!!shopInfo.collectCoupon">
+                <span class="currency">￥</span>{{shopInfo.collectCoupon.couponPrice}}
               </div>
-              <div class="coupon-desc">满200可用</div>
+              <div class="coupon-title" v-if="!shopInfo.collectCoupon">
+                <span class="currency"></span>敬请
+              </div>
+              <div class="coupon-desc" v-if="!!shopInfo.collectCoupon">满{{shopInfo.collectCoupon.couponLimit}}可用</div>
+              <div class="coupon-desc" v-if="!shopInfo.collectCoupon">期待</div>
             </div>
             <div class="coupon-right">
               <div class="coupon-title-2">店铺会员最高可享</div>
-              <div class="coupon-desc-2">全场8折</div>
+              <div class="coupon-desc-2" v-if="vipInfo.hasOwnProperty('allmerLevelConfig')">全场{{discountInfo}}折</div>
+              <div class="coupon-desc-2" v-if="!vipInfo.hasOwnProperty('allmerLevelConfig')">暂无</div>
             </div>
           </div>
           <div class="code-box">
@@ -67,7 +72,7 @@ export default {
     // this.getShopDetail();
     // _.alert('queue start');
     // this.queue([this.qrySharePath, this.qrCode, this.getShopDetail, this.doHtml2Canvas])
-    this.queue([this.qrySharePath, this.qrCode, this.getShopDetail])
+    this.queue([this.qrySharePath, this.qrCode, this.getShopDetail, this.qryMerLevel])
       .then((res) => {
         this.$nextTick(() => {
           this.doHtml2Canvas();
@@ -96,6 +101,7 @@ export default {
       url: null,
       hideBox: false,
       shopInfo: {},
+      vipInfo: {},
     }
   },
   methods: {
@@ -126,6 +132,18 @@ export default {
         }).then((res) => {
           let { url = null, shopId, userId } = res.data;
           this.url = `http://cs.juanzisc.com/collection/shopDetail?shopId=${shopId}&parentUserId=${this.parentUserId}`;
+          resolve();
+        }).catch((err) => {});
+      })
+    },
+    // 商铺会员等级信息
+    qryMerLevel() {
+      return new Promise((resolve, reject) => {
+        api.collection.qryMerLevel({
+          shopId: this.shopId,
+        }).then((res) => {
+          this.vipInfo = res.data[0];
+          this.discountInfo = (this.vipInfo.hasOwnProperty('allmerLevelConfig') && this.vipInfo.allmerLevelConfig.length > 0) ? this.vipInfo.allmerLevelConfig[this.vipInfo.allmerLevelConfig.length - 1].levelRate : 10;
           resolve();
         }).catch((err) => {});
       })

@@ -44,11 +44,11 @@
         </div>
       </div>
     </div>
-    <div class="section-2 clearfix">
+    <div class="section-2 clearfix" v-if="shopVideoList.length > 0 || shopMainImgList.length > 0">
       <div class="cell first" v-if="shopVideoList.length > 0" @click="showVideo">
         <!--         {{shopInfo.shopVideo}} -->
       </div>
-      <div class="cell" v-if="!!shopMainImgList.length > 0" v-for="(item, index) in shopMainImgList" @click="previewImg(index)">
+      <div class="cell" v-if="shopMainImgList.length > 0" v-for="(item, index) in shopMainImgList" @click="previewImg(index)">
         <img class="image" :src="item" />
       </div>
       <!-- TODO -->

@@ -77,7 +77,8 @@
         <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList" :key="'collection' + index" @click.stop="toShopDetail(item.shopId)">
           <div :class="['front-side with-shadow', {'bg-1': index % 3 == 0, 'bg-2': index % 3 == 1,'bg-3': index % 3 == 2, 'hidden': item.reverse}]">
             <div class="icon-egg" v-show="item.zoneCount > 0"></div>
-            <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div>
+            <!-- <div :class="['icon-collect', {'collect-tag': item.state == 1}]"></div> -->
+            <div v-if="item.isFollow == 1" :class="['icon-collect', {'collect-tag': item.state == 1}]"></div>
             <div class="cell-header">
               <div class="cell-logo">
                 <img class="cell-logo-img" :src="item.shopLogo || require('../assets/images/icon_shop_default.png')" />

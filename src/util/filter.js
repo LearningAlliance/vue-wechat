@@ -91,7 +91,7 @@ export const formatDistance = (distance) => {
         return '';
     }
     if (distance < 1000) {
-        return `${distance}m`;
+        return `${distance.toFixed(1)}m`;
     } else {
         return `${(distance / 1000).toFixed(1)}km`;
     }

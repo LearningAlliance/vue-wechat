@@ -119,8 +119,12 @@ axios.interceptors.response.use((res) => {
 				// location.reload();
 			})
 		} else {
-			let oldUrl = encodeURIComponent(location.href.split('?')[0]);
-			location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+			if (_.isWx()) {
+				let oldUrl = encodeURIComponent(location.href.split('?')[0]);
+				location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxb3101479b8367c05&redirect_uri=${oldUrl}&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect`;
+			} else {
+
+			}
 		}
 	} else {
 		console.log(res);

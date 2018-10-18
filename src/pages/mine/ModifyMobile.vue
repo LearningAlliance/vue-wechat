@@ -11,7 +11,8 @@
       </div>
       <div class="value clearfix">
         <input type="number" class="input" placeholder="请输入新的手机号" oninput="if(value.length>11)value=value.slice(0, 11)" v-model="userPhone" onchange="if(value.length>11)value=value.slice(0, 11)" />
-        <div class="btn" @click="getVerifyCode">获取验证码</div>
+        <div class="btn" @click="getVerifyCode" v-show="timeText == 0">获取验证码</div>
+        <div class="btn" v-show="timeText != 0">{{timeText}}s</div>
       </div>
       <div class="line-box">
         <div class="line"></div>
@@ -38,12 +39,15 @@
 import * as _ from '@/util/tool.js'
 import api from '@/fetch/api'
 
+var timer = null;
 export default {
   data() {
     return {
       userPhone: '',
       verifyCode: '',
       resultMsg: '',
+      timer: null,
+      timeText: 0,
     }
   },
   methods: {
@@ -58,6 +62,13 @@ export default {
         verifyType: 1,
       }).then((res) => {
         _.alert('验证码已发送，请注意查收');
+        this.timeText = 60;
+        timer = setInterval(() => {
+          this.timeText--;
+          if (this.timeText == 0) {
+            clearInterval(timer);
+          }
+        }, 1000);
       }).catch((err) => {
         console.log(err);
       });
@@ -86,7 +97,7 @@ export default {
         this.verifyCode = '';
         this.$router.history.go(-1);
       }).catch((err) => {
-      	this.resultMsg = err.data.resultMsg;
+        this.resultMsg = err.data.resultMsg;
       });
     }
   }
@@ -99,7 +110,7 @@ export default {
   height: 100%;
   min-height: 100%;
   background: #fff;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   overflow: hidden;
 }
 

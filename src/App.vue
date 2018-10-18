@@ -78,8 +78,10 @@ export default {
     }
     try {
       if (_.isWx()) {
+        // _.alert('微信');
         this.wxConfig();
       } else {
+        // _.alert('其他');
         this.pcConfig();
       }
     } catch (e) {
