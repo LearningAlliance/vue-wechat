@@ -18,6 +18,9 @@ require('video.js/dist/video-js.css')
 require('vue-video-player/src/custom-theme.css')
 
 import VideoPlayer from 'vue-video-player'
+
+// import "swiper/dist/css/swiper.min.css";
+
 Vue.use(VideoPlayer);
 
 // import Mint from 'mint-ui';

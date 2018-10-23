@@ -178,6 +178,7 @@ export default [{
 	meta: {
 		title: '收藏',
 		subTitle: '放置彩蛋',
+		keepAlive: true,
 	},
 	component: PutEgg
 }, {

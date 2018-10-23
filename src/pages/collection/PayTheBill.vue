@@ -22,6 +22,16 @@
           <span class="value orange">-{{discount}}元</span>
         </div>
       </div>
+
+<!--       <div class="section-cell line clearfix" v-for="(item, index) in payActAll" v-if="payActAll.length > 0 && item.activityType == 10">
+        <div class="cell-left">
+          <span class="label">{{`满${item.couponLimit}元减${item.couponPrice}元`}}</span>
+        </div>
+        <div class="cell-right">
+          <span class="value orange"></span>
+        </div>
+      </div> -->
+
       <div class="section-cell clearfix" @click="toUseCoupons">
         <div class="cell-left">
           <span class="label">代金券</span>
@@ -73,6 +83,7 @@ export default {
       couponLimit: 0, //满减限制
       pensionRate: 0, // 养老金比例
       shopInfo: {}, // 店铺详情
+      payActAll: [], // 全部的买单活动
     }
   },
   mounted() {
@@ -100,6 +111,7 @@ export default {
   watch: {
     amount(newVal, oldVal) {
       this.updatePayInfoByKey({ amount: newVal });
+      this.updatePayAct();
       if (newVal - this.price >= this.couponLimit) {
         this.discount = this.payActNum;
       } else {
@@ -108,6 +120,7 @@ export default {
     },
     price(newVal, oldVal) {
       this.updatePayInfoByKey({ price: newVal });
+      this.updatePayAct();
       if (this.amount - newVal >= this.couponLimit) {
         this.discount = this.payActNum;
       } else {
@@ -121,6 +134,30 @@ export default {
       clearPayINfo: 'clearPayINfo',
       updatePayInfoByKey: 'updatePayInfoByKey',
     }),
+    updatePayAct(){
+      if(this.payActAll.length > 0){
+        let payFee = 0; // 实际支付金额
+        if(this.hasPrice){
+          payFee = this.amount - this.price > 0 ? this.amount - this.price : 0;
+        }else {
+          payFee = this.amount;
+        }
+        let len = this.payActAll.length;
+        for(let i = 0; i < len; i++){
+          if(this.payActAll[i].activityType != 10){
+            continue;
+          }
+          if(i == 0 && payFee >= this.payActAll[0].couponLimit){
+            this.payAct = this.payActAll[0];
+          }else if(payFee < this.payActAll[i].couponLimit && !!this.payActAll[i + 1] && payFee >= this.payActAll[i + 1].couponLimit){
+            this.payAct = this.payActAll[i + 1];
+          }
+        }
+        this.payActName = `满${this.payAct.couponLimit}元减${this.payAct.couponPrice}元`;
+        this.couponLimit = Number(this.payAct.couponLimit);
+        this.payActNum = Number(this.payAct.couponPrice);
+      }
+    },
     changeHasPrice() {
       this.hasPrice = !this.hasPrice;
     },
@@ -144,7 +181,8 @@ export default {
         shopId: this.shopId,
         couponType: '2',
       }).then((res) => {
-        let payAct = res.data.length > 0 ? res.data[0] : {};
+        this.payActAll = res.data.length > 0 ? res.data : [];
+        let payAct = res.data.length > 0 ? res.data[res.data.length - 1] : {};
         this.payAct = payAct;
         if (payAct.activityType == 10) {
           this.payActName = `满${payAct.couponLimit}元减${payAct.couponPrice}元`;

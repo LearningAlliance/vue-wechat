@@ -14,7 +14,7 @@
           <div class="create-date">{{item.createDate.slice(0, 10)}}</div>
           <div class="comment-content">{{item.commentContent}}</div>
           <div class="comment-imgs clearfix" v-if="item.hasOwnProperty('commentImgsList') && item.commentImgsList.length > 0">
-            <div :class="['img', {'no-right': index2 % 3 == 2}]" v-for="(item2, index2) in item.commentImgsList" :key="'comment' + index + '_img' + index2" v-if="index2 < 3">
+            <div :class="['img', {'no-right': index2 % 3 == 2}]" v-for="(item2, index2) in item.commentImgsList" :key="'comment' + index + '_img' + index2" v-if="index2 < 3" @click="preview(index2)">
               <img :src="item2" />
             </div>
           </div>
@@ -55,12 +55,14 @@
     <div class="footer" v-if="!!shopId">
       <div class="btn" @click="toComment">评论</div>
     </div>
+    <previewer ref="previewer" :list="previewerList" :options="options"></previewer>
   </div>
 </template>
 <script type="text/javascript">
 import api from '@/fetch/api.js'
 import { mapGetters } from 'vuex'
 import * as _ from '@/util/tool.js'
+import { Previewer } from 'vux'
 export default {
   data() {
     return {
@@ -75,7 +77,16 @@ export default {
       subCommnentList: [],
       shopInfo: {},
       shopId: null,
+      options: {
+        isClickableElement: function(el) {
+          return /previewer-delete-icon/.test(el.className)
+        }
+      },
+      previewerList: [],
     }
+  },
+  components: {
+    'previewer': Previewer,
   },
   computed: {
     ...mapGetters([
@@ -105,8 +116,12 @@ export default {
       api.collection.qryShopCommentById({ commentId: this.commentId }).then((res) => {
         let comment = res.data;
         comment.forEach((obj) => {
+          console.log(obj);
           if (!!obj.commentImgs) {
             obj.commentImgsList = obj.commentImgs.split(',');
+            obj.commentImgsList.forEach((item) => {
+              this.previewerList.push({ src: item });
+            });
           } else {
             obj.commentImgsList = [];
           }
@@ -176,8 +191,8 @@ export default {
         },
       });
     },
-    toShopDetail(){
-      if(!!this.shopId){
+    toShopDetail() {
+      if (!!this.shopId) {
         this.$router.push({
           path: '/collection/shopDetail',
           query: {
@@ -185,6 +200,11 @@ export default {
           },
         });
       }
+    },
+    preview(index) {
+      // this.imgUrl = this.picList[index];
+      // this.isPreview = true;
+      this.$refs.previewer.show(index)
     },
   },
 }

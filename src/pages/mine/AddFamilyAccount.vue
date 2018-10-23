@@ -35,6 +35,7 @@
       <p class="err-text" v-show="!!resultMsg">{{resultMsg}}</p>
     </div>
     <div :class="['submit', {'canClick': phone.trim().length == 11 && rate > 0 && rate <= 100 && selectedList.length > 0}]" @click="submit">确定</div>
+    <div class="height-200"></div>
   </div>
 </template>
 <script type="text/javascript">
@@ -163,9 +164,10 @@ export default {
   min-height: 100%;
   background: #fff;
   box-sizing: border-box;
-  overflow: hidden;
+  // overflow: hidden;
   .header {
-    margin: 53px auto 0 auto;
+    margin: 0 auto;
+    padding-top: 53px;
     width: 650px;
     height: 42px;
     font-family: PingFangSC-Regular;
@@ -354,6 +356,12 @@ export default {
     line-height: 36.4px;
     height: 36.4px;
   }
+}
+
+.height-200{
+  width: 100%;
+  height: 200px;
+  background: #FFF;
 }
 
 </style>

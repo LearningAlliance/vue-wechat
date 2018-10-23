@@ -46,6 +46,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      saveEgg: 'saveEgg',
       updateEggInfoByKey: 'updateEggInfoByKey',
     }),
     next() {
@@ -53,6 +54,14 @@ export default {
         return;
       }
       this.updateEggInfoByKey({ desc: this.desc });
+      if (!this.eggInfo['reType']) {
+        let router = this.$router;
+        this.saveEgg({
+          router,
+          shopId: this.shopId,
+        });
+        return;
+      }
       this.$router.push({
         path: '/collection/putEggStep2',
         query: {

@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="remark-box">
-      <textarea placeholder="想说的就写下来吧～ @某某" class="remark" rows="6" maxlength="140" v-model="remark"></textarea>
+      <textarea placeholder="想说的就写下来吧～" class="remark" rows="6" maxlength="140" v-model="remark"></textarea>
     </div>
     <div class="num-box">{{num}}/140</div>
     <div :class="['btn', {'can-submit': num > 0}]" @click="comment">发布</div>

@@ -256,6 +256,9 @@ export default {
           font-size: 24px;
           color: #2E3141;
           line-height: 31.2px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
       }
       .card-img {

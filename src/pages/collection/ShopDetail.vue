@@ -19,7 +19,7 @@
       <i class="icon icon-home" @click="toHome"></i>
       <!--             <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1')}]" @click="userFollow(collectInfo.isFollow)"></i> -->
-      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1 ? '已特别关注' : '未特别关注'}}</span>
+      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1 ? '收藏置顶' : '取消置顶'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1)}]" @click="userFollow(collectInfo.isFollow)"></i>
     </div>
     <div class="height-100"></div>
@@ -62,10 +62,10 @@
       <div class="line"></div>
     </div>
     <div class="section-3">
-      <i class="icon-address"></i>
+      <i class="icon-address" @click="openLocation"></i>
       <div class="shop-info">
         <div class="shop-address" @click="openLocation">{{shopInfo.shopAddress}}</div>
-        <div class="shop-distance">距您{{shopInfo.distance | formatDistance}}</div>
+        <div class="shop-distance"  @click="openLocation">距您{{shopInfo.distance | formatDistance}}</div>
       </div>
       <div class="line"></div>
       <i class="icon-tel" @click="makePhone(shopInfo.shopTel)"></i>
@@ -79,8 +79,8 @@
           <div class="desc" v-if="shopInfo.pensionRate">返{{!!shopInfo.pensionRate ? shopInfo.pensionRate * 100 : 0}}%养老保障金</div>
         </div>
         <div class="cell-info">
-          <div class="desc no-top" v-if="payAct.activityType == 10">满{{payAct.couponLimit}}元立减{{payAct.couponPrice}}元 <span v-if="payAct.limitDesc">({{payAct.limitDesc}})</span></div>
-          <div class="desc no-top" v-if="payAct.activityType == 11"><span v-if="payAct.limitDesc">({{payAct.limitDesc}})</span></div>
+          <div class="desc no-top" v-for="(item, index) in payAct" :key="index" v-if="item.activityType == 10">满{{item.couponLimit}}元立减{{item.couponPrice}}元 <span v-if="item.limitDesc">({{item.limitDesc}})</span></div>
+          <div class="desc no-top" v-for="(item, index) in payAct" :key="index" v-if="payAct.activityType == 11"><span v-if="item.limitDesc">({{item.limitDesc}})</span></div>
           <!-- <div class="desc">满100元送小猪佩奇 (周一至周五) </div> -->
         </div>
       </div>
@@ -380,7 +380,8 @@ export default {
         shopId: this.shopId,
         couponType: '2',
       }).then((res) => {
-        this.payAct = res.data.length > 0 ? res.data[0] : {};
+        // this.payAct = res.data.length > 0 ? res.data[0] : {};
+        this.payAct = res.data.length > 0 ? res.data : [];
       }).catch((err) => {});
     },
     setStars(sc) {
@@ -520,7 +521,8 @@ export default {
       })
     },
     userFollow(status) {
-      MessageBox.confirm('是否关注/取消关注店铺').then(action => {
+      let msg = status == 1 ? '取消置顶' : '收藏置顶';
+      MessageBox.confirm(msg).then(action => {
         if (action) {
           let follow = null;
           if (status == 0 || status == undefined) {
@@ -1585,7 +1587,9 @@ export default {
     overflow: hidden;
     background-image: url('../../assets/images/ic_like.png');
     &.no {
-      background-image: url('../../assets/images/ic_like_grey.png');
+      background-size: 100% 100%;
+      background-color: #FFF;
+      background-image: url('../../assets/images/ic_like_grey_2.png');
     }
   }
   .top-bar-desc {

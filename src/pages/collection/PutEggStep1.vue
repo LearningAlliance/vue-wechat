@@ -43,9 +43,9 @@ export default {
       if (!this.eggInfo['zoneType']) {
         return true;
       }
-      if (!this.eggInfo['reType']) {
-        return true;
-      }
+      // if (!this.eggInfo['reType']) {
+      //   return true;
+      // }
     }
   }
 }

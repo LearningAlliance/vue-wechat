@@ -21,11 +21,11 @@
         <div :class="['tab-cell', {'on': tabOn == 'tab2'}]" @click="tabClick('tab2')">有活动</div>
       </div>
     </div>
-    <div :class="['kind', {'show-all': showAll}]">
-      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index <= 2">{{item.name}}</div>
+    <div :class="['kind', {'show-all': showAll}]" ref="kindBox">
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item)" v-if="index <= 2 && (item.id != selectedKindId || index == 0)">{{item.name}}</div>
       <div class="kind-cell icon-down" @click="showAllKinds" v-show="!showAll">更多</div>
       <br v-show="!showAll" />
-      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item.id)" v-if="index >= 3">{{item.name}}</div>
+      <div :class="['kind-cell', {'active': selectedKindId == item.id}]" v-for="(item, index) in kinds" :key="'kind' + index" @click="changeKind(item)" v-if="index >= 3 && item.id != selectedKindId">{{item.name}}</div>
     </div>
     <div class="kind-shade" v-show="showAll" @click="closeShade"></div>
     <div class="activity-list" v-show="tabOn == 'tab2'" ref="tab2List" @scroll="handleScroll">
@@ -72,6 +72,7 @@
         <div class="no-more" v-show="allLoadedForAct">没有更多了</div>
       </div>
     </div>
+
     <div class="shop-list" v-show="tabOn == 'tab1'" ref="tab1List" @scroll="handleScroll">
       <div class="common-list collecttion-list">
         <div :class="['common-cell', {'animated flipInY': index == 0 && firstLoad, 'reverse': item.reverse}]" v-for="(item, index) in collectionList" :key="'collection' + index" @click.stop="toShopDetail(item.shopId)">
@@ -107,7 +108,7 @@
             <div class="cell-content">
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
-              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
+              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig') && !!item.merLevelConfig.levelName">
                 <div class="label">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</div>
                 <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
@@ -163,7 +164,7 @@
             <div class="cell-content">
               <div class="cell-shop-name">{{item.shopName}}</div>
               <div class="height-10"></div>
-              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig')">
+              <div class="cell-item" v-if="item.hasOwnProperty('merLevelConfig') && item.merLevelConfig.levelName">
                 <div class="label">{{item.merLevelConfig.levelName && item.merLevelConfig.levelName.toUpperCase()}}</div>
                 <div class="desc">{{item.merLevelConfig.levelDesc}}</div>
               </div>
@@ -222,6 +223,7 @@ export default {
       collectionListForAct: [],
       recommendListForAct: [],
       showRecommendListForAct: false,
+      defaultKinds: [], // 默认的类型
     }
   },
   deactivated() {
@@ -296,7 +298,7 @@ export default {
     tabClick(num) {
       this.tabOn = num;
       this.showAll = false;
-      this.selectedKindId = '0';
+      // this.selectedKindId = '0';
       this.pageNumForAct = 1;
       this.pageNumForRec = 1;
       if (num == 'tab1') {
@@ -319,22 +321,30 @@ export default {
         let obj = { name: '全部', id: '0', sort: 0 };
         res.data.unshift(obj);
         this.kinds = res.data.sort(this.compare);
+        this.defaultKinds = Object.assign([], this.kinds);
       }).catch((err) => {
         console.log(err);
       }).then(() => {
         this.$store.dispatch('setLoadingState', true);
       });
     },
-    changeKind(id) {
+    changeKind(item) {
+      let {id} = item;
       this.collectionList = [];
       this.recommendList = [];
       if (!id) {
         this.shopMainType = 0;
       } else {
         this.shopMainType = id;
+        // 位置调换
+        this.kinds = Object.assign([], this.defaultKinds);
+        this.kinds.unshift(item);
       }
       this.selectedKindId = id;
       this.showAll = false;
+      this.$nextTick(() =>{
+        this.$refs.kindBox.scrollTop = 0;
+      });
       if (this.tabOn == 'tab1') {
         this.pageNumForRec = 1;
         this.$nextTick(() => {

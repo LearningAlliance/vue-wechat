@@ -1,16 +1,10 @@
 <template>
-  <div class="banner-box">
-    <div v-if="list.length > 1" :class="['banner', {'first-banner': index == 0, 'last-banner': index == list.length - 1}]" v-for="(item, index) in list" @click="toUrl(item.url)">
-      <img class="banner-img with-shadow" :src="item.img" />
-    </div>
-    <div class="banner only-one" v-else @click="toUrl(list[0].url)">
-      <img class="banner-img with-shadow" :src="list[0].img" />
-    </div>
-  </div>
+  <banner-inner v-if="list.length > 0" :list="list"></banner-inner>
 </template>
 <script type="text/javascript">
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import bannerInner from '@/components/bannerInner'
 export default {
   props: {
     type: {
@@ -26,14 +20,17 @@ export default {
   mounted() {
     this.qryBannerList();
   },
+  components: {
+    'banner-inner': bannerInner,
+  },
   methods: {
     toUrl(url) {
-      if(!url){
+      if (!url) {
         return;
       }
-      if(url.indexOf('http') > -1){
+      if (url.indexOf('http') > -1) {
         window.location.href = url;
-      }else {
+      } else {
         this.$router.push(url);
       }
       // window.location.href = url;
@@ -55,41 +52,55 @@ export default {
   display: none
 }
 
-.banner-box {
+.swiper-container {
   width: 100%;
   height: 360px;
-  display: box;
-  display: -webkit-box;
-  overflow-x: scroll;
-  padding-top: 20px;
+  margin: 0 auto; // padding-top: 20px;
   padding-bottom: 20px;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
-  background: #fff;
-  .banner {
-    width: 650px;
-    height: 320px;
-    padding-left: 15px;
-    padding-right: 15px;
-    &.only-one {
-      margin: 0 auto;
-    }
-    &.first-banner {
-      width: 665px;
-      padding-left: 30px;
-    }
-    &.last-banner {
-      width: 665px;
-      padding-right: 30px;
-    }
-    .banner-img {
-      display: block;
-      border-radius: 12px;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
-    }
-  }
+  background: #FFF;
 }
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+}
+
+
+// .banner-box {
+//   width: 100%;
+//   height: 360px;
+//   display: box;
+//   display: -webkit-box;
+//   overflow-x: scroll;
+//   padding-top: 20px;
+//   padding-bottom: 20px;
+//   box-sizing: border-box;
+//   -webkit-overflow-scrolling: touch;
+//   background: #fff;
+//   .banner {
+//     width: 650px;
+//     height: 320px;
+//     padding-left: 15px;
+//     padding-right: 15px;
+//     &.only-one {
+//       margin: 0 auto;
+//     }
+//     &.first-banner {
+//       width: 665px;
+//       padding-left: 30px;
+//     }
+//     &.last-banner {
+//       width: 665px;
+//       padding-right: 30px;
+//     }
+//     .banner-img {
+//       display: block;
+//       border-radius: 12px;
+//       overflow: hidden;
+//       width: 100%;
+//       height: 100%;
+//     }
+//   }
+// }
 
 </style>

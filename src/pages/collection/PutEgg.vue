@@ -66,12 +66,12 @@ export default {
         { name: '视频', value: '3', select: false },
       ],
       reTypes: [
-        // { name: '碎片', value: '2', select: true },
-        { name: '微信红包', value: '4', select: false },
+        // { name: '碎片', value: '2', select: false },
+        { name: '微信红包', value: '4', select: true },
         { name: '套餐券', value: '1', select: false },
       ],
       zoneType: '1',
-      reType: '2',
+      reType: '4',
       whetherPut: true, // 是否放入
       expDate: 1,
       canSubmit: true,

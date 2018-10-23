@@ -123,6 +123,10 @@ export default {
         _.alert('数量不能为0');
         return;
       }
+      if(this.userInfo.userPhone.length != 11){
+        _.alert('请输入完整的手机号后再进行提交');
+        return;
+      }
       api.collection.saveCouponOrder({
         buyNums: this.num,
         merId: this.merId,

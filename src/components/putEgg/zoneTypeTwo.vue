@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     ...mapActions({
+      saveEgg: 'saveEgg',
       updateEggInfoByKey: 'updateEggInfoByKey',
     }),
     timerFun() {
@@ -126,6 +127,14 @@ export default {
         return;
       }
       this.updateEggInfoByKey({ zoneFile: this.audioUrl });
+      if (!this.eggInfo['reType']) {
+        let router = this.$router;
+        this.saveEgg({
+          router,
+          shopId: this.shopId,
+        });
+        return;
+      }
       this.$router.push({
         path: '/collection/putEggStep2',
         query: {
@@ -199,7 +208,7 @@ export default {
       }).then((res) => {
         console.log(res);
         let { url = '' } = res.data[0];
-        if(!!url){
+        if (!!url) {
           this.audioUrl = url;
         }
       }).catch((err) => {});

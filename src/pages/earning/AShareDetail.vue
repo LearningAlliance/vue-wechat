@@ -3,9 +3,8 @@
     <div ref="box" :class="['box', {'hidden': hideBox}]">
       <div class="info">
         <div class="avatar-box">
-          <!-- <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
-          <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
-          <!-- <img ref="avatar" class="avatar" src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLoJTSB95niaeia0icfVUGTss1J0C2mWiaqhTfGc7DkWg6GAIktNvEtJjuRQJPv5yX8q6fia5HJgN9XNibQ/132" crossOrigin="anonymous" /> -->
+          <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
+          <!-- <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
         </div>
         <div class="user-name">
           好友 <span class="underline">{{userInfo.userNick | formatName}}</span> 向你推荐
@@ -15,9 +14,8 @@
         <div class="area">
           <div class="shop-info">
             <div class="shop-logo">
-              <!-- <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/> -->
-              <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" />
-              <!-- <img ref="logo" :src="userInfo.userHead || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
+              <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/>
+              <!-- <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
             </div>
             <div class="shop-content">
               <div class="shop-name">{{shopInfo.shopName}}</div>
@@ -79,7 +77,7 @@ export default {
         })
         console.log('success');
       }).catch((err) => {
-        _.alert('queue', err);
+        console.log('queue', err);
       })
   },
   filters: {
@@ -142,10 +140,17 @@ export default {
         api.collection.qryMerLevel({
           shopId: this.shopId,
         }).then((res) => {
-          this.vipInfo = res.data[0];
+          let {data = []} = res;
+          if(data.length == 0){
+            resolve();
+            return;
+          }
+          this.vipInfo = data[0];
           this.discountInfo = (this.vipInfo.hasOwnProperty('allmerLevelConfig') && this.vipInfo.allmerLevelConfig.length > 0) ? this.vipInfo.allmerLevelConfig[this.vipInfo.allmerLevelConfig.length - 1].levelRate : 10;
           resolve();
-        }).catch((err) => {});
+        }).catch((err) => {
+          reject(err);
+        });
       })
     },
     qrCode() {
