@@ -29,7 +29,7 @@
       </div>
       <div class="coupon-info">
         <div class="title">套餐内容</div>
-        <div class="info-cell" v-if="couponInfo.couponDesc.length > 0" v-for="(item, index) in couponInfo.couponDesc">
+        <div class="info-cell" v-if="couponInfo.couponDesc.length > 0" v-for="(item, index) in couponInfo.couponDesc" :key="index">
           <div class="info-name">{{item.name}}</div>
           <div class="info-price">￥{{item.price}}</div>
         </div>
@@ -66,7 +66,7 @@
       <div class="title">分店可用</div>
     </div>
     <div class="section-6" v-show="list.length > 0">
-      <div class="box" v-for="(item, index) in list">
+      <div class="box" v-for="(item, index) in list" :key="index">
         <div class="cell" @click="toShopDetail(item.shopId)">
           <p class="shopName clearfix">{{item.shopName}}</p>
           <span class="distance">{{item.distance | formatDistance}}</span>
@@ -90,21 +90,28 @@
       </div>
       <div class="btn" @click="toBuy">购买</div>
     </div>
+    <phone-card :visible="visible" :hide-phone-card="hidePhoneCard" :phone-list="phoneList"></phone-card>
   </div>
 </template>
 <script type="text/javascript">
 import { mapGetters } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
+import phoneCard from '@/components/phoneCard'
 export default {
   data() {
     return {
+      phoneList: [],
+      visible: false,
       couponId: null,
       couponInfo: {
         couponDesc: [],
       },
       list: [],
     }
+  },
+  components: {
+    'phone-card': phoneCard,
   },
   mounted() {
     let { couponId } = this.$route.query;
@@ -140,6 +147,14 @@ export default {
         shopLat: this.latitude.toString(),
       }).then((res) => {
         let item = res.data[0];
+        let {shopPhone = '', shopTel = ''} = res.data[0]
+        if(!!shopPhone && !!shopTel && shopPhone != shopTel){
+          this.phoneList = [shopPhone, shopTel];
+        }else if(!!shopPhone){
+          this.phoneList.push(shopPhone);
+        }else if(!!shopTel){
+          this.phoneList.push(shopTel);
+        }
         this.list = [item];
       }).catch((err) => {
 
@@ -170,7 +185,10 @@ export default {
       }).catch((err) => {});
     },
     makePhone(tel) {
-      window.location.href = `tel:${tel}`;
+      this.visible = true;
+    },
+    hidePhoneCard(){
+      this.visible = false;
     },
     toBranch() {
       this.$router.push({

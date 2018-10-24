@@ -3,8 +3,8 @@
     <div ref="box" :class="['box', {'hidden': hideBox}]">
       <div class="info">
         <div class="avatar-box">
-          <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
-          <!-- <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
+          <!-- <img ref="avatar" class="avatar" :src="require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" /> -->
+          <img ref="avatar" class="avatar" :src="userInfo.userHead || require('../../assets/images/icon_user_default.png')" crossOrigin="anonymous" />
         </div>
         <div class="user-name">
           好友 <span class="underline">{{userInfo.userNick | formatName}}</span> 向你推荐
@@ -14,8 +14,8 @@
         <div class="area">
           <div class="shop-info">
             <div class="shop-logo">
-              <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/>
-              <!-- <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" /> -->
+              <!-- <img ref="logo" :src="require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous"/> -->
+              <img ref="logo" :src="shopInfo.shopLogo || require('../../assets/images/icon_shop_default.png')" crossOrigin="anonymous" />
             </div>
             <div class="shop-content">
               <div class="shop-name">{{shopInfo.shopName}}</div>

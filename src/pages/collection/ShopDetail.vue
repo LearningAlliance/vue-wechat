@@ -29,7 +29,7 @@
           <div class="shop-name">{{shopInfo.shopName}}</div>
           <div class="score-box clearfix">
             <div class="star clearfix">
-              <div v-for="(item, index) in stars" :class="['star-item', item]" track-by="index"></div>
+              <div v-for="(item, index) in stars" :class="['star-item', item]" track-by="index" :key="index"></div>
             </div>
             <span class="score">综合{{shopInfo.score}}分</span>
           </div>
@@ -48,7 +48,7 @@
       <div class="cell first" v-if="shopVideoList.length > 0" @click="showVideo">
         <!--         {{shopInfo.shopVideo}} -->
       </div>
-      <div class="cell" v-if="shopMainImgList.length > 0" v-for="(item, index) in shopMainImgList" @click="previewImg(index)">
+      <div class="cell" v-if="shopMainImgList.length > 0" v-for="(item, index) in shopMainImgList" @click="previewImg(index)" :key="index">
         <img class="image" :src="item" />
       </div>
       <!-- TODO -->
@@ -183,6 +183,7 @@
         <my-player ref="myPlayer" v-if="playList.length > 0" :video-url="playList"></my-player>
       </div>
     </div>
+    <phone-card :visible="visible" :hide-phone-card="hidePhoneCard" :phone-list="phoneList"></phone-card>
   </div>
 </template>
 <script type="text/javascript">
@@ -190,6 +191,7 @@ import { mapGetters, mapActions } from 'vuex'
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 import myPlayer from '@/components/myPlayer'
+import phoneCard from '@/components/phoneCard'
 import { Previewer } from 'vux'
 import {
   MessageBox,
@@ -197,6 +199,8 @@ import {
 export default {
   data() {
     return {
+      phoneList: [],
+      visible: false,
       shopId: null,
       shopInfo: {
         collectCoupon: {}
@@ -231,6 +235,7 @@ export default {
   components: {
     'previewer': Previewer,
     'my-player': myPlayer,
+    'phone-card': phoneCard,
   },
   computed: {
     ...mapGetters([
@@ -282,6 +287,14 @@ export default {
         // }
         // res.data[0].collectCoupon = obj; 
         this.shopInfo = res.data[0];
+        let {shopPhone = '', shopTel = ''} = res.data[0]
+        if(!!shopPhone && !!shopTel && shopPhone != shopTel){
+          this.phoneList = [shopPhone, shopTel];
+        }else if(!!shopPhone){
+          this.phoneList.push(shopPhone);
+        }else if(!!shopTel){
+          this.phoneList.push(shopTel);
+        }
         if (!!this.shopInfo.mainImgUrl) {
           this.shopMainImgList = this.shopInfo.mainImgUrl.split(',');
           // 测试
@@ -422,7 +435,10 @@ export default {
 
     },
     makePhone(tel) {
-      window.location.href = `tel:${tel}`;
+      this.visible = true;
+    },
+    hidePhoneCard(){
+      this.visible = false;
     },
     toShopVipInfo() {
       this.$router.push({
