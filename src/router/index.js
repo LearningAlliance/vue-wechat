@@ -22,7 +22,7 @@ Vue.use(require('vue-wechat-title'))
 //   getLocation, //获取地理位置（火星坐标）
 // }
 
-export default new Router({
+var router = new Router({
   // linkActiveClass: 'active',
   mode: 'history',
   routes: [{
@@ -64,3 +64,12 @@ export default new Router({
     }
   },
 })
+
+router.beforeEach((to, from, next) => {
+  if(!sessionStorage.getItem('configUrl')){
+    sessionStorage.setItem('configUrl', document.URL);
+  }
+  next();
+})
+
+export default router;

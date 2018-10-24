@@ -181,7 +181,16 @@ export default {
       if (!wxConfig) {
         return;
       }
-      api.common.getWxConfig().then((res) => {
+      let url = '';
+      if (window.__wxjs_is_wkwebview === true) {
+        let curUrl = sessionStorage.getItem('configUrl') || '';
+        url = curUrl.split('#')[0];
+      } else {
+        url = window.location.href.split('#')[0];
+      }
+      api.common.getWxConfig({
+        url,
+      }).then((res) => {
         this.doConfig(res.data[0]);
       }).catch((err) => {
         console.log(err);
