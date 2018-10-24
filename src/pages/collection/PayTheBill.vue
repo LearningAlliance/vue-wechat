@@ -219,7 +219,6 @@ export default {
         let { createDate, orderNo, url } = res.data;
         _.alert('支付逻辑todo, 假装支付完成');
         // location.href = 'https://ibsbjstar.ccb.com.cn/CCBIS/QR?QRCODE=CCB9980005524947325807371';
-        // return;
         location.href = url;
         return;
         // TODO 支付完成跳转逻辑

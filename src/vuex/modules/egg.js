@@ -41,6 +41,7 @@ const actions = {
 		let {
 			router,
 			shopId,
+			redirect,
 		} = payload;
 		// console.log(router);
 		// router.push({
@@ -56,11 +57,15 @@ const actions = {
 			}
 		}
 		api.collection.saveSysZone(postData).then((res) => {
-			// console.log(res);
+			let {
+				amount = '', orderNo = ''
+			} = res.data;
 			router.push({
-				path: '/collection/placementSuccess',
+				path: redirect || '/collection/placementSuccess',
 				query: {
 					shopId,
+					amount,
+					orderNo,
 				}
 			})
 			// 放置彩蛋后清空彩蛋信息

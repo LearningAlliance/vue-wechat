@@ -3,7 +3,7 @@
   <div class="page">
     <div class="card">
       <div class="card-title">支付金额</div>
-      <div class="card-price"><span class="currency">￥</span>{{eggInfo.amount | formatPrice}}</div>
+      <div class="card-price"><span class="currency">￥</span>{{Number(amount).toFixed(2)}}</div>
     </div>
     <div class="section-title">支付方式</div>
     <div class="box pay on">微信支付</div>
@@ -13,6 +13,7 @@
 <script type="text/javascript">
 import { mapGetters, mapActions } from 'vuex'
 import * as _ from '@/util/tool.js'
+import api from '@/fetch/api.js'
 export default {
   computed: {
     ...mapGetters(['eggInfo']),
@@ -26,13 +27,85 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      shopId: '',
+      amount: '',
+      orderNo: '',
+      wxPayData: {},
+    }
+  },
+  mounted() {
+    let { amount, orderNo, shopId } = this.$route.query;
+    this.amount = amount;
+    this.orderNo = orderNo;
+    this.shopId = shopId;
   },
   methods: {
-  	pay(){
-  		_.alert('支付todo');
-  		// 付款成功后调用生成彩蛋 TODO
-  	}
+    ...mapActions({
+      saveEgg: 'saveEgg',
+      updateEggInfoByKey: 'updateEggInfoByKey',
+    }),
+    pay() {
+      // 付款成功后调用生成彩蛋
+      api.collection.unifiedorder({
+        ip: '192.168.0.113',
+        totalFee: this.amount,
+        openId: localStorage.getItem('openId') || '',
+        body: '放置彩蛋微信红包',
+        orderNo: this.orderNo,
+        notifyUrl: 'http://cs.juanzisc.com:9000/userServer/APIForZone',
+      }).then((res) => {
+        this.wxPayData = res.data;
+        if (typeof WeixinJSBridge == "undefined") {
+          if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', this.wxPay, false);
+          } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', this.wxPay);
+            document.attachEvent('onWeixinJSBridgeReady', this.wxPay);
+          }
+        } else {
+          this.wxPay();
+        }
+      }).catch((err) => {
+        console.log(err);
+      })
+    },
+    wxPay() {
+      let { appId, timeStamp, nonceStr, package: wx_package, signType, paySign } = this.wxPayData;
+      let shopId = this.shopId;
+      var _this = this;
+      WeixinJSBridge.invoke('getBrandWCPayRequest', {
+          "appId": appId,
+          "timeStamp": timeStamp,
+          "nonceStr": nonceStr,
+          "package": wx_package,
+          "signType": signType,
+          "paySign": paySign
+        },
+        function(res) {
+          switch (res.err_msg) {
+            case 'get_brand_wcpay_request:cancel':
+              _.alert('用户取消支付！');
+              break;
+            case 'get_brand_wcpay_request:fail':
+              _.alert(`支付失败！（${res.err_desc}`);
+              break;
+            case 'get_brand_wcpay_request:ok':
+              _.alert('支付成功！');
+              _this.$router.push({
+                path: '/collection/placementSuccess',
+                query: {
+                  shopId,
+                }
+              });
+              break;
+            default:
+              _.alert(JSON.stringify(res));
+              break;
+          }
+        }
+      );
+    }
   },
 }
 

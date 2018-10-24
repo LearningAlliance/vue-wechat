@@ -215,6 +215,8 @@ export default [{
 	meta: {
 		title: '收藏',
 		subTitle: ' 放置彩蛋',
+		wxConfig: true,
+		jsApiList: ['chooseWXPay'],
 	},
 	component: PutEggPay,
 }, {

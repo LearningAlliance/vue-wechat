@@ -154,9 +154,16 @@ export const qryUserCouponCode = (params) => post('/userServer/business/UserCoup
 
 // 创建买单订单
 export const saveOrderBaseInfo = (params) => post('/userServer/business/OrderBaseInfoAction', {
-	action: 'saveOrderBaseInfo',
-	data: JSON.stringify(params),
-});
+		action: 'saveOrderBaseInfo',
+		data: JSON.stringify(params),
+	},
+	// {
+	// 	body: {
+	// 		withToken: false,
+	// 		withUid: false,
+	// 	}
+	// }
+);
 
 // 买单成功优惠券显示
 export const qryOrderMerCouponList = (params) => post('/userServer/business/MerCouponAction', {
@@ -174,5 +181,11 @@ export const qryCommendCouponList = (params) => post('/userServer/business/MerCo
 // 查询用户活动碎片列表
 export const qryActivityUserList = (params) => post('/userServer/business/ActivityUserAction', {
 	action: 'qryActivityUserList',
+	data: JSON.stringify(params),
+});
+
+// 微信统一下单接口
+export const unifiedorder = (params) => post('/userServer/business/SysWechatAction', {
+	action: 'unifiedorder',
 	data: JSON.stringify(params),
 });

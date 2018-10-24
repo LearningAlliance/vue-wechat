@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       amount: null,
+      shopId: '',
     }
   },
   watch: {
@@ -54,14 +55,23 @@ export default {
     next() {
       if (!!this.amount && this.amount > 0) {
         this.updateEggInfoByKey({ amount: this.amount });
-        this.$router.push({
-          path: '/collection/putEggPay',
-          query: {
-            shopId: this.shopId,
-          }
-        })
+        // this.$router.push({
+        //   path: '/collection/putEggPay',
+        //   query: {
+        //     shopId: this.shopId,
+        //   }
+        // })
+        this.saveEggAction();
       }
-    }
+    },
+    saveEggAction() {
+      let router = this.$router;
+      this.saveEgg({
+        router,
+        shopId: this.shopId,
+        redirect: '/collection/putEggPay',
+      });
+    },
   }
 }
 

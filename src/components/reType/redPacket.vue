@@ -3,7 +3,8 @@
   <div class="page">
     <div class="title">获得红包</div>
     <div class="amount"><span class="currency">￥</span><span class="price">{{info.price || 0}}</span></div>
-    <div class="desc">系统已自动通过微信零钱发放</div>
+    <!-- <div class="desc">系统已自动通过微信零钱发放</div> -->
+    <div class="desc">系统已自动存入保障金中</div>
   </div>
 </template>
 <script type="text/javascript">

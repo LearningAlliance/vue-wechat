@@ -57,6 +57,7 @@ export default {
         api.common.getOpenIdByCode({ code, }).then((res) => {
           // console.log(res);
           let { userWecharId } = res.data[0]; //openid
+          localStorage.setItem('openId', userWecharId);
           if (!userWecharId) {
             return;
           }

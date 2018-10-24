@@ -220,7 +220,7 @@ export default [{
 	meta: {
 		title: '收藏',
 		subTitle: '我的彩蛋',
-		keepAlive: true,
+		// keepAlive: true,
 	},
 	component: Myeggs,
 }, {
