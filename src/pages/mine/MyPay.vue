@@ -5,7 +5,7 @@
     <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <ul class="list-box">
-          <li class="list" v-for="(item, index) in pageList">
+          <li class="list" v-for="(item, index) in pageList" :key="index">
             <div class="box" @click="toDetail(item.orderNo, item.createDate)">
               <div class="box-content clearfix">
                 <img class="box-logo" :src="item.shopLogo" />
@@ -102,7 +102,6 @@ export default {
     },
     cancelOrder(orderNo) {
       MessageBox.confirm('确定要取消吗?').then(action => {
-        console.log(action);
         if (action) {
           api.collection.cancelOrder({
             orderNo,

@@ -63,24 +63,38 @@ import { Loadmore, MessageBox } from 'mint-ui';
 import api from '@/fetch/api.js'
 import * as _ from '@/util/tool.js'
 export default {
-  props: ['myOrder', 'coupons', 'orderDetail', 'myOrderNo', 'createDate'],
+  props: ['myOrder', 'coupons', 'orderDetail', 'myOrderNo', 'createDate', 'refresh'],
   data() {
     return {
+      orderNo: '',
       // order: {
       //  coupons: null,
       //  orderDetail: null,
       // },
     }
   },
-  created() {
-    // console.log(this.coupons, this.orderDetail);
+  mounted(){
+    let { orderNo } = this.$route.query;
+    this.orderNo = orderNo;
   },
   methods: {
     payOrder() {
       _.alert('TODO 支付');
     },
     cancelOrder() {
-      _.alert('TODO 取消支付');
+      var self = this;
+      let orderNo = this.orderNo;
+      MessageBox.confirm('确定要取消吗?').then(action => {
+        if (action) {
+          api.collection.cancelOrder({
+            orderNo,
+          }).then((res) => {
+            self.refresh();
+          });
+        }
+      }).catch((err) => {
+
+      });
     },
     toShop(){
       if(!this.myOrder.shopId){

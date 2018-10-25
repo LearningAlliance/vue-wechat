@@ -187,7 +187,7 @@ export default [{
 	meta: {
 		title: '个人中心',
 		subTitle: '我的买单',
-		keepAlive: true,
+		// keepAlive: true,
 	},
 	component: MyPay,
 }, {

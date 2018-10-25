@@ -48,7 +48,7 @@ export default {
     pay() {
       // 付款成功后调用生成彩蛋
       api.collection.unifiedorder({
-        ip: '192.168.0.113',
+        // ip: '192.168.0.113',
         totalFee: this.amount,
         openId: localStorage.getItem('openId') || '',
         body: '放置彩蛋微信红包',
