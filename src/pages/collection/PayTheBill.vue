@@ -87,6 +87,36 @@ export default {
     }
   },
   mounted() {
+    if(!_.isWx() && !sessionStorage.getItem('userAliId')){
+      if(this.$route.query.hasOwnProperty('auth_code')){
+        // 获取 userAliId
+        let auth_code = _.getRequest('auth_code');
+        api.common.getOpenIdByCode({ auth_code, }).then((res) => {
+          let { userAliId } = res.data[0]; // userAliId
+          sessionStorage.setItem('userAliId', userAliId);
+          if (!userAliId) {
+            return;
+          }
+          // TODO 后续这边可能用于手机绑定
+          // api.common.wxLogin({ userAliId, }).then((res) => {
+          //   console.log('wxLogin:', res);
+          //   // return;
+          //   // let token = res.data[0].token;
+          //   let userid = res.data[0].userId;
+          //   // localStorage.setItem('token', token);
+          //   sessionStorage.setItem('userIdForAli', userid);
+          // }).catch((err) => {
+          //   console.log(err);
+          // })
+        }).catch((err) => {
+          console.log(err);
+        });
+      } else{
+        var newUrl = `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017090608587613&scope=auth_base&redirect_uri=${encodeURIComponent(location.href)}`;
+        console.log(newUrl);
+        location.href = newUrl;
+      }
+    }
     let { amount = null, price = null, hasPrice = true } = this.payInfo;
     this.amount = amount;
     this.price = price;
@@ -208,6 +238,10 @@ export default {
         amount: this.total,
         shopId: this.shopId,
       };
+      if(!_.isWx()){
+        // postData.aliUserid = sessionStorage.getItem('userIdForAli') || '';
+        postData.aliUserid = sessionStorage.getItem('userAliId') || '';
+      }
       if (this.hasPrice && this.price > 0) {
         postData.price = this.price;
       }
@@ -217,7 +251,7 @@ export default {
       api.collection.saveOrderBaseInfo(postData).then((res) => {
         this.clearPayINfo();
         let { createDate, orderNo, url } = res.data;
-        _.alert('支付逻辑todo, 假装支付完成');
+        // _.alert('支付逻辑todo, 假装支付完成');
         // location.href = 'https://ibsbjstar.ccb.com.cn/CCBIS/QR?QRCODE=CCB9980005524947325807371';
         location.href = url;
         return;

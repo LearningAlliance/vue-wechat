@@ -133,7 +133,7 @@ export default {
         couponId: this.couponId,
       }).then((res) => {
         let params = res.data;
-        _.alert('购买成功， todo 支付逻辑， 假装支付成功');
+        // _.alert('购买成功， todo 支付逻辑， 假装支付成功');
         setTimeout(() => {
           this.$router.push({
             path: '/collection/saveCouponSuccess',
