@@ -32,15 +32,21 @@
     <div class="section margin-top-20">
       <div class="cell">
         <div class="cell-left">手机号码</div>
-        <!-- <div class="cell-right">{{userInfo.userPhone}}</div> -->
         <div class="cell-right">
           <input type="tel" class="input" v-model="userInfo.userPhone" maxlength="11" />
         </div>
       </div>
+      <div class="line-box">
+        <div class="line"></div>
+      </div>
+      <div class="cell">
+        <div class="cell-left">赠送保障金</div>
+        <div class="cell-right">{{(list.length > 0 && !!list[0].pensionRate ?  list[0].pensionRate : 0) * 100}}%</div>
+      </div>
     </div>
     <div class="footer clearfix">
       <div class="footer-label">合计</div>
-      <div class="footer-price">{{totalFee | formatPrice}}</div>
+      <div class="footer-price orange">{{totalFee | formatPrice}}</div>
       <div class="footer-btn" @click="pay">去支付</div>
     </div>
   </div>
@@ -55,6 +61,7 @@ export default {
       couponInfo: {},
       num: 0,
       merId: null,
+      list: [],
     }
   },
   created() {
@@ -68,6 +75,8 @@ export default {
   computed: {
     ...mapGetters([
       'userInfo',
+      'longitude',
+      'latitude',
     ]),
     couponTotalPrice() { // 原价的总和
       return this.num * this.couponInfo.couponPrice;
@@ -78,12 +87,27 @@ export default {
     totalFee() {
       return (this.couponInfo.buyPrice * this.num);
     },
+    getLocationOver() {
+      return !!this.longitude && !!this.latitude;
+    },
+  },
+  watch: {
+    getLocationOver(val, oldVal) {
+      if (val) {
+        this.getShopByCoupon();
+      }
+    },
   },
   mounted() {
     let { couponId, merId } = this.$route.query;
     this.couponId = couponId;
     this.merId = merId;
     this.getDetail(couponId);
+    if (!!this.longitude && !!this.latitude) {
+      this.$nextTick(() => {
+        this.getShopByCoupon();
+      });
+    }
   },
   methods: {
     getDetail(couponId) {
@@ -98,6 +122,18 @@ export default {
           this.num = 1;
         }
       }).catch((err) => {});
+    },
+    getShopByCoupon() {
+      api.trade.getShopByCoupon({
+        couponId: this.couponId,
+        shopLon: this.longitude.toString(),
+        shopLat: this.latitude.toString(),
+      }).then((res) => {
+        let item = res.data[0];
+        this.list = [item];
+      }).catch((err) => {
+
+      });
     },
     plus() {
       if (this.num < this.couponInfo.surplusNum) {
@@ -239,7 +275,6 @@ export default {
   }
 }
 
-
 .footer {
   position: fixed;
   bottom: 0;
@@ -266,6 +301,9 @@ export default {
     color: #00001D;
     letter-spacing: 0;
     line-height: 120px;
+    &.orange {
+      color: #F05720;
+    }
   }
   .footer-btn {
     display: inline-block;

@@ -85,8 +85,13 @@
     <div class="blank"></div>
     <div class="footer clearfix">
       <div class="cell clearfix">
-        <span class="price-1"><span class="currency">￥</span>{{couponInfo.buyPrice | formatPriceWithoutUnit}}</span>
-        <span class="price-2"><span class="currency">￥</span>{{couponInfo.couponPrice | formatPriceWithoutUnit}}</span>
+        <div>
+          <span class="price-1"><span class="currency">￥</span>{{couponInfo.buyPrice | formatPriceWithoutUnit}}</span>
+          <span class="price-2"><span class="currency">￥</span>{{couponInfo.couponPrice | formatPriceWithoutUnit}}</span>
+        </div>
+        <div>
+          <span class="price-3">返<span class="orange">{{(list.length > 0 && !!list[0].pensionRate ?  list[0].pensionRate : 0) * 100}}%</span>保障金</span>
+        </div>
       </div>
       <div class="btn" @click="toBuy">购买</div>
     </div>
@@ -147,14 +152,6 @@ export default {
         shopLat: this.latitude.toString(),
       }).then((res) => {
         let item = res.data[0];
-        let {shopPhone = '', shopTel = ''} = res.data[0]
-        if(!!shopPhone && !!shopTel && shopPhone != shopTel){
-          this.phoneList = [shopPhone, shopTel];
-        }else if(!!shopPhone){
-          this.phoneList.push(shopPhone);
-        }else if(!!shopTel){
-          this.phoneList.push(shopTel);
-        }
         this.list = [item];
       }).catch((err) => {
 
@@ -236,16 +233,31 @@ export default {
   .cell {
     display: inline-block;
     float: left;
+    .price-3{
+      display: inline-block;
+      font-family: PingFangSC-Regular;
+      font-size: 28px;
+      color: #2E3141;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 40px;
+      .orange{
+        color: #F05720;
+      }
+    }
     .price-2 {
       text-decoration: line-through;
       display: inline-block;
-      height: 88px;
+      // height: 88px;
+      height: 48px;;
       font-family: PingFangSC-Regular;
       font-size: 36px;
       color: #C4CACD;
       letter-spacing: 0;
       text-align: center;
-      line-height: 88px;
+      // line-height: 88px;
+      line-height: 48px;
+      font-size: 36px;
       .currency {
         font-size: 28px;
       }
@@ -253,13 +265,15 @@ export default {
     .price-1 {
       margin-right: 10px;
       display: inline-block; // float: left;
-      height: 88px;
+      // height: 88px;
+      height: 48px;;
       font-family: PingFangSC-Semibold;
       font-size: 48px;
       color: #F05720;
       letter-spacing: 0;
       text-align: center;
-      line-height: 88px;
+      // line-height: 88px;
+      line-height: 48px;
       .currency {
         font-size: 36px;
       }
