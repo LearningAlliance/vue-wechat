@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <div class="height-60"></div>
-    <label for="file" class="upload-video">点击上传短视频</label>
+    <label for="file" class="upload-video">录制或上传视频</label>
     <label for="file" class="video-box">
       <div class="video-box-placeholder" v-if="videoUrl.length == 0">
         <div class="icon-player"></div>

@@ -19,7 +19,7 @@
       <i class="icon icon-home" @click="toHome"></i>
       <!--             <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1' ? '已特别关注' : '未特别关注'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == '1')}]" @click="userFollow(collectInfo.isFollow)"></i> -->
-      <span class="top-bar-desc">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1 ? '收藏置顶' : '取消置顶'}}</span>
+      <span class="top-bar-desc" @click="userFollow(collectInfo.isFollow)">{{collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1 ? '收藏置顶' : '取消置顶'}}</span>
       <i :class="['icon-attention', {'no': !(collectInfo.hasOwnProperty('isFollow') && collectInfo.isFollow == 1)}]" @click="userFollow(collectInfo.isFollow)"></i>
     </div>
     <div class="height-100"></div>
@@ -1599,10 +1599,12 @@ export default {
     top: 25px;
     right: 20px;
     background-color: #F8F8FC;
-    border-radius: 100px;
+    // border-radius: 100px;
     overflow: hidden;
     background-image: url('../../assets/images/ic_like.png');
     &.no {
+      width: 50px;
+      border-radius: 100px;
       background-size: 100% 100%;
       background-color: #FFF;
       background-image: url('../../assets/images/ic_like_grey_2.png');
