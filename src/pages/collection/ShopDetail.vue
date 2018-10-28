@@ -379,8 +379,8 @@ export default {
       const wx = this.$wechat;
       var self = this;
       wx.openLocation({
-        latitude: self.shopInfo.shopLat, // 纬度，浮点数，范围为90 ~ -90
-        longitude: self.shopInfo.shopLon, // 经度，浮点数，范围为180 ~ -180。
+        latitude: parseFloat(self.shopInfo.shopLat || 0), // 纬度，浮点数，范围为90 ~ -90
+        longitude: parseFloat(self.shopInfo.shopLon || 0), // 经度，浮点数，范围为180 ~ -180。
         name: self.shopInfo.shopName, // 位置名
         address: self.shopInfo.shopAddress, // 地址详情说明
         scale: 28, // 地图缩放级别,整形值,范围从1~28。默认为最大

@@ -210,6 +210,7 @@ export default {
       wx.config({
         // debug: process.env.NODE_ENV == "development" ? true : false,
         debug: false,
+        // debug: true,
         appId: appId,
         timestamp: timestamp,
         nonceStr: nonceStr,
