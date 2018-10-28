@@ -113,7 +113,7 @@ export default {
         });
       } else{
         var newUrl = `https://openauth.alipay.com/oauth2/publicAppAuthorize.htm?app_id=2017090608587613&scope=auth_base&redirect_uri=${encodeURIComponent(location.href)}`;
-        console.log(newUrl);
+        // console.log(newUrl);
         location.href = newUrl;
       }
     }

@@ -7,8 +7,8 @@
     </div>
     <div class="record-btn">
       <div :class="['icon-record-btn', {'with-shadow': !on}]" @touchstart="touchStart" @touchend="touchEnd" @touchmove="touchMove"></div>
-      <div :class="['icon-record-play', {'with-shadow': !play}]" @touchstart="touchPlay" @touchend="touchPlayEnd"></div>
-      <div class="icon-record-desc">播放</div>
+      <div v-if="!!localId" :class="['icon-record-play', {'with-shadow': !play}]" @touchstart="touchPlay" @touchend="touchPlayEnd"></div>
+      <div v-if="!!localId" class="icon-record-desc">播放</div>
     </div>
     <!-- <div :class="['submit-btn', {'on': canSubmit}]" @click="next">下一步</div> -->
     <div :class="['submit-btn', {'on': !!audioUrl}]" @click="next">下一步</div>
@@ -220,7 +220,9 @@ export default {
       this.play = true;
       if (!this.localId) {
         _.alert('请先录制音频后再试听');
+        return;
       }
+      _.alert('试听中');
       this.$wechat.playVoice({
         localId: self.localId, // 需要播放的音频的本地ID，由stopRecord接口获得
       });
