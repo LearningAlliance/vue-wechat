@@ -7,7 +7,7 @@
       <div class="section-desc shop-name">{{shopInfo.shopName}}</div>
       <div class="sectio-title-2">选择您的留言形式</div>
       <div class="zone-type-box clearfix">
-        <div class="zone-type" v-for="(item, index) in zoneTypes">
+        <div class="zone-type" v-for="(item, index) in zoneTypes" :key="index">
           <div :class="['zone-type-text', {'on': item.select}]" @click="changeZoneType(index)">{{item.name}}</div>
         </div>
       </div>
@@ -18,7 +18,7 @@
       </div>
       <div class="line" v-show="whetherPut"></div>
       <div class="re-type-box clearfix" v-show="whetherPut">
-        <div class="re-type" v-for="(item, index) in reTypes">
+        <div class="re-type" v-for="(item, index) in reTypes" :key="index">
           <div :class="['re-type-text', {'on': item.select}]" @click="changeReType(index)">{{item.name}}</div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default {
     }
   },
   mounted() {
-    this.clearEggINfo();
+    // this.clearEggINfo();
     let { shopId } = this.$route.query;
     this.shopId = shopId;
     if(!shopId){

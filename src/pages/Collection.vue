@@ -143,7 +143,7 @@
               <div class="cell-content">
                 <div class="cell-shop-name">{{item.shopName}}</div>
                 <div class="cell-shop-info">
-                  <span class="text">去过{{item.consumeNums}}次</span>
+                  <!-- <span class="text">去过{{item.consumeNums}}次</span> -->
                   <span class="text">{{item.tradingArea}}</span>
                   <span class="text">距您{{item.distance | formatDistanceCN}}</span>
                 </div>

@@ -42,6 +42,7 @@ export default {
       ms: 0, // 毫秒
       timer: null,
       localId: '', // 本地的音频文件id
+      canRecord: true,
     }
   },
   components: {
@@ -62,13 +63,21 @@ export default {
         this.s++;
         this.ms = 0;
       }
+      if(this.s == 59){
+        _.alert('不能更长了~');
+        this.on = false;
+        this.canRecord = false;
+        this.stopRecord();
+        clearInterval(this.timer);
+      }
       if (this.s == 60) {
         this.m++;
         this.s = 0;
       }
-      if (this.m == 2) {
+      if (this.m == 1) {
         _.alert('不能更长了~');
         this.on = false;
+        this.canRecord = false;
         this.stopRecord();
         clearInterval(this.timer);
       }
@@ -84,6 +93,7 @@ export default {
       ev = ev || event;
       ev.preventDefault();
       this.on = true;
+      this.canRecord = true;
       this.startRecord();
       // reset timer
       this.m = 0;
@@ -98,6 +108,9 @@ export default {
     touchEnd(ev) {
       ev = ev || event;
       ev.preventDefault();
+      if(!this.canRecord){
+        return;
+      }
       this.on = false;
       clearInterval(this.timer);
       this.stopRecord();
@@ -157,13 +170,18 @@ export default {
       //   }
       // });
       this.$wechat.startRecord();
-      this.$wechat.onVoiceRecordEnd({
-        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
-        complete: function(res) {
-          var localId = res.localId;
-
-        }
-      });
+      // this.$wechat.onVoiceRecordEnd({
+      //   // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+      //   complete: function(res) {
+      //     self.on = false;
+      //     clearInterval(self.timer);
+      //     self.canRecord = false;
+      //     let { localId = '' } = res;
+      //     self.localId = localId;
+      //     console.log('stopRecord success')
+      //     self.uploadVoice();
+      //   }
+      // });
     },
     stopRecord(flag) {
       // 取消的时候需要置空逻辑等

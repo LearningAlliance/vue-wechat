@@ -21,7 +21,7 @@ export default {
   props: {
     phoneList: {
       required: true,
-      default: ["19968194884", "tel11111", "tel22222"] // 电话列表
+      default: [] // 电话列表
     },
     visible: {
       default: true
