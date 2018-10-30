@@ -3,7 +3,7 @@
   <div class="page">
     <div class="section">
       <div class="box">
-        <div :class="['cell', {'selected': item.selected}]" v-for="(item, index) in list" @click="selectCell(index)">
+        <div :class="['cell', {'selected': item.selected}]" v-for="(item, index) in list" @click="selectCell(index)" :key="index">
           <p class="text-1" v-show="item.safeguard">{{item.safeguard}}保障金</p>
           <p class="text-2" v-show="item.credits">兑换{{item.credits}}养老金</p>
           <p class="text-3" v-show="!item.safeguard && !item.credits">其他金额</p>

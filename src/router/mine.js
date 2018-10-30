@@ -46,6 +46,7 @@ import UserInfo from '../pages/mine/UserInfo'
 
 // 会员中心
 import MemberCenter from '../pages/mine/MemberCenter'
+import EggShare from '../pages/mine/EggShare'
 
 export default [{
 	path: '/mine',
@@ -255,4 +256,13 @@ export default [{
 		subTitle: '会员中心',
 	},
 	component: MemberCenter,
+}, {
+	path: '/mine/eggShare',
+	name: 'eggShare',
+	meta: {
+		title: '彩蛋',
+		wxConfig: true,
+		jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage'],
+	},
+	component: EggShare,
 }, ]

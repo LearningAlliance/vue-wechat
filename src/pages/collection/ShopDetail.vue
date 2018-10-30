@@ -133,7 +133,7 @@
               <span class="discount">{{(item.buyPrice/item.couponPrice * 10).toFixed(1)}}折扣</span>
             </div>
             <div class="buy-btn" @click="buyCoupon(item.couponId)">购买</div>
-            <div class="buy-num">{{item.couponNum - item.surplusNum}}人买过</div>
+            <div class="buy-num">{{item.saleVolume}}人买过</div>
           </div>
         </div>
       </div>

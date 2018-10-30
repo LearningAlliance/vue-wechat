@@ -8,7 +8,7 @@
       粉色代金券  3
       红色红包  4
        -->
-    <div :class="['top-img', {'re-type-1': info.reType == 1,'re-type-2': info.reType == 2,'re-type-3': info.reType == 3,'re-type-4': info.reType == 4, }]">
+    <div v-if="info.reType != -1" :class="['top-img', {'re-type-1': info.reType == 1,'re-type-2': info.reType == 2,'re-type-3': info.reType == 3,'re-type-4': info.reType == 4, }]">
       <div class="top-right" v-if="info.reType == 1">
         <div class="combo-title">核销套餐</div>
         <div class="combo-name">{{info.name}}</div>
@@ -26,6 +26,7 @@
         <div class="limit">获得红包</div>
       </div>
     </div>
+    <div class="height-40"></div>
     <div class="egg-header">
       <img class="avatar" :src="info.userHead || require('../../assets/images/icon_user_default.png')" />
       <div class="user-info clearfix">
@@ -132,8 +133,13 @@ export default {
   background: #FFF;
 }
 
+.height-40{
+  width: 100%;
+  height: 40px;
+  background: #fff;
+}
+
 .egg-header {
-  margin-top: 40px;
   width: 100%;
   box-sizing: border-box;
   padding-left: 60px;

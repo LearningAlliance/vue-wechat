@@ -13,7 +13,7 @@
     <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <ul class="list-box">
-          <li class="list" v-for="(item, index) in pageList">
+          <li class="list" v-for="(item, index) in pageList" :key="index">
             <div class="box" @click="toDetail(item.orderNo, item.createDate)">
               <div class="box-header">
                 {{item.shopName}}
@@ -29,7 +29,7 @@
               </div>
               <div class="box-line"></div>
               <div class="box-footer">
-                <div class="box-create-time">下单时间：2018-07-18 12:37:11</div>
+                <div class="box-create-time">下单时间：{{item.createDate}}</div>
                 <div class="footer-btn-group clearfix">
                   <div class="footer-btn" @click.stop="cancelOrder(item.orderNo)" v-show="false">取消</div>
                 </div>

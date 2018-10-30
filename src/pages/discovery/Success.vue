@@ -4,7 +4,7 @@
     <div class="box">
       <img src="../../assets/images/img_success.png" />
       <p class="text">兑换成功</p>
-      <p class="text-2">恭喜你，{{typeText}} <span class="color-orange">+{{amount}}</span>元</p>
+      <p class="text-2">恭喜你，{{typeText}} <span class="color-orange">+{{amount}}</span>{{type == 1 ? '分' : '元'}}</p>
     </div>
     <div class="btn-group clearfix">
       <div class="btn-show" @click="showDetail">查看{{typeText}}</div>
@@ -25,8 +25,8 @@ export default {
     this.type = type;
     this.amount = amount;
   },
-  computed(){
-    typeText = () => {
+  computed: {
+    typeText() {
       if(this.type == 1){
         return '积分';
       }else if(this.type == 2){

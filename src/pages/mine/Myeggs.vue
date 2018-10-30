@@ -14,8 +14,8 @@
     <div class="main-body" :style="{'-webkit-overflow-scrolling': scrollMode}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <ul class="list-box">
-          <li class="list" v-for="(item, index) in pageList">
-            <div class="box" @click="toDetail(item.id)">
+          <li class="list" v-for="(item, index) in pageList" :key="index">
+            <div class="box" @click="toDetail(item.id, item.state, item.shopId, item.expDay)">
               <p class="egg-info clearfix">
                 {{item.reType | getReType}}彩蛋{{item.zoneType | getType}}
                 <span :class="['egg-status', {'state-1': item.state == 1}]">{{item.state | formatReType}}</span>
@@ -111,17 +111,13 @@ export default {
       }
       this.loadTop();
     },
-    toDetail(id) {
-      // this.$router.push({
-      //   path: '/mine/eggDetail',
-      //   query: {
-      //     id,
-      //   }
-      // });
+    toDetail(id, state, shopId, expDay) {
       this.$router.push({
-        path: '/collection/eggDetail',
+        path: state == 1 ? '/mine/eggShare' : '/collection/eggDetail',
         query: {
           id,
+          shopId,
+          expDay,
         }
       })
     },

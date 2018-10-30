@@ -23,6 +23,7 @@ import PutEggPay from '../pages/collection/PutEggPay'
 import SaveCouponSuccess from '../pages/collection/SaveCouponSuccess'
 import PayTheBillSuccess from '../pages/collection/PayTheBillSuccess'
 import CommnetForPay from '../pages/collection/CommnetForPay'
+import BindUser from '../pages/collection/BindUser'
 
 export default [{
 	path: '/collection',
@@ -241,4 +242,12 @@ export default [{
 		subTitle: '评论',
 	},
 	component: CommnetForPay,
+}, {
+	path: '/collection/bindUser',
+	name: 'bindUser',
+	meta: {
+		title: '登录',
+		subTitle: ' ',
+	},
+	component: BindUser,
 }, ]

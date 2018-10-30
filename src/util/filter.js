@@ -64,7 +64,8 @@ export const formatReType = (key) => {
     }
     switch (key) {
         case 1:
-            return '未打开';
+            // return '未打开';
+            return '分享';
             break;
         case 0:
             return '无效';

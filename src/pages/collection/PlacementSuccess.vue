@@ -56,9 +56,9 @@ export default {
     width: 100%;
     img {
       display: block;
-      width: 270px;
-      height: 230px;
-      margin: 30px auto 0 auto;
+      width: 284px;
+      height: 194px;
+      margin: 90px auto 20px auto;
     }
     .text {
       margin-top: 4.7px;

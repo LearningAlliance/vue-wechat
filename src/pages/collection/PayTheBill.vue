@@ -63,6 +63,14 @@
       <div class="footer-price">{{total}}元</div>
       <div class="footer-btn" @click="toPay">确认支付</div>
     </div>
+    <div class="modal" v-if="visible" @click="hideModal"></div>
+    <div class="tips" v-if="visible">
+      <div class="tips-title">您尚未绑定知柚账号可能会导致代金券无法使用</div>
+      <div class="tips-btn">
+        <div class="btn-left" @click="hideModal">放弃优惠</div>
+        <div class="btn-right" @click="bindUser">去绑定</div>
+      </div>
+    </div>
   </div>
 </template>
 <script type="text/javascript">
@@ -84,9 +92,15 @@ export default {
       pensionRate: 0, // 养老金比例
       shopInfo: {}, // 店铺详情
       payActAll: [], // 全部的买单活动
+      visible: false,
     }
   },
   mounted() {
+    // this.visible = true;
+
+    // //测试
+    // return;
+
     if(!_.isWx() && !sessionStorage.getItem('userAliId')){
       if(this.$route.query.hasOwnProperty('auth_code')){
         // 获取 userAliId
@@ -164,6 +178,12 @@ export default {
       clearPayINfo: 'clearPayINfo',
       updatePayInfoByKey: 'updatePayInfoByKey',
     }),
+    hideModal(){
+      this.visible = false;
+    },
+    bindUser(){
+      this.$router.push('/collection/bindUser');
+    },
     updatePayAct(){
       if(this.payActAll.length > 0){
         let payFee = 0; // 实际支付金额
@@ -273,6 +293,74 @@ export default {
 .blank {
   width: 100%;
   height: 140px;
+}
+
+.modal{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.tips{
+  position: fixed;
+  width: 584px;
+  height: 344px;
+  top: 50%;
+  left: 50%;
+  margin-left: -292px;
+  margin-top: -172px;
+  z-index: 1001;
+  border-radius: 20px;
+  background: #fff;
+  box-sizing: border-box;
+  padding-top: 60px;
+  padding-left: 60px;
+  padding-right: 60px;
+  .tips-title{
+    font-family: PingFangSC-Medium;
+    font-size: 32px;
+    color: #3D4060;
+    letter-spacing: 0;
+    text-align: center;
+    line-height: 48px;
+  }
+  .tips-btn{
+    margin-top: 60px;
+    .btn-left{
+      float: left;
+      height: 68px;
+      padding-left: 40px;
+      padding-right: 40px;
+      font-family: PingFangSC-Medium;
+      font-size: 32px;
+      color: #818B8F;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 68px;
+      border: 1px solid #818B8F;/*no*/
+      border-radius: 44px;
+    }
+    .btn-right{
+      float: right;
+      height: 68px;
+      padding-left: 40px;
+      padding-right: 40px;
+      font-family: PingFangSC-Medium;
+      font-size: 32px;
+      color: #FFF;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 68px;
+      border: 1px solid #F05720;/*no*/
+      border-radius: 44px;
+      background: #F05720;
+      border-radius: 44px;
+    }
+  }
 }
 
 .page {

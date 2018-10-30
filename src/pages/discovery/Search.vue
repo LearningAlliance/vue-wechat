@@ -16,7 +16,7 @@
         <div class="icon icon-delete-history" @click="clearAll"></div>
       </div>
       <div class="section-body">
-        <div class="cell" v-for="(item, index) in list1" @click="clickCell(item)">{{item}}</div>
+        <div class="cell" v-for="(item, index) in list1" @click="clickCell(item)" :key="index">{{item}}</div>
         <div class="none" v-show="list1.length == 0">暂无搜索记录</div>
       </div>
     </div>
