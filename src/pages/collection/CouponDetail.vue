@@ -90,7 +90,7 @@
           <span class="price-2"><span class="currency">￥</span>{{couponInfo.couponPrice | formatPriceWithoutUnit}}</span>
         </div>
         <div>
-          <span class="price-3">返<span class="orange">{{(list.length > 0 && !!list[0].pensionRate ?  list[0].pensionRate : 0) * 100}}%</span>保障金</span>
+          <span class="price-3">返<span class="orange">{{extraInfo.rate || 0}}%</span>保障金</span>
         </div>
       </div>
       <div class="btn" @click="toBuy">购买</div>
@@ -113,6 +113,8 @@ export default {
         couponDesc: [],
       },
       list: [],
+      extraInfo: {},
+      shopId: null,
     }
   },
   components: {
@@ -153,9 +155,19 @@ export default {
       }).then((res) => {
         let item = res.data[0];
         this.list = [item];
+        if(item.hasOwnProperty('shopId')){
+          this.shopId = item.shopId;
+          this.qryKetubbahAmount(item.shopId);
+        }
       }).catch((err) => {
 
       });
+    },
+    qryKetubbahAmount(shopId){
+      api.collection.qryKetubbahAmount({shopId,}).then((res) => {
+        console.log(res);
+        this.extraInfo = res.data;
+      }).catch((err) => {});
     },
     toShopDetail(shopId) {
       this.$router.push({
@@ -206,6 +218,7 @@ export default {
         query: {
           merId: this.couponInfo.merId,
           couponId: this.couponId,
+          shopId: this.shopId,
         }
       })
     },

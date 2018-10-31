@@ -39,7 +39,7 @@
     <div class="section">
       <div class="section-title">会员等级与权益</div>
       <div class="list">
-        <div :class="['cell', {'no-bottom': allLevel.length - 1 == index}]" v-for="(item, index) in allLevel">
+        <div :class="['cell', {'no-bottom': allLevel.length - 1 == index}]" v-for="(item, index) in allLevel" :key="index">
           <div class="cell-left">{{item.levelName}}</div>
           <div class="cell-right">
             <div class="cell-top">所需经验值{{item.upgradeRule}}</div>

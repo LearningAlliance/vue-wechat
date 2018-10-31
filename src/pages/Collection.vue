@@ -235,6 +235,10 @@ export default {
       scroll = this.$refs.tab2List.scrollTop;
     }
     sessionStorage.setItem('scroll', scroll);
+    if (!!this.longitude && !!this.latitude) {
+      this.getShops();
+      this.getActivities();
+    }
   },
   activated() {
     // 再次进入到缓存的页面时 需要keep-live
@@ -246,8 +250,10 @@ export default {
     } else if (this.tabOn == 'tab2') {
       this.$refs.tab2List.scrollTop = parseInt(scroll);
     }
-    this.getShops();
-    this.getActivities();
+    if (!!this.longitude && !!this.latitude) {
+      this.getShops();
+      this.getActivities();
+    }
     // TODO点击收藏 取消收藏后刷新列表页面
     // if (!!this.longitude && !!this.latitude) {
     //   this.getShops();
@@ -390,7 +396,7 @@ export default {
         shopLat: this.latitude.toString(),
         // shopLon: '120.082565',
         // shopLat: '30.200684',
-        range: '20000',
+        range: '10000',
         shopMainType: this.shopMainType.toString(),
         keyWords: this.keyWords || '',
       }).then((res) => {

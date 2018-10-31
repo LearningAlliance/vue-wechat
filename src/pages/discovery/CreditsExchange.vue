@@ -10,8 +10,8 @@
         </div>
       </div>
       <div class="input-box clearfix">
-        <input type="text" :disabled="!canEdit" class="input" placeholder="请输入你要兑换保障金金额" v-model.number="value" />
-        <div :class="['submit', {'disable': value <= 0 || !value}]" @click="submit">提交</div>
+        <input type="text" :disabled="!canEdit" class="input" placeholder="其他金额：请输入你要兑换保障金金额" v-model.number="value" />
+        <!-- <div :class="['submit', {'disable': value <= 0 || !value}]" @click="submit">提交</div> -->
       </div>
     </div>
     <div class="readMe">
@@ -193,7 +193,7 @@ export default {
       .input {
         display: inline-block;
         float: left;
-        width: 470px;
+        width: 690px;
         height: 88px;
         padding-left: 20px;
         padding-right: 20px;

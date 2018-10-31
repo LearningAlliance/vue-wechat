@@ -189,3 +189,9 @@ export const unifiedorder = (params) => post('/userServer/business/SysWechatActi
 	action: 'unifiedorder',
 	data: JSON.stringify(params),
 });
+
+// 查询店铺保障金费率，保障金金额，商户等级费率，等级金额
+export const qryKetubbahAmount = (params) => post('/userServer/business/MerInfoAction', {
+	action: 'qryKetubbahAmount',
+	data: JSON.stringify(params),
+});

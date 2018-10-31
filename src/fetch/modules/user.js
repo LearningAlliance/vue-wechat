@@ -178,3 +178,14 @@ export const userLevel = (params) => post('/userServer/business/UserInfoAction',
 	action: 'userLevel',
 	data: JSON.stringify(params),
 })
+
+// 支付宝是否绑定手机接口
+export const isBindAliPhone = (params) => post('/userServer/business/UserInfoAction', {
+	action: 'isBindAliPhone',
+	data: JSON.stringify(params),
+}, {
+	body: {
+		withToken: false,
+		withUid: false,
+	}
+})

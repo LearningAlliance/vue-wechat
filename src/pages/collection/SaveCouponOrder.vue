@@ -41,7 +41,7 @@
       </div>
       <div class="cell">
         <div class="cell-left">赠送保障金</div>
-        <div class="cell-right">{{(list.length > 0 && !!list[0].pensionRate ?  list[0].pensionRate : 0) * 100}}%</div>
+        <div class="cell-right">{{extraInfo.rate || 0}}%</div>
       </div>
     </div>
     <div class="footer clearfix">
@@ -62,6 +62,8 @@ export default {
       num: 0,
       merId: null,
       list: [],
+      shopId: null,
+      extraInfo: {},
     }
   },
   created() {
@@ -99,10 +101,12 @@ export default {
     },
   },
   mounted() {
-    let { couponId, merId } = this.$route.query;
+    let { couponId, merId, shopId } = this.$route.query;
     this.couponId = couponId;
     this.merId = merId;
+    this.shopId = shopId;
     this.getDetail(couponId);
+    this.qryKetubbahAmount(shopId);
     if (!!this.longitude && !!this.latitude) {
       this.$nextTick(() => {
         this.getShopByCoupon();
@@ -134,6 +138,11 @@ export default {
       }).catch((err) => {
 
       });
+    },
+    qryKetubbahAmount(shopId){
+      api.collection.qryKetubbahAmount({shopId}).then((res) => {
+        this.extraInfo = res.data;
+      }).catch((err) => {});
     },
     plus() {
       if (this.num < this.couponInfo.surplusNum) {

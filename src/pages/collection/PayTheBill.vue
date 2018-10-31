@@ -96,11 +96,6 @@ export default {
     }
   },
   mounted() {
-    // this.visible = true;
-
-    // //测试
-    // return;
-
     if(!_.isWx() && !sessionStorage.getItem('userAliId')){
       if(this.$route.query.hasOwnProperty('auth_code')){
         // 获取 userAliId
@@ -111,6 +106,22 @@ export default {
           if (!userAliId) {
             return;
           }
+          api.user.isBindAliPhone({
+            userAliId: userAliId
+          }).then((res) => {
+            console.log(res);
+          }).catch((err) => {});
+          api.user.isBindAliPhone({
+            // userAliId: userAliId
+            userAliId: userAliId,
+          }).then((res) => {
+            console.log(res);
+            let { isBind } = res.data[0];
+            console.log(isBind);
+            if(isBind == 0){
+              this.visible = true;
+            }
+          }).catch((err) => {});
           // TODO 后续这边可能用于手机绑定
           // api.common.wxLogin({ userAliId, }).then((res) => {
           //   console.log('wxLogin:', res);

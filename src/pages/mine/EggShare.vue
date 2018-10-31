@@ -4,7 +4,7 @@
     <img class="icon-success" src="../../assets/images/img_setegg_success.png" />
     <div class="egg-info">送你一个{{info.reType | getReType}}{{info.zoneType | getType}}彩蛋</div>
     <!-- <div v-if="!!info.expDay" class="egg-info">有效期还剩<span class="orange">{{info.expDay}}</span>天</div> -->
-    <div v-if="!!expDay" class="egg-info">有效期还剩<span class="orange">{{expDay}}</span>天</div>
+    <div v-if="!!expDay && forShare != 1" class="egg-info">有效期还剩<span class="orange">{{expDay}}</span>天</div>
     <div class="egg-desc">请到指定门店位置领取打开</div>
     <div class="btn" @click="toShopDetail">查看门店信息</div>
   </div>
@@ -17,7 +17,8 @@ export default {
     return {
       info: {},
       id: null,
-      expDay: '',
+      expDay: "",
+      forShare: 0
     };
   },
   filters: {
@@ -64,57 +65,63 @@ export default {
     }
   },
   mounted() {
-    let { id, shopId, expDay = '' } = this.$route.query;
+    let { id, shopId, expDay = "", forShare = 0 } = this.$route.query;
     this.id = id;
     this.shopId = shopId;
     this.expDay = expDay;
-    this.getInfo();
+    this.forShare = forShare;
+    if(forShare != 1){
+      this.getInfo();
+    }
+    setTimeout(this.shareConfig(), 1000);
   },
   methods: {
-    getInfo() {
+    shareConfig() {
       const wx = this.$wechat;
       var self = this;
+      wx.onMenuShareTimeline({
+        title: "送你一个彩蛋惊喜", // 分享标题
+        link: `http://cs.juanzisc.com/mine/eggShare?id=${self.id}&shopId=${self.shopId}&forShare=1`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
+        success: function() {
+          // 用户点击了分享后执行的回调函数
+        }
+      });
+      wx.onMenuShareAppMessage({
+        title: "送你一个彩蛋惊喜", // 分享标题
+        desc: "快到彩蛋位置领取打开，看看我给你放了什么吧！", // 分享描述
+        link: `http://cs.juanzisc.com/mine/eggShare?id=${self.id}&shopId=${self.shopId}&forShare=1`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
+        type: "", // 分享类型,music、video或link，不填默认为link
+        dataUrl: "", // 如果type是music或video，则要提供数据链接，默认为空
+        success: function() {
+          // 用户点击了分享后执行的回调函数
+          // _.alert("分享成功");
+        }
+      });
+      return;
+      wx.updateAppMessageShareData({
+        title: "送你一个彩蛋惊喜", // 分享标题
+        desc: "快到彩蛋位置领取打开，看看我给你放了什么吧！", // 分享描述
+        link: `http://cs.juanzisc.com/mine/eggShare?id=${self.id}&shopId=${self.shopId}&forShare=1`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
+        success: function() {
+          _.alert("分享成功");
+        }
+      });
+      wx.updateTimelineShareData({
+        title: "送你一个彩蛋惊喜", // 分享标题
+        link: `http://cs.juanzisc.com/mine/eggShare?id=${self.id}&shopId=${self.shopId}&forShare=1`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
+        success: function() {
+          _.alert("分享成功");
+        }
+      });
+    },
+    getInfo() {
       api.user.getEggDetail({ id: this.id }).then(res => {
         let { data = {} } = res;
         this.info = data;
-        wx.onMenuShareTimeline({
-            title: '送你一个彩蛋惊喜', // 分享标题
-            link: `http://cs.juanzisc.com/collection/shopDetail?shopId=${self.shopId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
-            success: function () {
-            // 用户点击了分享后执行的回调函数
-            }
-        });
-        wx.onMenuShareAppMessage({
-            title: '送你一个彩蛋惊喜', // 分享标题
-            desc: '快到彩蛋位置领取打开，看看我给你放了什么吧！', // 分享描述
-            link: `http://cs.juanzisc.com/collection/shopDetail?shopId=${self.shopId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-            imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
-            type: '', // 分享类型,music、video或link，不填默认为link
-            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-            success: function () {
-                // 用户点击了分享后执行的回调函数
-                // _.alert("分享成功");
-            }
-        });
-        return;
-        wx.updateAppMessageShareData({
-          title: "送你一个彩蛋惊喜", // 分享标题
-          desc: "快到彩蛋位置领取打开，看看我给你放了什么吧！", // 分享描述
-          link: `http://cs.juanzisc.com/collection/shopDetail?shopId=${self.shopId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
-          success: function() {
-            _.alert("分享成功");
-          }
-        });
-        wx.updateTimelineShareData({
-          title: "送你一个彩蛋惊喜", // 分享标题
-          link: `http://cs.juanzisc.com/collection/shopDetail?shopId=${self.shopId}`, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-          imgUrl: "http://cs.juanzisc.com/img_share_caidan.png", // 分享图标
-          success: function() {
-            _.alert("分享成功");
-          }
-        });
       });
     },
     toShopDetail() {
