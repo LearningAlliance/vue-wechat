@@ -20,8 +20,8 @@ const state = {
     // longitude: 110.855687, // 经度
 
     // wu
-    longitude: 120.082565,
-    latitude: 30.200684,
+    // longitude: 120.082565,
+    // latitude: 30.200684,
 
     // 杭州测试
     // latitude: 30.31974,

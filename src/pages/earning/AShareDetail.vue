@@ -73,7 +73,9 @@ export default {
     this.queue([this.qrySharePath, this.qrCode, this.getShopDetail, this.qryMerLevel])
       .then((res) => {
         this.$nextTick(() => {
-          this.doHtml2Canvas();
+          setTimeout(
+            this.doHtml2Canvas(),
+            1000);          
         })
         console.log('success');
       }).catch((err) => {
