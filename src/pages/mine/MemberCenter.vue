@@ -2,7 +2,7 @@
   <div class="page">
     <div class="card">
       <div class="height-10"></div>
-      <div :class="['vip-level-logo', {'level-0': vipLevel == 0, 'level-1': vipLevel == 1, 'level-2': vipLevel == 2, 'level-3': vipLevel == 3, 'level-4': vipLevel == 4, 'level-5': vipLevel == 5, }]"></div>
+      <div :class="['vip-level-logo', {'level-0': vipLevel == 1, 'level-1': vipLevel == 2, 'level-2': vipLevel == 3, 'level-3': vipLevel == 4, 'level-4': vipLevel == 5, 'level-5': vipLevel == 6, }]"></div>
       <div class="vip-score">经验值 {{Number(score)}}/{{totalScore || 0}}</div>
       <div class="vip-process-box">
         <div class="process-left">{{nowLevel.levelName}}</div>
@@ -98,9 +98,8 @@ export default {
     }
   },
   mounted() {
-    // TODO
     this.getData();
-    this.getAccountCredits();
+    // this.getAccountCredits();
   },
   methods: {
     getAccountCredits() {
@@ -121,7 +120,7 @@ export default {
           this.nextLevel = nextLevel;
           this.nowLevel = nowLevel;
           this.vipLevel = this.nowLevel.levelId;
-          this.totalScore = nowLevel.upgradeRule;
+          this.totalScore = nextLevel.upgradeRule;
           this.getAccountCredits();
         }).catch((err) => {});
     },

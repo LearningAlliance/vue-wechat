@@ -17,7 +17,7 @@
               </div>
               <div class="box-line"></div>
               <div class="box-footer">
-                <div class="box-create-time">下单时间：2018-07-18 12:37:11</div>
+                <div class="box-create-time">下单时间：{{item.createDate}}</div>
                 <div class="footer-btn-group clearfix">
                   <div class="footer-btn" @click.stop="cancelOrder(item.orderNo)" v-show="item.orderState == 1">取消</div>
                 </div>

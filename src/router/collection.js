@@ -96,7 +96,7 @@ export default [{
 		title: '店铺详情',
 		wxConfig: true,
 		jsApiList: ['getLocation', 'openLocation'],
-		getLocation: true, 
+		getLocation: true,
 		// keepAlive: true,
 	},
 	component: ShopDetail,

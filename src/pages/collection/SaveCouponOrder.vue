@@ -20,13 +20,13 @@
       </div>
       <div class="cell clearfix">
         <div class="cell-left">小计</div>
-        <div class="cell-right orange">{{couponTotalPrice | formatPrice}}</div>
+        <div class="cell-right orange">{{totalFee | formatPrice}}</div>
       </div>
     </div>
     <div class="section margin-top-20">
       <div class="cell">
         <div class="cell-left">VIP折扣</div>
-        <div class="cell-right orange">{{totalDiscount | formatPrice}}</div>
+        <div class="cell-right orange">{{extraInfo.vipAmount | formatPrice}}</div>
       </div>
     </div>
     <div class="section margin-top-20">
@@ -46,7 +46,7 @@
     </div>
     <div class="footer clearfix">
       <div class="footer-label">合计</div>
-      <div class="footer-price orange">{{totalFee | formatPrice}}</div>
+      <div class="footer-price orange">{{finalFee | formatPrice}}</div>
       <div class="footer-btn" @click="pay">去支付</div>
     </div>
   </div>
@@ -89,6 +89,9 @@ export default {
     totalFee() {
       return (this.couponInfo.buyPrice * this.num);
     },
+    finalFee() {
+      return Number(this.totalFee) - Number(this.extraInfo.vipAmount);
+    },
     getLocationOver() {
       return !!this.longitude && !!this.latitude;
     },
@@ -99,6 +102,11 @@ export default {
         this.getShopByCoupon();
       }
     },
+    totalFee(val, oldVal){
+      if(!!val){
+        this.qryKetubbahAmount(this.shopId);
+      }
+    }
   },
   mounted() {
     let { couponId, merId, shopId } = this.$route.query;
@@ -106,7 +114,6 @@ export default {
     this.merId = merId;
     this.shopId = shopId;
     this.getDetail(couponId);
-    this.qryKetubbahAmount(shopId);
     if (!!this.longitude && !!this.latitude) {
       this.$nextTick(() => {
         this.getShopByCoupon();
@@ -135,12 +142,18 @@ export default {
       }).then((res) => {
         let item = res.data[0];
         this.list = [item];
+        if(!!this.totalFee){
+          this.qryKetubbahAmount(this.shopId);
+        }
       }).catch((err) => {
 
       });
     },
     qryKetubbahAmount(shopId){
-      api.collection.qryKetubbahAmount({shopId}).then((res) => {
+      api.collection.qryKetubbahAmount({
+        shopId,
+        amount: this.totalFee,
+      }).then((res) => {
         this.extraInfo = res.data;
       }).catch((err) => {});
     },
