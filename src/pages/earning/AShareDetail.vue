@@ -75,7 +75,7 @@ export default {
         this.$nextTick(() => {
           setTimeout(
             this.doHtml2Canvas(),
-            1000);          
+            300);          
         })
         console.log('success');
       }).catch((err) => {
