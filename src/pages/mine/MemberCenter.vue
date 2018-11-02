@@ -102,13 +102,13 @@ export default {
     // this.getAccountCredits();
   },
   methods: {
-    getAccountCredits() {
-        api.user.getAccountCredits().then((res) => {
-          let item = res.data[0];
-          this.score = item.amount || 0;
-          this.setProcess();
-        }).catch((err) => {});
-    },
+    // getAccountCredits() {
+    //     api.user.getAccountCredits().then((res) => {
+    //       let item = res.data[0];
+    //       this.score = item.amount || 0;
+    //       this.setProcess();
+    //     }).catch((err) => {});
+    // },
     getData() {
         api.user.userLevel({}).then((res) => {
           let {
@@ -120,8 +120,10 @@ export default {
           this.nextLevel = nextLevel;
           this.nowLevel = nowLevel;
           this.vipLevel = this.nowLevel.levelId;
+          this.score = nowLevel.integral;
           this.totalScore = nextLevel.upgradeRule;
-          this.getAccountCredits();
+          this.setProcess();
+          // this.getAccountCredits();
         }).catch((err) => {});
     },
     setProcess() {
