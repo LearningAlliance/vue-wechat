@@ -3,7 +3,7 @@
   <div class="page">
     <div class="blank"></div>
     <div class="section">
-      <div class="box" v-for="(item, index) in list">
+      <div class="box" v-for="(item, index) in list" :key="index">
         <div class="cell" @click="toShopDetail(item.shopId)">
           <p class="shopName clearfix">{{item.shopName}}</p>
           <span class="distance">{{item.distance | formatDistance}}</span>
