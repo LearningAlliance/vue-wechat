@@ -77,7 +77,9 @@ export default {
   },
   methods: {
     payOrder() {
-      _.alert('购买成功， todo 支付逻辑， 假装支付成功');
+      // _.alert('购买成功， todo 支付逻辑， 假装支付成功');
+      _.alert('支付平台申请中，敬请期待');
+      return;
       setTimeout(() => {
         this.$router.push({
           path: '/collection/saveCouponSuccess',

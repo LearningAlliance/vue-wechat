@@ -185,13 +185,14 @@ export default {
         _.alert('请输入完整的手机号后再进行提交');
         return;
       }
+      _.alert('支付平台申请中，敬请期待');
+      return;
       api.collection.saveCouponOrder({
         buyNums: this.num,
         merId: this.merId,
         couponId: this.couponId,
       }).then((res) => {
         let params = res.data;
-        // _.alert('购买成功， todo 支付逻辑， 假装支付成功');
         setTimeout(() => {
           this.$router.push({
             path: '/collection/saveCouponSuccess',

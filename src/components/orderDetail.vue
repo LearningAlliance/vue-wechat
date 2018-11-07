@@ -79,7 +79,9 @@ export default {
   },
   methods: {
     payOrder() {
-      _.alert('TODO 支付');
+      // _.alert('TODO 支付');
+      _.alert('支付平台申请中，敬请期待');
+      return;
     },
     cancelOrder() {
       var self = this;
